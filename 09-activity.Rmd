@@ -49,26 +49,11 @@ First, lets import the processed raw data file.
 ```{r ch9_2, class.source="Rmain"}
 # Import the data
 img <- read.csv("data/processed_data/AlgarRestorationProject_raw_detections.csv", header=T)
-```
 
-Which looks like this:
-
-```{r ch9_3, echo=F}
-kbl(head(img))%>%
-  kable_paper() %>%
-  scroll_box(height = "200px")
-```
-
-Then load the activity package:
-
-```{r ch9_4, class.source="Rmain"}
-# Load the package
+# Load the activity package
 library(activity) 
-```
 
-If your cameras correct for daylight savings use the correct code, if they do not, use UTC. 
-
-```{r ch9_5, results="hide", class.source="Rmain"}
+# Specify the timezone (if your camera doesn't correct for timezones, just use UTC)
 img$timestamp <- ymd_hms(img$timestamp, tz="UTC")
 ```
 
@@ -89,9 +74,9 @@ Fortunately, the authors have a solution!
 
 Instead of using the 'human' 24h clock, we can instead express animal activity relative to an important anchor point in the day (e.g. sunrise). 
 
-NOTE -the transformation is not necessary at latitudes below 20°, or in studies with a duration of less than a month (below 40° latitude), as day length doesn't chnage substantially.
+NOTE -the transformation is not necessary at latitudes below 20°, or in studies with a duration of less than a month (below 40° latitude), as day length doesn't change substantially.
 
-```{r ch9_6, class.source="Rmain"}
+```{r ch9_6, class.source="Rmain", message=F, warning=F}
 # We need to add latitude and longitude to our observations
 # import our station locations (and other covariates)
 locs <-  read.csv("data/processed_data/AlgarRestorationProject_camera_locations_and_covariates.csv")
@@ -109,13 +94,6 @@ tmp <- solartime ( img_locs$timestamp, # the date time column
 # Although we want to use solar time, let's add both incase you want to explore the implications
 img_locs$solar <- tmp$solar
 img_locs$clock <- tmp$clock
-
-```
-
-Let's check out the relationship between these two indices:
-
-```{r ch9_7, class.source="Rinfo"}
-plot(img_locs$solar, img_locs$clock)
 ```
 
 We are now ready to fit some models!
@@ -127,28 +105,17 @@ Let's start with a white-tailed deer and caribou example.
 Note we are reducing the number of replicates to 100 to speed up the process - typically people use 1000.
 
 ```{r ch9_8, class.source="Rmain"}
-# Fit an activity model
+# Fit an activity model to the WTD data
 m1 <- fitact(img_locs$solar[img_locs$sp=="Odocoileus.virginianus"], sample="model", reps=100)
-plot(m1)
-```
+#plot(m1)
 
-Take a look at the raw data if you want.
-
-```{r ch9_9, eval=FALSE, class.source="Rinfo"}
-m1
-```
-
-And repeat it for Caribou
-
-```{r ch9_10, class.source="Rmain"}
+# Repeat for caribou
 # Fit an activity model
 m2 <- fitact(img_locs$solar[img_locs$sp=="Rangifer.tarandus"], sample="model", reps=100)
-plot(m2)
-```
+#plot(m2)
 
-We can plot both on the same axis as follows:
 
-```{r ch9_11, class.source="Rmain"}
+# Plot the results of both on the same axis
 plot(m2, yunit="density", data="none", las=1, lwd=2,
      tline=list(lwd=2), # Thick line 
      cline=list(lty=0)) # Supress confidence intervals
@@ -189,19 +156,14 @@ We can also compare patterns within a species across different strata of interes
 **White-tail deer on HumanUse feature**
 
 ```{r ch9_13, class.source="Rmain"}
-#Fit an activity model
+#Fit an activity model - human use lines
 m1 <- fitact(img_locs$solar[img_locs$sp=="Odocoileus.virginianus" &
                               img_locs$feature_type=="HumanUse"], sample="model", reps=100)
-```
 
-**White-tail deer on Offline feature**
-
-```{r ch9_14, class.source="Rmain"}
+# Offline areas
 m2 <- fitact(img_locs$solar[img_locs$sp=="Odocoileus.virginianus" &
                               img_locs$feature_type=="Offline"], sample="model", reps=100)
-```
 
-```{r ch9_15, class.source="Rmain"}
 
 plot(m2, yunit="density", data="none", las=1, lwd=2,
      tline=list(lwd=2), # Thick line 
@@ -223,20 +185,20 @@ There is very high overlap for these comparisons, and it is unlikely to have ari
 
 ### Seasonal comparison
 
-```{r}
+```{r ch9_13a, class.source="Rmain"}
+
+# Extract the month information
 img_locs$month <- month(img_locs$timestamp, label=T)
 
 
-#Fit an activity model
+#Fit an activity model - using just the 'summer' months
 m1 <- fitact(img_locs$solar[img_locs$sp=="Rangifer.tarandus" &
                               img_locs$month %in% c("Apr", "May", "Jun", "Jul", "Aug", "Sep")], sample="model", reps=100)
 
-
+# Winter months
 m2 <- fitact(img_locs$solar[img_locs$sp=="Rangifer.tarandus" &
                               img_locs$month %in% c("Oct", "Nov", "Dec", "Jan", "Feb", "Mar")], sample="model", reps=100)
-```
 
-```{r}
 plot(m2, yunit="density", data="none", las=1, lwd=2,
      tline=list(lwd=2), # Thick line 
      cline=list(lty=0)) # Supress confidence intervals
@@ -248,21 +210,6 @@ plot(m1, yunit="density", data="none", add=TRUE,
 legend("topright", c("Winter", "Summer"), col=1:2, lty=1, lwd=2)
 ```
 
-
-## On your own
-
-Try your own species comparisons. Remember we have the following species:
-
-```{r ch9_17, echo=F}
-unique(img_locs$sp)
-```
-
-You can also try other categorical strata comparisons, we have:
-
-`feature_type`
-```{r ch9_18, echo=F}
-table(locs$feature_type)
-```
 
 ## Selected further reading
 

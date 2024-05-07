@@ -74,13 +74,9 @@ When you are writing papers or reports based on camera data, it is useful to hav
 # Also read in the species list
 sp_summary <- read.csv("data/processed_data/AlgarRestorationProject_species_list.csv", header=T)
 
-```
-
-### Total number of captures
-To summaries the wildlife detections in this project we can make use of the `...total_observations.csv` files:
-
-```{r ch5_4, class.source="Rmain"}
+# Import the ...total_observations.csv file
 total_obs <- read.csv("data/processed_data/AlgarRestorationProject_30min_independent_total_observations.csv", header=T)
+
 ```
 
 The format of the output tables is what we would call 'wide' format - we have multiple species observation on the same row.
@@ -135,12 +131,6 @@ total_binary <-  total_obs %>%    # The total obs dataframe
 long_bin <- total_binary %>% 
   pivot_longer(cols=sp_summary$sp, names_to="sp", values_to = "count") # Takes the species names columns, and makes them unique rows with "sp" as the key 
 
-```
-
-Now when we do the same calculations, as before, we can calculate the number of sites occupied:
-
-```{r ch5_10, message=F, warning=F, class.source="Rmain"}
-
 # We can now sum the presence/absences and divide by the number of survey locations
 tmp <- long_bin %>% 
   group_by(sp) %>% 
@@ -186,19 +176,17 @@ subplot(nrows=1,fig1, fig2, titleX = T) # We could stack them on top of one anot
 
 What does this output tell you about species-specific occurrences across the landscape?
 
-
 ## Temporal patterns in capture rates
 
 Next lets summaries the temporal patterns in the number of sites (`placenames`) surveyed, and the total number of animals captured. We will use the monthly dataframes in order to do this, but you could do it at the weekly or daily scale if required!
 
-```{r ch5_12, class.source="Rmain"}
-mon_obs <- read.csv("data/processed_data/AlgarRestorationProject_30min_independent_monthly_observations.csv", header=T)
-
-```
-
 We will first count the number of survey nights each location was active, then in the second step add the number of species detections.
 
 ```{r ch5_13, warning=F, message=F, class.source="Rmain"}
+# Use the monthly observations dataset
+mon_obs <- read.csv("data/processed_data/AlgarRestorationProject_30min_independent_monthly_observations.csv", header=T)
+
+
 # Count up the number of stations and the number of camera nights
 mon_summary <- mon_obs %>%                  # Use the monthly observations dataframe
             group_by(date) %>%              # Group by the date
@@ -332,13 +320,6 @@ So far we have explored temporal and spatial patterns in species counts - but wh
 
 **Final note** just because you do not see a strong effect in your raw data, doesn't mean that it will not have an effect in your final models, particularly if you plan to account for multiple confounding variables or use random effects!
 
-
-Lets have a quick look at what we have available to us in the `camera_locations_and_covariates` file:
-
-```{r ch5_18, class.source="Rinfo"}
-str(locs)
-```
-
 We have - `feature type`, `water_depth_m`, `line_of_sight_m`, `elevation`, `road_dist_m`, `water_dist_m`, `lcc_habitats` and `mean_ndvi` as potential covariates.  
 
 Before we proceed, it is good practice to convert categorical variables (like `feature_type` and `lcc_habitats`) to factors. There is a very easy way to do that using the `mutate_if()` function of dplyr: 
@@ -346,13 +327,9 @@ Before we proceed, it is good practice to convert categorical variables (like `f
 ```{r ch5_19, class.source="Rmain"}
 locs <- locs %>% 
             mutate_if(is.character,as.factor) # If a column is a character string, make it a factor
-```
 
-Run `str(locs)` again to see what has changed!
+# Add the location variables to the dataframes
 
-Before we explore patterns, we need to add the covariates to the response dataframes (e.g. total_obs). We will use `left_join()`.
-
-```{r ch5_20, warning=F, message=F, class.source="Rmain"}
 total_obs <- left_join(total_obs, locs)
 ```
 
@@ -360,32 +337,9 @@ Lets explore two different types of plot we can make for once particular species
 
 ### Continuous predictors
 
-The best plot for two continuous predictors is a scatter plot.
+Scatter plots are very useful, we can easily make them with a trendline using `ggplot`. 
 
-In base R:
-
-```{r ch5_21, class.source="Rinfo"}
-plot(data=total_obs, 
-       Alces.alces ~   # Y variable
-       line_of_sight_m, # X variable
-       pch=19,
-       las=1
-     ) 
-
-```
-
-We can make the same plot in `ggplot`:
-
-```{r ch5_22, class.source="Rinfo"}
-ggplot(data=total_obs, 
-       aes(x=line_of_sight_m, y=Alces.alces)) + 
-       geom_point() +                   # Specify a scatter plot
-       theme_classic()                  # A nice theme
-```
-
-The great thing about `ggplot` is that it is easy to add trend lines:
-
-```{r ch5_23, message=F, warning=F, class.source="Rinfo"}
+```{r ch5_23, message=F, warning=F, class.source="Rmain"}
 ggplot(data=total_obs, 
        aes(x=line_of_sight_m, y=Alces.alces)) + 
        geom_point() +                   # Specify a scatter plot
@@ -397,10 +351,9 @@ What do you think?
 
 For more `ggplot` scatterplot examples (with code) see the [R graph gallery - Scatterplots](https://r-graph-gallery.com/scatterplot.html). 
 
-
 Let's checkout another predictor:
 
-```{r ch5_24, eval=F , class.source="Rinfo"}
+```{r ch5_24, eval=F , class.source="Rmain"}
 ggplot(data=total_obs, 
        aes(x=mean_ndvi, y=Alces.alces)) + 
        geom_point() +                   # Specify a scatter plot
@@ -412,16 +365,7 @@ ggplot(data=total_obs,
 
 For categorical predictors boxplots are very useful!
 
-Base R:
-
-```{r ch5_25, class.source="Rinfo"}
-boxplot(data=total_obs,
-          Alces.alces ~ feature_type)
-```
-
-Or if `ggplot` is your thing:
-
-```{r ch5_26, class.source="Rinfo"}
+```{r ch5_26, class.source="Rmain"}
 ggplot(total_obs, aes(x=feature_type, y=Alces.alces)) +
   geom_boxplot()+
   theme_classic()

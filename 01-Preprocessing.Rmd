@@ -40,7 +40,7 @@ When a camera takes images, it applies sequential names which are duplicated acr
 We have created a tool which can be applied to folders of images organised by location and deployment, to create unique codes for each image:[the WildCo Image Renamer](https://github.com/WildCoLab/WildCo_Image_Renamer). The repository has an example dataset which you can play around with to get familiar with the tool.
 
 ```{r ch1_2, echo=F, message=F, warning=F, out.width="75%"}
-knitr::include_graphics("images/preprocessing/renamer.PNG")
+knitr::include_graphics("./images/preprocessing/renamer.png")
 ```
 
 
@@ -86,7 +86,7 @@ To quickly extract timelapse images we develop some code which uses the metadata
 ## Labelling
 
 ```{r ch1_4, echo=F, message=F, warning=F, out.width="100%"}
-knitr::include_graphics("images/preprocessing/labelers.png")
+knitr::include_graphics("./images/preprocessing/labelers.PNG")
 ```
 
 We often get asked what the best software/data platform is for labeling images... and **the pragmatic answer is that it does not matter as long as you export your data in a standardised format** (see [the data standardisation chapter](#standard). The truth is that different projects have different needs: 

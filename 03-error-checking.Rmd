@@ -1,6 +1,6 @@
 ---
-editor_options: 
-  markdown: 
+editor_options:
+  markdown:
     wrap: sentence
 ---
 
@@ -76,77 +76,12 @@ Fortunately the process has been made far easier with the `lubridate` package.
 The first dates we need to convert are those in the deployment (`dep`) datasheet - the start and end times of each period of camera activity.
 The way `lubridate` works is you specify the order of the days, months years, hours, minutes and seconds with the codes d,m,y,h,m, and s respectively.
 
-### Skill check: `lubridate`
-
-Try importing the 25th of December in a couple of formats.
-Copy and run the following:
-
-```{r ch3_3, eval =F, class.source="Rinfo"}
-#library(lubridate)
-# day-month-year
-dmy("24-12-2022")
-
-# year-month-day
-ymd("2022-12-24")
-```
-
-The output should be identical.
-Note `lubridate` defaults to UTC - unless otherwise specified.
-
-Now the real power of `lubridate` lies in the fact that you can handle multiple different date formats in one column using the `parse_date_time()` function.
-This sometimes happens - I usually blame excel - but you could be merging two data sets formatted in different ways too.
-Lets try it:
-
-```{r ch3_4, eval=F, class.source="Rinfo"}
-x <- c("24-12-2022", "2022-12-24", "12-24-2022") #Three different date formats
-parse_date_time(x, c("ymd", "dmy", "mdy"))
-```
-
-Again, they should give all the same output!
-
-Next, lets calculate the amount of time which has elapsed between two dates.
-A fundamental operation in the management of camera data.
-To do this we first create an interval object `interval(date1, date2)`, then ask to return the object in days `/ddays(1)`.
-Lets try it:
-
-```{r ch3_5, eval=T, class.source="Rinfo"}
-# Specify your start and end dates
-start <- ymd("2021-10-13")
-end <- ymd("2021-12-11")
-```
-
-```{r ch3_6, eval=F, class.source="Rinfo"}
-# Specify the interval, and put it in days
-interval(start, end)/ddays(1)
-
-# Interval creates an "interval object" - run that along and see what it looks like
-# ddays() converts the native units of date objects in R (seconds) to days - run it on its own to see.
-```
-
-How many days elapsed between those two dates?
-
-We can change the units of the output by changing the denominator:
-
-```{r ch3_7, class.source="Rinfo"}
-# Specify the interval, and put it in weeks
-interval(start, end)/ddays(7)
-```
-
-And in decimal years:
-
-```{r ch3_8, class.source="Rinfo"}
-interval(start, end)/ddays(365)
-```
-
-Easy!
-If you want to learn more about the amazing functionality of the 'lubridate' package - check out the pdf [Lubridate Cheatsheet](https://rawgit.com/rstudio/cheatsheets/main/lubridate.pdf)
+If you want to learn more about the amazing functionality of the 'lubridate' package - check out the [Lubridate Cheatsheet](https://rawgit.com/rstudio/cheatsheets/main/lubridate.pdf)
 
 ### Deployment dates
 
-Lets get back to the camera data.
-Which `lubridate` format should we use for `r dep$start_date[1]`?
+We use the `ymd()` function to convert our dates into date objects.
 
-`ymd()` should do the job.
 Lets convert the date columns from character strings to date objects:
 
 ```{r ch3_9, class.source="Rmain"}
@@ -193,14 +128,9 @@ It was a camera that was on a 'HumanUse' feature - this camera was stolen!
 
 ### Image dates
 
-We next need to convert the `img$timestamp` column.
-What `lubridate` format is required for a a date which looks like **`r img$timestamp[1]`**?
+We next need to convert the `img$timestamp` column to a date-object.
 
-```{r ch3_13, eval=F, class.source="Rinfo"}
-ymd_hms("2015-11-21 03:03:44")
-```
-
-Lets apply this to our image dataset:
+We use the 'ymd_hms()' function to do this, as images have time data too.
 
 ```{r ch3_14, class.source="Rmain"}
 img$timestamp <- ymd_hms(img$timestamp)
@@ -215,18 +145,9 @@ range(img$timestamp)
 
 We have data from early 2018 to late 2019.
 
-And check for NA's:
-
-```{r ch3_16, class.source="Rinfo"}
-table(is.na(img$timestamp))
-```
-
-No NA's - great!
-
 ## Basic trapping summaries
 
-Now that our camera trap data are loaded into R, we can very quickly find out summary information about the dataset.
-These can feed directly into the methods section of your report/paper.
+Now that our camera trap data are loaded into R, we can very quickly find out summary information about the dataset. These can feed directly into the methods section of your report/paper.
 
 First let's count the number of unique locations:
 
@@ -259,42 +180,7 @@ knitr::include_graphics("images/exploration/project_your_locations.PNG")
 
 (p.s. [Mason is well worth a follow on Twitter](https://twitter.com/masonfidino) )
 
-#### Skill check: Leaflet maps
-
-Below we make use of the fantastic 'leaflet' package to produce interactive plots to help us check our camera locations.
-`leaflet` has a tonne of different customization options and freely available, high resolution, base layers to choose from.
-
-Note - Leaflet is best used using tidyverse 'pipe' notation - `%>%`.
-It allows you to add successive operations in the order that the elements occur.
-
-The simplest version of a leaflet map looks like this:
-
-```{r map1, echo=T, class.source="Rinfo"}
-m <- leaflet() %>%             # call leaflet
-        addTiles() %>%         # add the default basemap
-        addCircleMarkers(      # Add circles for stations
-          lng=dep$longitude, lat=dep$latitude) 
-m                              # return the map
-```
-
-This is great!
-We can zoom in using the +/\_ in the top left hand corner, and the default basemap is OpenStreetMap.
-The camera stations all appear to be in the right place (we don't have any in the Atlantic).
-
-But wouldn't it be great to see the `dep$placename` when we click over a symbol?
-Run the following:
-
-```{r map2, echo=T, eval=F, class.source="Rinfo"}
-m <- leaflet() %>%             
-        addTiles() %>%         
-        addCircleMarkers(      
-          lng=dep$longitude, lat=dep$latitude,
-          popup=paste(dep$placename)) # include a popup with the placename!
-m                              
-```
-
-Okay, but a map isn't really useful until have have some satellite imagery, right?
-Easy:
+#### Basic Leaflet map
 
 ```{r map3, echo=T, class.source="Rinfo"}
 m <- leaflet() %>%             
@@ -325,7 +211,7 @@ It looks like there is a typo in one of the coordinates: -112.5075 -> -113.5075.
 dep$longitude[dep$placename=="ALG069"] <- -112.5075
 ```
 
-#### The ultimate leaflet map
+#### Advanced leaflet map
 
 We will need to check our correction has worked. Let's also color camera locations based on their `dep$feature_type`, include them in the legend, and have their names show up when we click on them too!
 
@@ -389,18 +275,7 @@ camera_locs <- dep %>%
   st_as_sf(coords = c("longitude", "latitude"), crs = "+proj=longlat") # Convert to `sf` format
 ```
 
-First lets check that none of the `placenames` are duplicated - this would suggest a placename with two sets of coordinates.
-If all is well, this should return an empty dataframe.
-
-```{r ch3_23, class.source="Rinfo"}
-# Check that there are no duplicated stations
-camera_locs[duplicated(camera_locs$placename)==T,]
-```
-
-If it returns a list of \<0 rows\>, we don't have duplicates with different coordinates.
-Phew!
-
-Now let's crunch the numbers.Paste and run the following:
+Now let's crunch the numbers. Paste and run the following:
 
 ```{r ch3_24, class.source="Rmain"}
 # distance matrix for all cameras
@@ -473,41 +348,10 @@ The next step is to plot out the camera activity at each unique place name to se
 To make this plot we will need to use the `plotly` package for the first time.
 We use this because the plots are interactive, just like with leaflet we can zoom in and zoom out and find problem observations.
 It also dynamically changes the y-axis and x-axis labels to fit the data, which is very useful!
-Let's experiment with some basic 'plotly' graphs to get warmed up:
 
-#### Skill check: plotly
-
-If you are familiar with making plots in base R or ggplot, hopefully `plotly` is not too intimidating.
-
-Let us start with a basic scatter plot using the deployment data.
-
-```{r ch3_28, warning=F, message=F, class.source="Rinfo"}
-library(plotly)
-fig <- plot_ly(data = dep,                    # Specify your data frame
-               x = ~longitude, y = ~latitude, # The x and y axis columns
-               type="scatter")                # and the type of plot
-fig
-```
-
-Like we said, this is very similar to conventional plotting tools.
-However, things get different when we start to specify the style of the points.
-In base R we might use `pch=` and `cex=` to change the style and size of the points, whereas with `plotly` we use the "marker" option, and include elements as a list.
-
-```{r ch3_29, warning=F, message=F, class.source="Rinfo"}
-library(plotly)
-fig <- plot_ly(data = dep,                    
-               x = ~longitude, y = ~latitude,
-               color=~feature_type,              # We can specify color categories
-               type="scatter",
-               marker=list(size=15))             # the default size is 10           
-fig
-
-```
-
-As ever- this just scratches the surface of the `plotly` package.
 See the [Plotly graphing library](https://plotly.com/r/) for a wealth of options.
 
-#### The ultimate plotly camera activity figure
+#### Camera activity summary
 
 In the following plot, black dots denote start and end dates, lines denote periods where a camera is active.
 Each unique `placename` gets its own row on the plot - you can hover over the lines to get the `deployment_id`.
@@ -804,85 +648,7 @@ sp_list %>%
   kableExtra::scroll_box(width = "100%", height = "250px")
 ```
 
-That is a lot of species classifications - are they all correct? If you are familiar with the species you may be able to know by eye, however if you are unfamiliar with them. You can also use a package called `taxize`. 
-
-### Skill Check: Taxize package
-
-Lets start by seeing what `taxize` can do with a single species.
-Run the following:
-
-```{r ch3_35, eval=F, class.source="Rinfo"}
-library(taxize)
-gnr_resolve("Lynx canadensis")
-```
-
-For each hit in an online taxonomy database, you get a row in a dataframe and a confidence score in the identification.
-
-Lets try miss-spelling a common name:
-
-```{r ch3_36, eval=F, class.source="Rinfo"}
-gnr_resolve("Lynx cramadensis")
-```
-
-Cool!
-We can even recover incorrectly spelled names!
-
-What about common names?
-
-Well there is a way we can get those too using `sci2comm()`"
-
-```{r ch3_37, eval=F, class.source="Rinfo"}
-sci2comm("Lynx canadensis")
-```
-
-For more information [see the `Taxize` documentation](https://docs.ropensci.org/taxize/).
-
-```{r ch3_38, message=F, warning=F, echo=F, eval=F,include=F, class.source="Rmain"}
-# REMOVED AS TAXIZE IS UNRELIABLE
-
-#Let us turn this code into a useful workflow.
-#We will use a confidence threshold of \>90% as a validation threshold for our species designations.
-
-#We make use of a loop to iterate through our species lists.
-#if you want a tutorial on loops for R see: [Data #Carpentry:loops](https://swcarpentry.github.io/r-novice-inflammation/15-supp-loops-in-depth/)
-
-
-
-# Add a column which states if it is in the databases
-sp_list$verified <- NA
-i<- 1
-# Check if it is in a bunch of different taxonomic databases
-for(i in 1:nrow(sp_list))
-{
-  tmp <- gnr_resolve(sp_list$sp[i], data_source_ids= c(1,2,11,12, 163, 174)) # Note we restrict the databases to a few big ones, there are some weird ones in there. 
-  
-  if(nrow(tmp[tmp$score>0.9,])>0)
-  {
-    sp_list$verified[i] <- TRUE
-  } else{sp_list$verified[i] <- FALSE}
-}
-# Update the row names
-row.names(sp_list) <- 1:nrow(sp_list)
-
-
-# First add a column to the species list with genus and species pasted together
-sp_list$sp <- paste(sp_list$genus, sp_list$species)
-i <- 8
-# Check if it is in a bunch of different taxonomic databases
-for(i in 1:nrow(sp_list))
-{
-  tmp <- sci2comm(sp_list$sp[i], db = "ncbi", simplify=T)
-  Sys.sleep(4)
-  if(length(tmp[[1]])>0)
-  {
-    sp_list$common_name[i] <- tolower(tmp[[1]][1]) # Take the first element and make it all lower case
-  }
-  print(paste(i, "species of", nrow(sp_list)))
-}
-
-```
-
-In this instance, we have an external list of common names which we will use to update our `img` file.
+We have an external list of common names which we will use to update our `img` file.
 
 ```{r ch3_44, class.source="Rmain", message=F, warning=F}
 # Import the dataframe
@@ -1449,39 +1215,9 @@ write.csv(week_count, paste0("data/processed_data/",ind_dat$project_id[1], "_",i
 
 ```
 
-**11 & 12: A 'site_day x species' matrix of the number of independent detections and species counts across for each day a station was active in the study period:**
 
--   "`r  paste0("data/processed_data/",ind_dat$project_id[1], "_",independent ,"min_Daily_total_observations.csv")`"
+For a site by day code example, see the full course: [An Introduction to Camera Trap Data Management and Analysis in R](https://wildcolab.github.io/Introduction-to-Camera-Trap-Data-Management-and-Analysis-in-R/)
 
--   "`r  paste0("data/processed_data/",ind_dat$project_id[1], "_",independent ,"min_Daily_total_counts.csv")`"
-
-```{r ch3_69, echo=T, message=F, warning=F, class.source="Rmain"}
-# Daily format
-  # Station / Month / days / Covariates / Species      
-  tmp <- row_lookup
-  tmp$days <- 1
-  # Add species columns  
-  tmp[, levels(ind_dat$sp)] <- NA
-  
-  day_obs <- tmp
-  day_count <- tmp
-# For each week, count the number of individuals/observations
-  for(i in 1:nrow(day_obs))
-    {
-      tmp <- ind_dat[ind_dat$placename==day_obs$placename[i] & strftime(ind_dat$timestamp, format = "%Y-%m-%d")== day_obs$date[i],]
-      
-      tmp_stats <- tmp %>%  group_by(sp, .drop=F) %>% summarise(obs=n(), count=sum(animal_count))
-      
-      day_obs[i,as.character(tmp_stats$sp)] <- tmp_stats$obs
-      day_count[i,as.character(tmp_stats$sp)] <- tmp_stats$count
-        
-      
-    }
-write.csv(day_obs, paste0("data/processed_data/",ind_dat$project_id[1], "_",independent ,"min_independent_daily_observations.csv"), row.names = F) 
-
-write.csv(day_count, paste0("data/processed_data/",ind_dat$project_id[1], "_",independent ,"min_independent_daily_counts.csv"), row.names = F) 
-
-```
 
 ### Final data check
 
@@ -1492,11 +1228,10 @@ Check this using the following tables.
 
 ```{r ch3_70, echo=T, class.source="Rinfo"}
 
-tmp <- cbind(data.frame("Time"=c("Total", "Monthly", "Weekly", "Daily")),
+tmp <- cbind(data.frame("Time"=c("Total", "Monthly", "Weekly")),
 rbind(colSums(total_obs[,2:ncol(total_obs)]),
 colSums(mon_obs[,3:ncol(mon_obs)]),
-colSums(week_obs[,3:ncol(week_obs)]),
-colSums(day_obs[,3:ncol(day_obs)])  ))
+colSums(week_obs[,3:ncol(week_obs)])))
 
 tmp %>%
   kbl() %>%
@@ -1509,11 +1244,10 @@ tmp %>%
 **Counts**
 
 ```{r ch3_71, echo=T, , class.source="Rinfo"}
-tmp <- cbind(data.frame("Time"=c("Total", "Monthly", "Weekly", "Daily")),
+tmp <- cbind(data.frame("Time"=c("Total", "Monthly", "Weekly")),
 rbind(colSums(total_count[,2:ncol(total_count)]),
 colSums(mon_count[,3:ncol(mon_count)]),
-colSums(week_count[,3:ncol(week_count)]),
-colSums(day_count[,3:ncol(day_count)])  ))
+colSums(week_count[,3:ncol(week_count)])  ))
 
 tmp %>%
   kbl() %>%

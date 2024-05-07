@@ -6,113 +6,14 @@ Once we have created the building blocks for our data analysis dataframes, we mu
 
 Call it `02_example_covariates.R`.
 
-**Load the required packages**
+**Load the required packages and read in the locations dataframe**
 
 ```{r ch4_1, echo=T, results='hide', message =F, warning=F, class.source="Rmain"}
-library(kableExtra);library(dplyr); library(sf); library(MODISTools); library(lubridate); library(corrplot); library(traitdata); library(terra); library(osmdata); library(elevatr)
-```
+library(kableExtra);library(dplyr); library(sf); library(MODISTools); library(lubridate); library(corrplot); library(terra); library(osmdata); library(elevatr)
 
-We can simplify the covariate options we have available into two distinct categories:
-
-**- Species traits**
- 
-The traits are species-level covariates which we think are important in structuring their responses to other covariates, such as human modification.  
-
-```{r ch4_2, class.source="Rmain"}
-# Start by reading in your species list
-sp_summary <- read.csv("data/processed_data/AlgarRestorationProject_species_list.csv", header=T)
-```
- 
- 
-**- Location-level covariates**
-
-Location-level covariates are characteristics of the camera locations which are either fundamental to your question (such as the habitat type, degree of human modification, or distance to the nearest road), or they are things you are not directly interested in but must account for in your analyses. The way we derive and treat these variables are identical however. 
-
-```{r ch4_3, class.source="Rmain"}
+# Locations data frame 
 locs <- read.csv("data/processed_data/AlgarRestorationProject_camera_locations.csv", header=T)
-```
 
-
-## Species traits
-
-It is easier than ever before to add trait data to your species lists, particularly with the advent of R packages which pool multiple data sources such as the [`traitdata` database](https://github.com/RS-eco/traitdata), which to date, compiles data from 32 different sources.
-
-Below we use this package to add trait data to the project species list:
-
-```{r ch4_4, class.source="Rmain"}
-
-# This package isn't available on Cran, so we must use the remotes package
-#library(remotes)
-#remotes::install_github("RS-eco/traitdata", build_vignettes = T, force=T)
-# Load the library
-library(traitdata)
-```
-
-To pull the data for a specific database we use the following code:
-
-```{r ch4_5, class.source="Rmain"}
-data("elton_mammals")
-```
-
-To explore the full list of available datasets click [this link](https://opentraits.org/datasets.html).
-
-Let's take a look at what categories we have available to us:
-
-```{r ch4_6, class.source="Rinfo", include=T}
- head(elton_mammals) %>% kbl() %>% scroll_box(height = "200px") %>%
-  kable_paper("striped", full_width = F)
-```
-
-Lets make a new column `sp` which matches the species column in our 'sp_summary' dataset. We will use this as the "key" variable to extract the trait data. 
-
-```{r ch4_7, class.source="Rmain"}
-elton_mammals$sp <- paste0(elton_mammals$Genus,"." ,elton_mammals$Species)
-```
-
-We do not want to take all of the trait data, so lets subset to `BodyMass.Value` and the activity data `Activity.Nocturnal	Activity.Crepuscular	Activity.Diurnal`.
-
-```{r ch4_8, warning=F, message=F, class.source="Rmain"}
-tmp <- elton_mammals[, c("sp","BodyMass.Value", "Activity.Nocturnal", "Activity.Crepuscular",	"Activity.Diurnal")]
-
-# Lets rename the columns to make them more usable
-tmp <- tmp %>% rename(
-              mass_g = BodyMass.Value,
-              act_noct = Activity.Nocturnal,
-              act_crep = Activity.Crepuscular,
-              act_diur = Activity.Diurnal)
-
-sp_summary <- left_join(sp_summary, tmp)
-```
-
-And then check our output:
-
-```{r ch4_9, class.source="Rinfo"}
-sp_summary %>% kbl() %>% scroll_box(height = "200px") %>%
-  kable_paper("striped", full_width = F)
-```
-
-If there are any NA's, it could be for several reasons:
-
-i) There is no trait data for that species - in this case you could either:
-
-- leave them as NA's (excluding them from later analyses) or if you are lucky, your analysis framework might be able to accommodate missing trait data
-
-- Give the species the mean values obtained from other species in its genus 
-
-ii) There is a mismatch in taxonomic resolution - you are working with a subspecies that isn't recognized. This is the case here with elk! Lets replace it with the data for (**Cervus elaphus**)
-
-```{r ch4_9a, , class.source="Rmain"}
-
-sp_summary[sp_summary$sp=="Cervus.canadensis", c("mass_g", "act_noct","act_crep","act_diur")] <- 
-    elton_mammals[elton_mammals$sp=="Cervus.elaphus", c("BodyMass.Value", "Activity.Nocturnal", "Activity.Crepuscular",	"Activity.Diurnal")]
-```
-
-Whatever you do, remember to report it in your methods section!
-
-Let's save our species list for a rainy day!
-
-```{r ch4_10, class.source="Rmain"}
-write.csv(sp_summary, paste0("data/processed_data/", locs$project_id[1],"_species_list.csv"), row.names = F)
 ```
 
 ## Camera station covariates
@@ -125,77 +26,46 @@ For the time invariant covariates, we will add them to our `locs` dataframe impo
 
 You may have collected some data in the field when deploying or checking your camera traps, and kept that data separate from your camera trap data (e.g. vegetation assessments). Provided that the naming convention you gave to these dataframes is the same as in your camera data (e.g. the location is in a column called `placename`) - you can do a 'left_join()` to merge the two datasets.
 
-Import a sample set of local covariates:
+Import a sample set of local covariates and look at it:
 
 ```{r ch4_11, class.source="Rmain"}
+# Import
 local_covs <- read.csv("data/raw_data/example_covariates/example_dataframe.csv")
-```
 
-Lets take a look at the data structure:
+# Add it to you locations datafile
+locs <- left_join(locs, local_covs)   # From the dplyr package
 
-```{r ch4_12, echo=F, class.source="Rinfo"}
+# Look at the data
 local_covs %>% kbl() %>% 
   kableExtra::scroll_box(height = "250px")
+
 ```
 
 It is a dataframe where the survey locations are rows and the local covariates, in this case `line_of_sight_m`, are columns.
 
-To add this data to our station data, we use a `left_join()` operation from the `dplyr()` package. It uses a key variable which is common in both data frames to add data from the "right-hand side" to the rows in the "left-hand side" which are not already present. Any rows present in the right-hand side which are not in the left-hand side will be skipped.
-
-```{r ch4_13, message=F, warning=F, class.source="Rmain"}
-locs <- left_join(locs, local_covs)   # From the dplyr package
-```
+We added this data to our station data using a `left_join()` operation from the `dplyr()` package. It uses a key variable which is common in both data frames to add data from the "right-hand side" to the rows in the "left-hand side" which are not already present. Any rows present in the right-hand side which are not in the left-hand side will be skipped.
 
 For more examples of joins using `dplyr()` see: [https://dplyr.tidyverse.org/reference/mutate-joins.html](https://dplyr.tidyverse.org/reference/mutate-joins.html)
 
 ### Remotely collected covariates
 
-To exploit remotely collected data sources we need to use a package to help us with spatial data.
-
-#### Key skills: `sf` package
-
-The most intuitive package to learn spatial operations in R is the `simple features` package (a.k.a. `sf`).
-`sf`  allows you to use spatial dataframes in the style of a typical R dataframe. We use this package frequently as it allows you to rapidly change coordinate projection systems (e.g. lat/long to UTM) and rapidly perform spatial operations.
+To exploit remotely collected data sources we need to use the `sf` package to help us with spatial data.
 
 Lets convert our "normal" dataframe to an `sf` dataframe:
 
 ```{r ch4_14, class.source="Rmain"}
+# Convert
 locs_sf <- st_as_sf(locs,                              # We specify the dataframe 
                     coords=c("longitude", "latitude"), # The XY coordinates
                     crs=4326)                          # And the projection code
-```
 
-What does an `sf` object look like? Like a normal dataframe but with a weird header: 
-
-```{r  ch4_15, class.source="Rinfo"}
+# Look
 locs_sf
+
+
 ```
 
-That header is important - it tells you the type of data you have (lines, points, polygons etc), and the projection information (`CRS`).
-
-We like using `sf` as it is very easy to transform coordinates into different projections using `st_transform()`. Use the website [epsg.io](https://epsg.io/) to find the CRS codes for the projection you want - e.g. UTM 12N = 26712, then plug it into the following:
-
-```{r ch4_16, eval=T, class.source="Rinfo"}
-locs_utm <- st_transform(locs_sf, crs=26712)
-```
-
-Check the header of `locs_utm` and you should see that the CRS has changed!
-
-Plotting `sf` objects is a little bit odd at first. If you try to plot them normally you get lots of replicated plots (one for each column) - try it:
-
-```{r ch4_17, class.source="Rinfo"}
-plot(locs_utm)
-```
-
-It can be useful as it varied the colors based on the properties of the column. Typically, however, we just want to plot the points themselves. We do that by wrapping the object in `st_geometry()` this just extracts the geometry of the object.
-
-```{r ch4_18, class.source="Rinfo"}
-plot(st_geometry(locs_utm))
-axis(1)
-axis(2)
-```
-
-We will use `st_geometry()` frequently below.
+That weird header is important - it tells you the type of data you have (lines, points, polygons etc), and the projection information (`CRS`).
 
 For more in depth information of `sf` functionality see: [https://r-spatial.github.io/sf/articles/sf1.html](https://r-spatial.github.io/sf/articles/sf1.html) 
 
@@ -212,6 +82,7 @@ The only time we deviate from the `sf` package is to deal with rasters. Raster o
 
 ```{r  ch4_19, class.source="Rmain"}
 library(terra)
+
 # Import the example raster using the stars package
 ras <- rast("data/raw_data/example_covariates/example_raster.tif")
 # Covert your sf locations to the same projection as your raster then put it in terra `vect` format,
@@ -219,13 +90,11 @@ locs_terra <- locs_sf %>%
                 st_transform(crs=st_crs(ras)) %>% # change the projection to match the raster
                 vect() # Turn it into a terra object
 
-```
-
-Lets check our layers match up!
-
-```{r ch4_20, class.source="Rinfo"}
+# Plot the result
 plot(ras) # The terra package makes nice raster plots with legends
 plot(locs_terra, add=T) # Add the survey locations as black dots
+
+
 ```
 
 Great! Now lets buffer our camera locations by 250 meters, and take the average depth to water for each location:
@@ -241,13 +110,9 @@ tmp <- raster::extract(ras, locs_terra, fun=mean)
 # They are ordered the same way so no need for a fancy join
 locs_sf$water_depth_m <- tmp$Depth2WatAlgar
 
-```
-
-Finally, lets check the distribution of our data!
-
-```{r ch4_22, class.source="Rinfo"}
-# Basic boxplot in base R
+# Check the distribution of our data
 boxplot(locs_sf$water_depth_m)
+
 ```
 
 Most locations are on the water table (lowland sites), others are above it (upload sites), and they have different vegetation characteristics in the field. 
@@ -256,27 +121,26 @@ Most locations are on the water table (lowland sites), others are above it (uplo
 
 Camera studies often occur over a range of elevations - and we can quickly extract these elevations using the `elevatr` package and an `sf` dataframe.
 
+The `src` option specifies the sources of the DEM data. We use `aws` Amazon Web Service Terrain Tiles - which are available globally.
+
+The `z` option specifies the resolution of the underlying DEM, the high the value, the more detailed it is. However, it will take longer to run so do not go crazy. 
 
 ```{r ch4_23, class.source="Rmain", warning=F, message=F}
 library(elevatr)
 locs_sf <- get_elev_point(locs_sf, 
                           src="aws", #Amazon Web Service Terrain Tiles - available globally
                           z = 12)  # z specifies the zoom level, the lower the value the faster the code runs, but the coarser the elevation values are
-```
 
-The `src` option specifies the sources of the DEM data. We use `aws` Amazon Web Service Terrain Tiles - which are available globally.
-
-The `z` option specifies the resolution of the underlying DEM, the high the value, the more detailed it is. However, it will take longer to run so do not go crazy. 
-
-Let's plot the output:
-
-```{r ch4_24, class.source="Rinfo"}
+# Plot the result
 boxplot(locs_sf$elevation)
+
+
 ```
 
 An elevation of ~ 500m was expected. Great!
 
 If you want to download a full elevation raster for your area of interests, see the [`introduction to elevatr`](https://cran.r-project.org/web/packages/elevatr/vignettes/introduction_to_elevatr.html)
+
 
 ### Open Street Maps
 Open Street Map (OSM) is an incredible resource for generating covariates for camera trap studies. For example, we might be interested in the distance to the nearest rivers, roads, or trails. All of these anthropogenic features are available in OSM!
@@ -301,62 +165,41 @@ Let's start by defining our area of interest. All `osmdata` queries begin with a
 # First buffer our points by 10km to create an area of interest (aoi)
 aoi <- st_bbox(st_buffer(locs_sf, 10000)) # Units are in meters 
 
-```
-
-We then use this bounding box to return all of the features which cross into it:
-
-```{r ch4_27, class.source="Rmain"}
+# Return the features inside the bounding box
 highway <- opq(aoi) %>% #using the bounding box
            add_osm_feature(key="highway") %>% #extract all highway features
            osmdata_sf()  # convert them into simple features format
 
+
 ```
 
-
-The data you extract is its own "class" of data made up from multiple data types:
-
-```{r ch4_28, eval=F, class.source="Rinfo"}
-str(highway)
-```
-
-Which looks very intimidating! However, the key thing is that it is made up of multiple data slices, each of which represents an `sf` dataset. Let's take a look at three of these
-
+The data you extract is its own "class" of data made up from multiple data types. The key thing is that it is made up of multiple data slices, each of which represents an `sf` dataset. Let's take a look at three of these
 - $osm_points
 - $osm_lines
 - $osm_polygons
 
-```{r ch4_29, class.source="Rinfo"}
-par(mfrow=c(1,3))
-plot(st_geometry(highway$osm_points), main="osm_points")
-plot(st_geometry(highway$osm_lines), main="osm_lines")
-plot(st_geometry(highway$osm_polygons), main="osm_polygons")
-```
-
-The points or the lines datasets look must useful to us, there is nothing in the polygon layer. 
-
-Let's use the lines element and add out camera stations:
+Let's use the lines element and add our camera stations, then calculate the distances to them:
 
 ```{r ch4_30, class.source="Rinfo"}
-par(mfrow=c(1,1))
-plot(st_as_sfc(aoi))     # st_as_sfc created a polygon from a `bbox` object
-plot(st_geometry(highway$osm_lines), add=T)
-plot(st_geometry(locs_sf), col="red", add=T)
-```
-
-We can now calculate the distances from our cameras to these objects using the following codes:
-
-`st_nearest_feature` gives us the index number of the feature which is closest to each station. 
-
-We can the use this to request the distance from that nearest feature to each camera station using `st_distance`. Which, put together, looks like:
-
-```{r ch4_31, class.source="Rmain"}
 # Create an index of the nearest object in `highway$osm_lines` to locs_sf
 index <- st_nearest_feature(locs_sf, highway$osm_lines)
 
 # Use that index to ask for the distance to that object
 locs_sf$road_dist_m <- st_distance(locs_sf, highway$osm_lines[index,], 
                                    by_element=T) # Note `by_element=T` tells st_distance to evaluate things line by line. 
+
+# Plot the data
+par(mfrow=c(1,1))
+plot(st_as_sfc(aoi))     # st_as_sfc created a polygon from a `bbox` object
+plot(st_geometry(highway$osm_lines), add=T)
+plot(st_geometry(locs_sf), col="red", add=T)
+
 ```
+
+`st_nearest_feature` gives us the index number of the feature which is closest to each station. 
+
+We can the use this to request the distance from that nearest feature to each camera station using `st_distance`. Which, put together, looks like:
+
 
 #### water bodies
 
@@ -367,28 +210,11 @@ water <- opq(aoi) %>%
            add_osm_feature(key="water") %>%
            osmdata_sf()
 
-```
-
-Lets check our data:
-
-```{r ch4_33, class.source="Rinfo"}
-par(mfrow=c(1,3))
-plot(st_geometry(water$osm_points), main="osm_points")
-plot(st_geometry(water$osm_lines), main="osm_lines")
-plot(st_geometry(water$osm_polygons), main="osm_polygons")
-```
-
-```{r, include=F}
-# Reset plot params
-par(mfrow=c(1,1))
-```
-
-In this instance, the lines and the polygons are incomplete, out best bet is the points file!
-
-```{r ch4_34, class.source="Rmain"}
+# This time we will use the points file
 index <- st_nearest_feature(locs_sf, water$osm_points)
 
 locs_sf$water_dist_m <- st_distance(locs_sf, water$osm_points[index,], by_element=T) # Note `by_element=T` tells st_distance to evaluate things line by line. 
+
 ```
 
 For more examples of using the `osmdata` package see: [the projects github page](https://github.com/ropensci/osmdata)
@@ -403,49 +229,19 @@ For more examples of using the `osmdata` package see: [the projects github page]
 
 Also click that link for more details on how to use it. 
 
-Let's load the package:
+Two commonly data products are [MOD13Q1](https://lpdaac.usgs.gov/products/mod13q1v006/) for the derivation of NDVI/EVI, and [MOD15A2H](https://lpdaac.usgs.gov/products/mod15a2hv006/) for the derivation of leaf area index (LAI).
+
+Let's load the package and get it into the right format:
 
 ```{r ch4_46, class.source="Rmain"}
 library(MODISTools)
-```
 
-For `MODIStools` to work, we need to provide a dataframe with specific column names:
-
-- `site_name` - the placename
-- `lat'
-- 'long'
-
-```{r ch4_47, class.source="Rmain"}
+# Select the location data and put it into the format MODIS tools expects
 modis_locs <- locs %>% 
   select("placename", "longitude", "latitude") %>% 
   rename(site_name=placename, lat=latitude, lon=longitude)
-```
 
-We can then look at the available bands for different products. 
-
-Two commonly used ones are [MOD13Q1](https://lpdaac.usgs.gov/products/mod13q1v006/) for the derivation of NDVI/EVI, and [MOD15A2H](https://lpdaac.usgs.gov/products/mod15a2hv006/) for the derivation of leaf area index (LAI).
-
-```{r ch4_48, class.source="Rinfo"}
-# list available bands for a product
-bands <- mt_bands(product = "MOD13Q1") #MOD15A2H
-head(bands)
-```
-
-When we run `MODIStools` the underlying algorithm chooses the best available pixel value from all the acquisitions from the 16 day period. The criteria used is lowest cloud cover, lowest satellite view angle, and the highest NDVI/EVI value.
-
-```{r ch4_49, class.source="Rinfo"}
-# list available dates for a product at a location
-dates <- mt_dates(product = "MOD13Q1", lat = modis_locs$lat[1], lon = modis_locs$lon[1]) #MOD15A2H
-
-# Get the first and last date!
-first(dates$calendar_date); last(dates$calendar_date)
-```
-
-In the interest of processing time, lets not pull the NDVI scores for the full date range. Instead, we will focus on mid summer in 2019. 
-
-Be patient, this might take a while!
-
-```{r ch4_50, class.source="Rmain"}
+# Download some NDVI data
 site_ndvi <- mt_batch_subset(product = "MOD13Q1",
                               df=modis_locs,
                               band = "250m_16_days_NDVI",
@@ -457,32 +253,16 @@ site_ndvi <- mt_batch_subset(product = "MOD13Q1",
 
 ```
 
-The raw output is somewhat intimidating:
 
-```{r ch4_51, class.source="Rinfo"}
-site_ndvi[1:10, ] %>% 
-  kbl() %>% 
-  scroll_box(height = "300px") %>%
-  kable_paper("striped", full_width = F)
-```
+Lets simplify the output to the key elements of information and rename them to match our camera data where appropriate:
 
-So lets simplify it to the key elements of information and rename them to match our camera data where appropriate:
-
-```{r ch4_52, class.source="Rmain"}
+```{r ch4_52, class.source="Rmain", message=F, warning=F}
+# Reduce the number of columsn in the output and rename it where required.
 ndvi_simple <- site_ndvi %>% 
   select(	site, band, calendar_date, value) %>% 
   rename(placename=site)
 
-ndvi_simple[1:10, ] %>% 
-  kbl() %>% 
-  scroll_box(height = "300px") %>%
-  kable_paper("striped", full_width = F)
-
-```
-
-So we have multiple observations per site. Lets take an average and add it to our `locs_sf` dataframe.
-
-```{r ch4_53, message=F, warning=F, class.source="Rmain"}
+# Take the average for each location
 tmp <- ndvi_simple %>%             #Take the NDVI layer
   group_by(placename) %>%          # Group observations by the placename
   summarize(mean_ndvi=mean(value)) # Take the mean of the values and call the new column `mean_ndvi`
@@ -490,42 +270,15 @@ tmp <- ndvi_simple %>%             #Take the NDVI layer
 # Add the new data to our locations dataframe
 locs_sf <- left_join(locs_sf, tmp)
 
-```
-
-And check the output:
-```{r ch4_54, class.source="Rinfo"}
+# Plot the results
 boxplot(locs_sf$mean_ndvi,
         ylab="Mean NDVI score",
         las=1)
+
+
 ```
 
 It is possible to generate an NDVI score for each month that each camera is active, however that would take too long to produce for this course! 
-
-
-### Digging deeper
-
-If you want to dig into estimating NDVI metrics from camera trap viewshed, rather than from satellite data, check out the `phenopix` R package. It allows the user to extract visual information from time lapse images.  It provides a quantitative daily measure of vegetation phenology at each site (e.g. green-up, senescence, snow cover).
-
-[Alberton, B. et al. 2017. Introducing digital cameras to monitor plant phenology in the tropics: applications for conservation. Perspect. Ecol. Conserv](https://www.sciencedirect.com/science/article/pii/S2530064417300019)
-
-[Filippa, G. et al. 2017. phenopix: Process Digital Images of a Vegetation Cover. R package version 2.3.1.](https://rdrr.io/rforge/phenopix/)
-
-
-The Phenopix package has a five step process:
-
-1. a region of interest (ROI) is identified;
-2. the red, green, and blue digital numbers from each image in the time series is extracted and an index of relative ‘greenness’ is computed and plotted from the digital numbers; 
-3. the vegetation indices’ data points are filtered to remove inconsistencies; 
-4. a curve is fit to the data and phenophases are determined from the curve; 
-5. phenophase uncertainties are calculated.
-  
-
-To see an application and comparison of these metrics, we highly recommend that you check out Catherine Sun's (WildCo alumni) paper on the subject:
-
-[Sun, Catherine, et al. "Simultaneous monitoring of vegetation dynamics and wildlife activity with camera traps to assess habitat change." Remote Sensing in Ecology and Conservation 7.4 (2021): 666-684.](https://zslpublications.onlinelibrary.wiley.com/doi/10.1002/rse2.222)
-
-And the code associated with this publication on the [WildCo GitHub Page](https://github.com/WildCoLab/WildCo_Phenology)
-
 
 ## Convert and save your covariates
 
@@ -559,19 +312,6 @@ library(corrplot)
 # First we need to create a correlation matrix between the different variables of interest
 M <- cor(locs[, c("line_of_sight_m", "water_depth_m", "elevation",
                      "road_dist_m", "mean_ndvi")])
-```
-
-Now lets make the basic `corrplot`:
-
-```{r ch4_59, class.source="Rinfo"}
-corrplot(M)
-```
-
-The cells denote pairwise correlations between the rows and the columns. The great thing about `corrplot` is customization option are near endless - see [the corrplot vignette](https://cran.r-project.org/web/packages/corrplot/vignettes/corrplot-intro.html).
-
-Let's make a better, more informative, `corrplot`!
-
-```{r ch4_60, class.source="Rmain"}
 
 corrplot(M,                              #The correlation matrix we made
          method="color",                 # How we want the cells 
@@ -583,6 +323,8 @@ corrplot(M,                              #The correlation matrix we made
          )
 
 ```
+
+The cells denote pairwise correlations between the rows and the columns. The great thing about `corrplot` is customization option are near endless - see [the corrplot vignette](https://cran.r-project.org/web/packages/corrplot/vignettes/corrplot-intro.html).
 
 In general there is very low correlation between our different predictors! If we were seeing pairwise correlations >0.7 we perhaps wouldn't include those in the same model. 
 

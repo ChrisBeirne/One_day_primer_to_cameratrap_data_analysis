@@ -39,40 +39,21 @@ total_obs <- read.csv("data/processed_data/AlgarRestorationProject_30min_indepen
 # Import your species list
 sp_summary <- read.csv("data/processed_data/AlgarRestorationProject_species_list.csv", header=T)
 
-```
-
-Which, as a quick reminder, looks like this:
-
-```{r ch7_3, echo=F}
-kbl(head(total_obs))%>%
-  kable_paper() %>%
-  scroll_box(height = "200px")
-```
-
-So within each row, we have the location (`placename`), the survey effort at each given location (camera `days`), and the number of independent records of each species. This is very close to the format which most linear model analysis packages require. Easy!
-
-Our next step to create the capture rate - our proxy for habitat use. We will divide each count by the number of days cameras were active in that location, then multiply by the a standardized number of days - often people use 100.
-
-In R this would look like:
-
-```{r ch7_4, class.source="Rmain"}
 # Create a dataframe to store these detection rates
 total_cr <- total_obs
 # Divide the species abundances (which start in column four), by the amount of camera effort
 total_cr[ ,sp_summary$sp ] <- (total_cr[ , sp_summary$sp]/total_cr$days)*100
-```
 
-We can then examine the relationship between raw counts (on the x-axis) with our detection rate (on the y-axis), using *Odocoileus virginianus* as an example. In the plot below each black dot represents a `placename` where camera trapping has occurred.
-
-```{r ch7_5, class.source="Rinfo"}
+# Make a plot of observations vs. capture rate
 plot(total_cr$Odocoileus.virginianus ~ total_obs$Odocoileus.virginianus,
      las=1, pch=19, 
      ylab="Capture rate per 100 days", 
      xlab="Number of independent records")
 
+
 ```
 
-As you can see they are not a perfect match as the capture rate accounts for the variation in effort between different sites.  
+As you can see there is not a perfect match as the capture rate accounts for the variation in effort between different sites.  
 
 ### Examples from the literature
 
@@ -106,43 +87,27 @@ In this example we will explore if the habitat use of *Odocoileus virginianus* v
 Recall that the information about each location is recorded in the  file:
 
 ```{r ch7_6, class.source="Rmain"}
+# Import locations
 locs <- read.csv("data/processed_data/AlgarRestorationProject_camera_locations_and_covariates.csv", header=T)
 
 # Convert to categorical factors
 locs <- locs %>% 
             mutate_if(is.character,as.factor)
 
+# Standardize
 # You should also standardize your covariates - it helps models coverage an facillitates comparison of effects sizes
 
 library(MuMIn)
 z_locs <- stdize(locs)
-```
 
-Take a look at it to see what it has done!
+# Add the covariate data to the capture rate datframe
 
-```{r ch7_6a, echo=F}
-kbl(head(z_locs))%>%
-  kable_paper() %>%
-  scroll_box(width = "750px", height = "200px")
-```
-
-Each location (`placename`) has a single row in the dataframe.
-
-We will now add our covariates to our capture rate dataframe: 
-
-```{r ch7_7, class.source="Rmain", message=F, warning=F}
 mod_dat <- left_join(total_cr, z_locs) # from the dplyr package
 ```
 
 ### Catagorical predictor
 
 So we start by exploring the influence of 'feature_type' on our response term. 
-
-What are the categories we have in our feature type variable?
-
-```{r ch7_8, class.source="Rinfo"}
-table(z_locs$feature_type)
-```
 
 `feature_type` is a a categorical variable which reflects strata where the camera trap was deployed: 
 
@@ -166,11 +131,8 @@ Next we will fit a simple linear model using the `lm()' function in base R.
 ```{r ch7_10, class.source="Rmain"}
 # model results <- lm( Y data ~ x Data, data= dataframe source)
 lm_cat <- lm(Odocoileus.virginianus ~ feature_type, data = mod_dat)
-```
 
-Lets looks at the model summary:
-
-```{r ch7_11, class.source="Rmain"}
+# And check the output
 summary(lm_cat)
 ```
 
@@ -190,24 +152,13 @@ effect_plot(lm_cat,                  # The model object
 ### Continuous predictor
 
 Let's also explore a continuous predictor `line_of_sight_m':
-
-```{r ch7_13, class.source="Rinfo"}
-plot(mod_dat$Odocoileus.virginianus~mod_dat$z.line_of_sight_m,
-        las=1,
-        xlab="line_of_sight_m",
-        ylab="Habitat use")
-```
-
-Next we will fit a simple linear model using the `lm()' function in base R. 
+We will fit a simple linear model using the `lm()' function in base R. 
 
 ```{r ch7_14, class.source="Rmain"}
 # model results <- lm( Y data ~ x Data, data= dataframe source)
 lm_con <- lm(Odocoileus.virginianus ~ z.line_of_sight_m, data = mod_dat)
-```
 
-Lets looks at the model summary:
-
-```{r ch7_15, class.source="Rmain"}
+# Look at the output
 summary(lm_con)
 ```
 
@@ -233,11 +184,8 @@ library(MuMIn)
 
 # Lets also create a "null model" something without any predictors in at all, to compare these models to:
 lm_null <- lm(Odocoileus.virginianus ~ 1, data = mod_dat) 
-```
 
-Now compare the three alternative models:
-
-```{r ch7_18, class.source="Rmain"}
+# Compare the results
 model.sel(lm_null, lm_cat, lm_con)
 ```
 
@@ -268,81 +216,30 @@ First we must install the packages we require: 'lme4' and `tidyr':
 
 ```{r ch7_19, class.source="Rmain"}
  library(lme4); library(tidyr)
-```
 
-The lme4 package requires a dataframe format (as above), with the response term and the predictor variables all included in the same location. 
-
-Second, lets create our monthly analysis dataframe:
-
-```{r ch7_20, class.source="Rmain"}
-# Import the total observations dataset
+# Import the monthly observations dataset
 monthly_obs <- read.csv("data/processed_data/AlgarRestorationProject_30min_independent_monthly_observations.csv", header=T)
-```
 
-Let's join this dataframe with the location data, as before:
-
-```{r ch7_21, class.source="Rmain", message=F, warning=F}
+# Add the locations (as before)
 mod_dat <- left_join(monthly_obs, z_locs)
-```
 
-And let's do another raw data check:
-
-```{r ch7_22, class.source="Rinfo"}
-boxplot(mod_dat$Odocoileus.virginianus~mod_dat$feature_type,
-        las=1,
-        xlab="feature_type",
-        ylab="Habitat use")
-```
-
-The patterns are similar to the `total_obs` dataset, however there is more noise!
-
-Now that we have monthly data, we might also want to control for some element of seasonality in our models. We can extract the month from our date column.
-
-```{r ch7_23, class.source="Rmain"}
+# extract month from the data frames
 mod_dat$date <- ym(mod_dat$date)
 mod_dat$month<- month(mod_dat$date, label=T)
 
-```
-
-
-Next we will fit a mixed effects model to this data set using `lme4`. You may have noticed that we haven't calculated a separate capture rate dataframe as we did in the simple example! That is because we can create a relative abundance index within the model itself by providing an `offset()` term . An offset term serves to scale the response term based on the amount of survey effort, and preserves the original units of the observations (counts). 
-
-The model takes the form:
-  
-Response term ~ fixed effect + offset() + (1|random intercept), data frame, distribution
-
-We include `placename` as the random intercept, as camera locations are repeatedly sampled at monthly intervals and thus our data (rows in the dataframe) are not independent. We use the `poisson`  family, as our response term is a count.  
-
-```{r ch7_24,eval=F, class.source="Rmain"}
-glmm_cat <- glmer(Odocoileus.virginianus ~ 
-                    feature_type + month + offset(log(days)) + (1|placename) , data=mod_dat, family="poisson")
-```
-
-Oh that warning doesn't look friendly. Convergence errors often arise as when we fit a model which is too complicated! It basically says the the model hasn't completely "solved" the parameters within it. In it's current form the model is estimating and effect for every single month of the year, that's a lot of thing to estimate with such a small dataset.
-
-Let's simplify things to `summer` and `winter`!
-
-```{r ch7_25, class.source="Rmain"}
-# Lets create a new column and give it the value summer
+# Convert month into a simple summer and winter comparison
 mod_dat$season <- "summer"
 mod_dat$season[month(mod_dat$date) %in% c(10,11,12,1,2,3)] <- "winter"
 
-# make it a factor factors
+# make it a factor 
 mod_dat <- mod_dat %>% 
             mutate_if(is.character,as.factor)
-```
 
-And re-run our model - also this time with a negative binomial distribution to account for excess zeros:
-
-```{r ch7_26, class.source="Rmain"}
+# Run the model
 glmm_cat <- glmer.nb(Odocoileus.virginianus ~ 
                     feature_type + season + offset(log(days)) + (1|placename) , data=mod_dat)
 
-```
-
-We can view a summary of the model fit using:
-
-```{r ch7_27, class.source="Rmain"}
+# Check the model fit
 summary(glmm_cat)
 ```
 
@@ -365,26 +262,6 @@ effect_plot(glmm_cat, pred = season, interval = TRUE, y.label = "Habitat use",
 ```
 
 Which suggests habitat use is slightly lower habitat use in winter then in summer. 
-
-### On your own
-
-Using this code as a scaffold, explore some more of the patterns we explored in the [data exploration chapter](#exploration).
-
-Remember we have the following species:
-
-```{r ch7_30, echo=F}
-sp_summary$sp
-```
-
-And the following covariates:
-
-```{r ch7_31, echo=F}
-colnames(z_locs)[colnames(z_locs) %in% c("feature_type","z.line_of_sight_m", "z.water_depth_m", "z.elevation", "z.road_dist_m", "z.water_dist_m", "z.mean_ndvi")]
-```
-
-**A note of caution**
-
-As stated at the start of this guide, we are not focusing on whether the models we apply are appropriate or finding "the best" models for this datasheet, so do not spend too much time trying to interpret this information! 
 
 ### Advanced mixed-model predictions
 
@@ -410,68 +287,34 @@ As with single species linear models, there are many choices available for model
 
 In this example we will use the `Hmsc` package.
 
-```{r ch7_32, class.source="Rmain"}
+```{r ch7_32, class.source="Rmain", eval=F}
 library(Hmsc)
-```
 
-**Preparing our data**
-
-The format of data required for joint species distribution models is very similar to the data required for single species models. However, rather than storing the response term and fixed effects within the the same data frame (as with `mod_dat` above), we need a separate `Y` matrix of site_time x species, and a separate `Xdata` dataframe containing the fixed and random effects. 
-
-```{r ch7_33, class.source="Rmain"}
+# Prepare our data
 # Pull the count data into its own matrix
 Y <- as.matrix(monthly_obs[,sp_summary$sp])
 
 # Give the row names a useful label, in this case the site_date values 
 # (just in case you want to check things)
 row.names(Y) <- paste(monthly_obs$placename, monthly_obs$date, sep="_")
-```
 
-Which looks like this:
-
-```{r ch7_34, echo=F}
-kbl(head(Y))%>%
-  kable_paper() %>%
-  scroll_box(height = "200px")
-```
-
-We then create the XData in a similar way to before, but this time dropping the species information:
-
-```{r ch7_35, class.source="Rmain", message=F, warning=F}
+# Join with the location data
 Xdat <- left_join(monthly_obs[c("placename", "date", "days")], z_locs)
 # All XData must be numeric or factors, so lets check what we have
 
-```
 
-Whose output looks like this:
-
-```{r ch7_36, echo=F}
-kbl(head(Xdat))%>%
-  kable_paper() %>%
-  scroll_box(height = "200px")
-```
-
-With Bayesian approaches we need to set up our sampling conditions
-
-```{r ch7_37, class.source="Rmain"}
+# Set up the sampling conditions
 nChains   = 2       # How many total repeats to run
 thin      = 5       # How often to thin the samples
 samples   = 100     # How many samples to take  
-transient = 1000 # How long should the "warm up" be
+transient = 200 # How long should the "warm up" be
 verbose   = T       # Give reports on model progress
-```
 
-Setup our random effect:
-
-```{r ch7_38, class.source="Rmain"}
+# Specify the random effects
 # Add a station-level random effect (for the co-variances)
 studyDesign = data.frame(station = as.factor(Xdat$placename))
 rL = HmscRandomLevel(units = studyDesign$station)
-```
 
-Specify our model""
-
-```{r ch7_39, message =F, warning=F, eval=T, class.source="Rmain"}
 # Model specification
 mod <- Hmsc(Y = Y, 
             XData = Xdat[,c("z.line_of_sight_m", "z.water_depth_m", "days")], 
@@ -481,15 +324,56 @@ mod <- Hmsc(Y = Y,
             distr="poisson")
 
 
-```
-
-And fit the model:
-
-```{r ch7_39a, eval=T,results="hide", class.source="Rmain"}
+# Fit the model
 out <-  sampleMcmc(mod, thin = thin, samples = samples, transient = transient,
                nChains = nChains, verbose = verbose)
 
 ```
+
+
+```{r ch7_32a, class.source="Rmain", include=F}
+library(Hmsc)
+
+# Prepare our data
+# Pull the count data into its own matrix
+Y <- as.matrix(monthly_obs[,sp_summary$sp])
+
+# Give the row names a useful label, in this case the site_date values 
+# (just in case you want to check things)
+row.names(Y) <- paste(monthly_obs$placename, monthly_obs$date, sep="_")
+
+# Join with the location data
+Xdat <- left_join(monthly_obs[c("placename", "date", "days")], z_locs)
+# All XData must be numeric or factors, so lets check what we have
+
+
+# Set up the sampling conditions
+nChains   = 2       # How many total repeats to run
+thin      = 5       # How often to thin the samples
+samples   = 100     # How many samples to take  
+transient = 200 # How long should the "warm up" be
+verbose   = T       # Give reports on model progress
+
+# Specify the random effects
+# Add a station-level random effect (for the co-variances)
+studyDesign = data.frame(station = as.factor(Xdat$placename))
+rL = HmscRandomLevel(units = studyDesign$station)
+
+# Model specification
+mod <- Hmsc(Y = Y, 
+            XData = Xdat[,c("z.line_of_sight_m", "z.water_depth_m", "days")], 
+            XFormula = ~z.line_of_sight_m + z.water_depth_m + log(days),
+            studyDesign = studyDesign, 
+            ranLevels = list(station = rL), 
+            distr="poisson")
+
+
+# Fit the model
+out <-  sampleMcmc(mod, thin = thin, samples = samples, transient = transient,
+               nChains = nChains, verbose = verbose)
+
+```
+
 
 We can plot a basic summary of the modeled effects using the following code.
 
@@ -561,27 +445,6 @@ The best place for examples of HMSC analyses right now are package vignettes:
 [Carvalho Jr, Elildo AR, et al. "Effects of illegal logging on Amazonian medium and large-sized terrestrial vertebrates." Forest Ecology and Management 466 (2020): 118105.](https://www.sciencedirect.com/science/article/pii/S0378112720300803)
 
 [Beirne, Christopher, et al. "Multispecies modelling reveals potential for habitat restoration to re‐establish boreal vertebrate community dynamics." Journal of Applied Ecology 58.12 (2021): 2821-2832.](https://besjournals.onlinelibrary.wiley.com/doi/abs/10.1111/1365-2664.14020)
-
-
-```{r ch7_42, echo=F, eval=F}
-
-# Maybe add in the future: 
-
-#Bootstrapped confidence intervals from the Bolker link
-
-
-# Bootstrap some CI's
-#set.seed(101)
-#m_bb <- bootMer(m1,
-#              FUN=function(x)
-#              predict(x,re.form=NA,newdata=newDat,
-#              type="response"),
-#              nsim=400)
-#
-#m_CI<- t(apply(g_bb$t,2,quantile,c(0.025,0.975),na.rm=TRUE))
-#newDat <- cbind(newDat, m_CI)
-```
-
 
 
 

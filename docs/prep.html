@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>Chapter 2 Preparing for the course | An Introduction to Camera Trap Data Management and Analysis in R</title>
   <meta name="description" content="Materials for the three day camera trap data management and analysis course" />
-  <meta name="generator" content="bookdown 0.35 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.39 and GitBook 2.6.7" />
 
   <meta property="og:title" content="Chapter 2 Preparing for the course | An Introduction to Camera Trap Data Management and Analysis in R" />
   <meta property="og:type" content="book" />
@@ -23,7 +23,7 @@
 <meta name="author" content="Christopher Beirne, the Wildlife Coexistence Lab, UBC, and the WildCam Network" />
 
 
-<meta name="date" content="2023-09-22" />
+<meta name="date" content="2024-05-07" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -54,27 +54,30 @@
 <script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
 <script src="libs/kePrint-0.0.1/kePrint.js"></script>
 <link href="libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
-<script src="libs/htmlwidgets-1.6.2/htmlwidgets.js"></script>
+<link href="libs/bsTable-3.3.7/bootstrapTable.min.css" rel="stylesheet" />
+<script src="libs/bsTable-3.3.7/bootstrapTable.js"></script>
+<link href="libs/htmltools-fill-0.5.8.1/fill.css" rel="stylesheet" />
+<script src="libs/htmlwidgets-1.6.4/htmlwidgets.js"></script>
 <link href="libs/leaflet-1.3.1/leaflet.css" rel="stylesheet" />
 <script src="libs/leaflet-1.3.1/leaflet.js"></script>
 <link href="libs/leafletfix-1.0.0/leafletfix.css" rel="stylesheet" />
 <script src="libs/proj4-2.6.2/proj4.min.js"></script>
 <script src="libs/Proj4Leaflet-1.0.1/proj4leaflet.js"></script>
 <link href="libs/rstudio_leaflet-1.3.1/rstudio_leaflet.css" rel="stylesheet" />
-<script src="libs/leaflet-binding-2.2.0/leaflet.js"></script>
-<script src="libs/leaflet-providers-1.13.0/leaflet-providers_1.13.0.js"></script>
-<script src="libs/leaflet-providers-plugin-2.2.0/leaflet-providers-plugin.js"></script>
-<script src="libs/plotly-binding-4.10.2/plotly.js"></script>
+<script src="libs/leaflet-binding-2.2.2/leaflet.js"></script>
+<script src="libs/leaflet-providers-2.0.0/leaflet-providers_2.0.0.js"></script>
+<script src="libs/leaflet-providers-plugin-2.2.2/leaflet-providers-plugin.js"></script>
+<script src="libs/plotly-binding-4.10.4/plotly.js"></script>
 <script src="libs/typedarray-0.1/typedarray.min.js"></script>
-<link href="libs/crosstalk-1.2.0/css/crosstalk.min.css" rel="stylesheet" />
-<script src="libs/crosstalk-1.2.0/js/crosstalk.min.js"></script>
+<link href="libs/crosstalk-1.2.1/css/crosstalk.min.css" rel="stylesheet" />
+<script src="libs/crosstalk-1.2.1/js/crosstalk.min.js"></script>
 <link href="libs/plotly-htmlwidgets-css-2.11.1/plotly-htmlwidgets.css" rel="stylesheet" />
 <script src="libs/plotly-main-2.11.1/plotly-latest.min.js"></script>
 
 
 <style type="text/css">
 pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span { line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
@@ -160,12 +163,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="divider"></li>
 <li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Introduction</a>
 <ul>
-<li class="chapter" data-level="1.1" data-path="index.html"><a href="index.html#ethos"><i class="fa fa-check"></i><b>1.1</b> Ethos</a></li>
-<li class="chapter" data-level="1.2" data-path="index.html"><a href="index.html#what-this-course-is"><i class="fa fa-check"></i><b>1.2</b> What this course is</a></li>
-<li class="chapter" data-level="1.3" data-path="index.html"><a href="index.html#what-this-course-is-not"><i class="fa fa-check"></i><b>1.3</b> What this course is not</a></li>
-<li class="chapter" data-level="1.4" data-path="index.html"><a href="index.html#how-to-use-this-book"><i class="fa fa-check"></i><b>1.4</b> How to use this book</a></li>
-<li class="chapter" data-level="1.5" data-path="index.html"><a href="index.html#get-in-touch"><i class="fa fa-check"></i><b>1.5</b> Get in touch</a></li>
-<li class="chapter" data-level="1.6" data-path="index.html"><a href="index.html#acknowledgements"><i class="fa fa-check"></i><b>1.6</b> Acknowledgements</a></li>
+<li class="chapter" data-level="1.1" data-path="index.html"><a href="index.html#how-to-use-this-book"><i class="fa fa-check"></i><b>1.1</b> How to use this book</a></li>
+<li class="chapter" data-level="1.2" data-path="index.html"><a href="index.html#get-in-touch"><i class="fa fa-check"></i><b>1.2</b> Get in touch</a></li>
+<li class="chapter" data-level="1.3" data-path="index.html"><a href="index.html#cite-the-course"><i class="fa fa-check"></i><b>1.3</b> Cite the course</a></li>
+<li class="chapter" data-level="1.4" data-path="index.html"><a href="index.html#acknowledgements"><i class="fa fa-check"></i><b>1.4</b> Acknowledgements</a></li>
 </ul></li>
 <li class="chapter" data-level="2" data-path="prep.html"><a href="prep.html"><i class="fa fa-check"></i><b>2</b> Preparing for the course</a>
 <ul>
@@ -214,9 +215,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="5.1" data-path="error-checking.html"><a href="error-checking.html#standardised-exploration-script"><i class="fa fa-check"></i><b>5.1</b> Standardised exploration script</a></li>
 <li class="chapter" data-level="5.2" data-path="error-checking.html"><a href="error-checking.html#formatting-dates"><i class="fa fa-check"></i><b>5.2</b> Formatting dates</a>
 <ul>
-<li class="chapter" data-level="5.2.1" data-path="error-checking.html"><a href="error-checking.html#skill-check-lubridate"><i class="fa fa-check"></i><b>5.2.1</b> Skill check: <code>lubridate</code></a></li>
-<li class="chapter" data-level="5.2.2" data-path="error-checking.html"><a href="error-checking.html#deployment-dates"><i class="fa fa-check"></i><b>5.2.2</b> Deployment dates</a></li>
-<li class="chapter" data-level="5.2.3" data-path="error-checking.html"><a href="error-checking.html#image-dates"><i class="fa fa-check"></i><b>5.2.3</b> Image dates</a></li>
+<li class="chapter" data-level="5.2.1" data-path="error-checking.html"><a href="error-checking.html#deployment-dates"><i class="fa fa-check"></i><b>5.2.1</b> Deployment dates</a></li>
+<li class="chapter" data-level="5.2.2" data-path="error-checking.html"><a href="error-checking.html#image-dates"><i class="fa fa-check"></i><b>5.2.2</b> Image dates</a></li>
 </ul></li>
 <li class="chapter" data-level="5.3" data-path="error-checking.html"><a href="error-checking.html#basic-trapping-summaries"><i class="fa fa-check"></i><b>5.3</b> Basic trapping summaries</a></li>
 <li class="chapter" data-level="5.4" data-path="error-checking.html"><a href="error-checking.html#error-checks"><i class="fa fa-check"></i><b>5.4</b> Error checks</a>
@@ -225,7 +225,6 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="5.4.2" data-path="error-checking.html"><a href="error-checking.html#camera-activity-checks"><i class="fa fa-check"></i><b>5.4.2</b> Camera activity checks</a></li>
 <li class="chapter" data-level="5.4.3" data-path="error-checking.html"><a href="error-checking.html#detection-check"><i class="fa fa-check"></i><b>5.4.3</b> Detection check</a></li>
 <li class="chapter" data-level="5.4.4" data-path="error-checking.html"><a href="error-checking.html#taxonomy-check"><i class="fa fa-check"></i><b>5.4.4</b> Taxonomy check</a></li>
-<li class="chapter" data-level="5.4.5" data-path="error-checking.html"><a href="error-checking.html#skill-check-taxize-package"><i class="fa fa-check"></i><b>5.4.5</b> Skill Check: Taxize package</a></li>
 </ul></li>
 <li class="chapter" data-level="5.5" data-path="error-checking.html"><a href="error-checking.html#diel-activity-check"><i class="fa fa-check"></i><b>5.5</b> Diel activity check</a></li>
 <li class="chapter" data-level="5.6" data-path="error-checking.html"><a href="error-checking.html#conclusion"><i class="fa fa-check"></i><b>5.6</b> Conclusion</a></li>
@@ -250,28 +249,25 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="7" data-path="covariates.html"><a href="covariates.html"><i class="fa fa-check"></i><b>7</b> Analysis covariates</a>
 <ul>
-<li class="chapter" data-level="7.1" data-path="covariates.html"><a href="covariates.html#species-traits"><i class="fa fa-check"></i><b>7.1</b> Species traits</a></li>
-<li class="chapter" data-level="7.2" data-path="covariates.html"><a href="covariates.html#camera-station-covariates"><i class="fa fa-check"></i><b>7.2</b> Camera station covariates</a>
+<li class="chapter" data-level="7.1" data-path="covariates.html"><a href="covariates.html#camera-station-covariates"><i class="fa fa-check"></i><b>7.1</b> Camera station covariates</a>
 <ul>
-<li class="chapter" data-level="7.2.1" data-path="covariates.html"><a href="covariates.html#locally-collected-covariates"><i class="fa fa-check"></i><b>7.2.1</b> Locally collected covariates</a></li>
-<li class="chapter" data-level="7.2.2" data-path="covariates.html"><a href="covariates.html#remotely-collected-covariates"><i class="fa fa-check"></i><b>7.2.2</b> Remotely collected covariates</a></li>
-<li class="chapter" data-level="7.2.3" data-path="covariates.html"><a href="covariates.html#extracting-data-from-local-rasters"><i class="fa fa-check"></i><b>7.2.3</b> Extracting data from local rasters</a></li>
-<li class="chapter" data-level="7.2.4" data-path="covariates.html"><a href="covariates.html#elevatr-package"><i class="fa fa-check"></i><b>7.2.4</b> elevatr package</a></li>
-<li class="chapter" data-level="7.2.5" data-path="covariates.html"><a href="covariates.html#open-street-maps"><i class="fa fa-check"></i><b>7.2.5</b> Open Street Maps</a></li>
-<li class="chapter" data-level="7.2.6" data-path="covariates.html"><a href="covariates.html#vegetation-productivity"><i class="fa fa-check"></i><b>7.2.6</b> Vegetation productivity</a></li>
-<li class="chapter" data-level="7.2.7" data-path="covariates.html"><a href="covariates.html#digging-deeper"><i class="fa fa-check"></i><b>7.2.7</b> Digging deeper</a></li>
+<li class="chapter" data-level="7.1.1" data-path="covariates.html"><a href="covariates.html#locally-collected-covariates"><i class="fa fa-check"></i><b>7.1.1</b> Locally collected covariates</a></li>
+<li class="chapter" data-level="7.1.2" data-path="covariates.html"><a href="covariates.html#remotely-collected-covariates"><i class="fa fa-check"></i><b>7.1.2</b> Remotely collected covariates</a></li>
+<li class="chapter" data-level="7.1.3" data-path="covariates.html"><a href="covariates.html#extracting-data-from-local-rasters"><i class="fa fa-check"></i><b>7.1.3</b> Extracting data from local rasters</a></li>
+<li class="chapter" data-level="7.1.4" data-path="covariates.html"><a href="covariates.html#elevatr-package"><i class="fa fa-check"></i><b>7.1.4</b> elevatr package</a></li>
+<li class="chapter" data-level="7.1.5" data-path="covariates.html"><a href="covariates.html#open-street-maps"><i class="fa fa-check"></i><b>7.1.5</b> Open Street Maps</a></li>
+<li class="chapter" data-level="7.1.6" data-path="covariates.html"><a href="covariates.html#vegetation-productivity"><i class="fa fa-check"></i><b>7.1.6</b> Vegetation productivity</a></li>
 </ul></li>
-<li class="chapter" data-level="7.3" data-path="covariates.html"><a href="covariates.html#convert-and-save-your-covariates"><i class="fa fa-check"></i><b>7.3</b> Convert and save your covariates</a></li>
-<li class="chapter" data-level="7.4" data-path="covariates.html"><a href="covariates.html#correlations-between-predictors"><i class="fa fa-check"></i><b>7.4</b> Correlations between predictors</a></li>
+<li class="chapter" data-level="7.2" data-path="covariates.html"><a href="covariates.html#convert-and-save-your-covariates"><i class="fa fa-check"></i><b>7.2</b> Convert and save your covariates</a></li>
+<li class="chapter" data-level="7.3" data-path="covariates.html"><a href="covariates.html#correlations-between-predictors"><i class="fa fa-check"></i><b>7.3</b> Correlations between predictors</a></li>
 </ul></li>
 <li class="chapter" data-level="8" data-path="exploration.html"><a href="exploration.html"><i class="fa fa-check"></i><b>8</b> Analysis data exploration</a>
 <ul>
 <li class="chapter" data-level="8.1" data-path="exploration.html"><a href="exploration.html#final-locations-plot"><i class="fa fa-check"></i><b>8.1</b> Final locations plot</a></li>
 <li class="chapter" data-level="8.2" data-path="exploration.html"><a href="exploration.html#independent-detections-summary"><i class="fa fa-check"></i><b>8.2</b> Independent detections summary</a>
 <ul>
-<li class="chapter" data-level="8.2.1" data-path="exploration.html"><a href="exploration.html#total-number-of-captures"><i class="fa fa-check"></i><b>8.2.1</b> Total number of captures</a></li>
-<li class="chapter" data-level="8.2.2" data-path="exploration.html"><a href="exploration.html#raw-occupancy"><i class="fa fa-check"></i><b>8.2.2</b> Raw occupancy</a></li>
-<li class="chapter" data-level="8.2.3" data-path="exploration.html"><a href="exploration.html#comparison-plot"><i class="fa fa-check"></i><b>8.2.3</b> Comparison plot</a></li>
+<li class="chapter" data-level="8.2.1" data-path="exploration.html"><a href="exploration.html#raw-occupancy"><i class="fa fa-check"></i><b>8.2.1</b> Raw occupancy</a></li>
+<li class="chapter" data-level="8.2.2" data-path="exploration.html"><a href="exploration.html#comparison-plot"><i class="fa fa-check"></i><b>8.2.2</b> Comparison plot</a></li>
 </ul></li>
 <li class="chapter" data-level="8.3" data-path="exploration.html"><a href="exploration.html#temporal-patterns-in-capture-rates"><i class="fa fa-check"></i><b>8.3</b> Temporal patterns in capture rates</a></li>
 <li class="chapter" data-level="8.4" data-path="exploration.html"><a href="exploration.html#species-specific-capture-rates"><i class="fa fa-check"></i><b>8.4</b> Species-specific capture rates</a></li>
@@ -290,24 +286,18 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="9.2" data-path="composition.html"><a href="composition.html#estimated-richness"><i class="fa fa-check"></i><b>9.2</b> Estimated richness</a>
 <ul>
 <li class="chapter" data-level="9.2.1" data-path="composition.html"><a href="composition.html#inext-package"><i class="fa fa-check"></i><b>9.2.1</b> iNext package</a></li>
+<li class="chapter" data-level="9.2.2" data-path="composition.html"><a href="composition.html#sampling-duration-example"><i class="fa fa-check"></i><b>9.2.2</b> Sampling duration example</a></li>
 </ul></li>
-<li class="chapter" data-level="9.3" data-path="composition.html"><a href="composition.html#sampling-unit-based-accumulation-curves"><i class="fa fa-check"></i><b>9.3</b> Sampling-unit-based accumulation curves</a></li>
-<li class="chapter" data-level="9.4" data-path="composition.html"><a href="composition.html#basic-results-plot"><i class="fa fa-check"></i><b>9.4</b> Basic results plot</a>
+<li class="chapter" data-level="9.3" data-path="composition.html"><a href="composition.html#other-diversity-metrics"><i class="fa fa-check"></i><b>9.3</b> Other diversity metrics</a>
 <ul>
-<li class="chapter" data-level="9.4.1" data-path="composition.html"><a href="composition.html#sampling-duration-example"><i class="fa fa-check"></i><b>9.4.1</b> Sampling duration example</a></li>
-<li class="chapter" data-level="9.4.2" data-path="composition.html"><a href="composition.html#on-your-own"><i class="fa fa-check"></i><b>9.4.2</b> On your own</a></li>
+<li class="chapter" data-level="9.3.1" data-path="composition.html"><a href="composition.html#simpson-and-shannon"><i class="fa fa-check"></i><b>9.3.1</b> Simpson and Shannon</a></li>
+<li class="chapter" data-level="9.3.2" data-path="composition.html"><a href="composition.html#more-examples-in-the-literature"><i class="fa fa-check"></i><b>9.3.2</b> More examples in the literature</a></li>
+<li class="chapter" data-level="9.3.3" data-path="composition.html"><a href="composition.html#multispecies-occupancy-model"><i class="fa fa-check"></i><b>9.3.3</b> Multispecies occupancy model</a></li>
 </ul></li>
-<li class="chapter" data-level="9.5" data-path="composition.html"><a href="composition.html#other-diversity-metrics"><i class="fa fa-check"></i><b>9.5</b> Other diversity metrics</a>
+<li class="chapter" data-level="9.4" data-path="composition.html"><a href="composition.html#community-structure"><i class="fa fa-check"></i><b>9.4</b> Community structure</a>
 <ul>
-<li class="chapter" data-level="9.5.1" data-path="composition.html"><a href="composition.html#simpson-and-shannon"><i class="fa fa-check"></i><b>9.5.1</b> Simpson and Shannon</a></li>
-<li class="chapter" data-level="9.5.2" data-path="composition.html"><a href="composition.html#more-examples-in-the-literature"><i class="fa fa-check"></i><b>9.5.2</b> More examples in the literature</a></li>
-<li class="chapter" data-level="9.5.3" data-path="composition.html"><a href="composition.html#multispecies-occupancy-model"><i class="fa fa-check"></i><b>9.5.3</b> Multispecies occupancy model</a></li>
-</ul></li>
-<li class="chapter" data-level="9.6" data-path="composition.html"><a href="composition.html#community-structure"><i class="fa fa-check"></i><b>9.6</b> Community structure</a>
-<ul>
-<li class="chapter" data-level="9.6.1" data-path="composition.html"><a href="composition.html#extracting-data-for-plotting"><i class="fa fa-check"></i><b>9.6.1</b> Extracting data for plotting</a></li>
-<li class="chapter" data-level="9.6.2" data-path="composition.html"><a href="composition.html#on-your-own-1"><i class="fa fa-check"></i><b>9.6.2</b> On your own</a></li>
-<li class="chapter" data-level="9.6.3" data-path="composition.html"><a href="composition.html#examples-in-the-literature"><i class="fa fa-check"></i><b>9.6.3</b> Examples in the literature</a></li>
+<li class="chapter" data-level="9.4.1" data-path="composition.html"><a href="composition.html#extracting-data-for-plotting"><i class="fa fa-check"></i><b>9.4.1</b> Extracting data for plotting</a></li>
+<li class="chapter" data-level="9.4.2" data-path="composition.html"><a href="composition.html#examples-in-the-literature"><i class="fa fa-check"></i><b>9.4.2</b> Examples in the literature</a></li>
 </ul></li>
 </ul></li>
 <li class="chapter" data-level="10" data-path="habitat-use.html"><a href="habitat-use.html"><i class="fa fa-check"></i><b>10</b> Habitat use</a>
@@ -324,9 +314,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="10.2.4" data-path="habitat-use.html"><a href="habitat-use.html#model-comparisons"><i class="fa fa-check"></i><b>10.2.4</b> Model comparisons</a></li>
 <li class="chapter" data-level="10.2.5" data-path="habitat-use.html"><a href="habitat-use.html#problems-with-these-models"><i class="fa fa-check"></i><b>10.2.5</b> Problems with these models</a></li>
 <li class="chapter" data-level="10.2.6" data-path="habitat-use.html"><a href="habitat-use.html#mixed-effects-models"><i class="fa fa-check"></i><b>10.2.6</b> Mixed-effects models</a></li>
-<li class="chapter" data-level="10.2.7" data-path="habitat-use.html"><a href="habitat-use.html#on-your-own-2"><i class="fa fa-check"></i><b>10.2.7</b> On your own</a></li>
-<li class="chapter" data-level="10.2.8" data-path="habitat-use.html"><a href="habitat-use.html#advanced-mixed-model-predictions"><i class="fa fa-check"></i><b>10.2.8</b> Advanced mixed-model predictions</a></li>
-<li class="chapter" data-level="10.2.9" data-path="habitat-use.html"><a href="habitat-use.html#examples-in-the-literature-1"><i class="fa fa-check"></i><b>10.2.9</b> Examples in the literature</a></li>
+<li class="chapter" data-level="10.2.7" data-path="habitat-use.html"><a href="habitat-use.html#advanced-mixed-model-predictions"><i class="fa fa-check"></i><b>10.2.7</b> Advanced mixed-model predictions</a></li>
+<li class="chapter" data-level="10.2.8" data-path="habitat-use.html"><a href="habitat-use.html#examples-in-the-literature-1"><i class="fa fa-check"></i><b>10.2.8</b> Examples in the literature</a></li>
 </ul></li>
 <li class="chapter" data-level="10.3" data-path="habitat-use.html"><a href="habitat-use.html#multispecies-models"><i class="fa fa-check"></i><b>10.3</b> Multispecies models</a>
 <ul>
@@ -341,11 +330,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <ul>
 <li class="chapter" data-level="11.1.1" data-path="occupancy.html"><a href="occupancy.html#unmarked-package"><i class="fa fa-check"></i><b>11.1.1</b> Unmarked package</a></li>
 <li class="chapter" data-level="11.1.2" data-path="occupancy.html"><a href="occupancy.html#plotting-predictions"><i class="fa fa-check"></i><b>11.1.2</b> Plotting predictions</a></li>
-<li class="chapter" data-level="11.1.3" data-path="occupancy.html"><a href="occupancy.html#on-your-own-3"><i class="fa fa-check"></i><b>11.1.3</b> On your own</a></li>
-</ul></li>
-<li class="chapter" data-level="11.2" data-path="occupancy.html"><a href="occupancy.html#spatial-occupancy-model-spoccupancy"><i class="fa fa-check"></i><b>11.2</b> Spatial occupancy model: spOccupancy</a>
-<ul>
-<li class="chapter" data-level="11.2.1" data-path="occupancy.html"><a href="occupancy.html#multi-species-model"><i class="fa fa-check"></i><b>11.2.1</b> Multi species model</a></li>
+<li class="chapter" data-level="11.1.3" data-path="occupancy.html"><a href="occupancy.html#on-your-own"><i class="fa fa-check"></i><b>11.1.3</b> On your own</a></li>
 </ul></li>
 </ul></li>
 <li class="chapter" data-level="12" data-path="activity.html"><a href="activity.html"><i class="fa fa-check"></i><b>12</b> Activity</a>
@@ -360,8 +345,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <ul>
 <li class="chapter" data-level="12.4.1" data-path="activity.html"><a href="activity.html#seasonal-comparison"><i class="fa fa-check"></i><b>12.4.1</b> Seasonal comparison</a></li>
 </ul></li>
-<li class="chapter" data-level="12.5" data-path="activity.html"><a href="activity.html#on-your-own-4"><i class="fa fa-check"></i><b>12.5</b> On your own</a></li>
-<li class="chapter" data-level="12.6" data-path="activity.html"><a href="activity.html#selected-further-reading"><i class="fa fa-check"></i><b>12.6</b> Selected further reading</a></li>
+<li class="chapter" data-level="12.5" data-path="activity.html"><a href="activity.html#selected-further-reading"><i class="fa fa-check"></i><b>12.5</b> Selected further reading</a></li>
 </ul></li>
 <li class="chapter" data-level="13" data-path="density.html"><a href="density.html"><i class="fa fa-check"></i><b>13</b> Density</a>
 <ul>
@@ -371,67 +355,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="13.2.1" data-path="density.html"><a href="density.html#random-encounter-model"><i class="fa fa-check"></i><b>13.2.1</b> Random encounter model</a></li>
 <li class="chapter" data-level="13.2.2" data-path="density.html"><a href="density.html#moose"><i class="fa fa-check"></i><b>13.2.2</b> Moose</a></li>
 <li class="chapter" data-level="13.2.3" data-path="density.html"><a href="density.html#wolf"><i class="fa fa-check"></i><b>13.2.3</b> Wolf</a></li>
-<li class="chapter" data-level="13.2.4" data-path="density.html"><a href="density.html#time-to-event-space-to-event-density-estimates"><i class="fa fa-check"></i><b>13.2.4</b> Time to event / Space to event density estimates</a></li>
-<li class="chapter" data-level="13.2.5" data-path="density.html"><a href="density.html#n-mixture-model-in-unmarked"><i class="fa fa-check"></i><b>13.2.5</b> N-mixture model in unmarked</a></li>
-<li class="chapter" data-level="13.2.6" data-path="density.html"><a href="density.html#abmi-method"><i class="fa fa-check"></i><b>13.2.6</b> ABMI Method</a></li>
-<li class="chapter" data-level="13.2.7" data-path="density.html"><a href="density.html#unmarked-spatial-capture-recapture-uscr"><i class="fa fa-check"></i><b>13.2.7</b> Unmarked spatial capture recapture (uSCR)</a></li>
 </ul></li>
 <li class="chapter" data-level="13.3" data-path="density.html"><a href="density.html#future-directions"><i class="fa fa-check"></i><b>13.3</b> Future directions</a></li>
-</ul></li>
-<li class="chapter" data-level="14" data-path="behavior.html"><a href="behavior.html"><i class="fa fa-check"></i><b>14</b> Behavior</a>
-<ul>
-<li class="chapter" data-level="14.1" data-path="behavior.html"><a href="behavior.html#behavioural-designations"><i class="fa fa-check"></i><b>14.1</b> Behavioural designations</a></li>
-<li class="chapter" data-level="14.2" data-path="behavior.html"><a href="behavior.html#event-duration"><i class="fa fa-check"></i><b>14.2</b> Event duration</a></li>
-<li class="chapter" data-level="14.3" data-path="behavior.html"><a href="behavior.html#animal-speed-and-day-range"><i class="fa fa-check"></i><b>14.3</b> Animal speed and day range</a></li>
-<li class="chapter" data-level="14.4" data-path="behavior.html"><a href="behavior.html#experimental-manipulations"><i class="fa fa-check"></i><b>14.4</b> Experimental manipulations</a></li>
-<li class="chapter" data-level="14.5" data-path="behavior.html"><a href="behavior.html#interactions"><i class="fa fa-check"></i><b>14.5</b> Interactions</a>
-<ul>
-<li class="chapter" data-level="14.5.1" data-path="behavior.html"><a href="behavior.html#activity-overlap"><i class="fa fa-check"></i><b>14.5.1</b> Activity overlap</a></li>
-<li class="chapter" data-level="14.5.2" data-path="behavior.html"><a href="behavior.html#one-species-as-a-predictor-of-another"><i class="fa fa-check"></i><b>14.5.2</b> One species as a predictor of another</a></li>
-<li class="chapter" data-level="14.5.3" data-path="behavior.html"><a href="behavior.html#residual-co-occurence-models"><i class="fa fa-check"></i><b>14.5.3</b> Residual co-occurence models</a></li>
-<li class="chapter" data-level="14.5.4" data-path="behavior.html"><a href="behavior.html#attractance-avoidance-ratios-aar"><i class="fa fa-check"></i><b>14.5.4</b> Attractance-Avoidance Ratios (AAR)</a></li>
-</ul></li>
-<li class="chapter" data-level="14.6" data-path="behavior.html"><a href="behavior.html#worked-examples"><i class="fa fa-check"></i><b>14.6</b> Worked examples</a></li>
-</ul></li>
-<li class="chapter" data-level="15" data-path="on-your-own-5.html"><a href="on-your-own-5.html"><i class="fa fa-check"></i><b>15</b> On your own</a>
-<ul>
-<li class="chapter" data-level="15.1" data-path="on-your-own-5.html"><a href="on-your-own-5.html#working-with-a-new-dataset"><i class="fa fa-check"></i><b>15.1</b> Working with a new dataset</a>
-<ul>
-<li class="chapter" data-level="15.1.1" data-path="on-your-own-5.html"><a href="on-your-own-5.html#read-in-the-data-and-packages"><i class="fa fa-check"></i><b>15.1.1</b> Read in the data and packages</a></li>
-<li class="chapter" data-level="15.1.2" data-path="on-your-own-5.html"><a href="on-your-own-5.html#format-the-dates"><i class="fa fa-check"></i><b>15.1.2</b> Format the dates</a></li>
-<li class="chapter" data-level="15.1.3" data-path="on-your-own-5.html"><a href="on-your-own-5.html#plot-and-correct-spatial-co-ordinates"><i class="fa fa-check"></i><b>15.1.3</b> Plot and correct spatial co-ordinates</a></li>
-<li class="chapter" data-level="15.1.4" data-path="on-your-own-5.html"><a href="on-your-own-5.html#check-camera-spacing"><i class="fa fa-check"></i><b>15.1.4</b> Check camera spacing</a></li>
-<li class="chapter" data-level="15.1.5" data-path="on-your-own-5.html"><a href="on-your-own-5.html#check-all-deployments-have-image-data"><i class="fa fa-check"></i><b>15.1.5</b> Check all deployments have image data</a></li>
-<li class="chapter" data-level="15.1.6" data-path="on-your-own-5.html"><a href="on-your-own-5.html#b.-check-all-images-have-deployment-data"><i class="fa fa-check"></i><b>15.1.6</b> 5b. Check all images have deployment data</a></li>
-<li class="chapter" data-level="15.1.7" data-path="on-your-own-5.html"><a href="on-your-own-5.html#c.-check-deployments-occur-where-you-expect"><i class="fa fa-check"></i><b>15.1.7</b> 5c. Check deployments occur where you expect</a></li>
-<li class="chapter" data-level="15.1.8" data-path="on-your-own-5.html"><a href="on-your-own-5.html#check-images-occur-within-deployments"><i class="fa fa-check"></i><b>15.1.8</b> Check images occur within deployments</a></li>
-<li class="chapter" data-level="15.1.9" data-path="on-your-own-5.html"><a href="on-your-own-5.html#check-species-taxonomy"><i class="fa fa-check"></i><b>15.1.9</b> Check species taxonomy</a></li>
-<li class="chapter" data-level="15.1.10" data-path="on-your-own-5.html"><a href="on-your-own-5.html#check-species-activity"><i class="fa fa-check"></i><b>15.1.10</b> Check species activity</a></li>
-<li class="chapter" data-level="15.1.11" data-path="on-your-own-5.html"><a href="on-your-own-5.html#filter-to-target-species-1"><i class="fa fa-check"></i><b>15.1.11</b> Filter to target species</a></li>
-<li class="chapter" data-level="15.1.12" data-path="on-your-own-5.html"><a href="on-your-own-5.html#make-effort-look_up"><i class="fa fa-check"></i><b>15.1.12</b> Make effort look_up</a></li>
-<li class="chapter" data-level="15.1.13" data-path="on-your-own-5.html"><a href="on-your-own-5.html#create-independent-data"><i class="fa fa-check"></i><b>15.1.13</b> Create independent data</a></li>
-<li class="chapter" data-level="15.1.14" data-path="on-your-own-5.html"><a href="on-your-own-5.html#create-analysis-dataframes"><i class="fa fa-check"></i><b>15.1.14</b> Create analysis dataframes</a></li>
-<li class="chapter" data-level="15.1.15" data-path="on-your-own-5.html"><a href="on-your-own-5.html#check-analysis-dataframe-counts"><i class="fa fa-check"></i><b>15.1.15</b> Check analysis dataframe counts</a></li>
-</ul></li>
-<li class="chapter" data-level="15.2" data-path="on-your-own-5.html"><a href="on-your-own-5.html#add-your-covariates"><i class="fa fa-check"></i><b>15.2</b> Add your covariates</a>
-<ul>
-<li class="chapter" data-level="15.2.1" data-path="on-your-own-5.html"><a href="on-your-own-5.html#species-traits-1"><i class="fa fa-check"></i><b>15.2.1</b> Species Traits</a></li>
-</ul></li>
-<li class="chapter" data-level="15.3" data-path="on-your-own-5.html"><a href="on-your-own-5.html#spatial-data"><i class="fa fa-check"></i><b>15.3</b> Spatial data</a>
-<ul>
-<li class="chapter" data-level="15.3.1" data-path="on-your-own-5.html"><a href="on-your-own-5.html#convert-to-simple-features"><i class="fa fa-check"></i><b>15.3.1</b> Convert to simple features</a></li>
-<li class="chapter" data-level="15.3.2" data-path="on-your-own-5.html"><a href="on-your-own-5.html#get-elevation-data"><i class="fa fa-check"></i><b>15.3.2</b> Get elevation data</a></li>
-<li class="chapter" data-level="15.3.3" data-path="on-your-own-5.html"><a href="on-your-own-5.html#open-street-map-data"><i class="fa fa-check"></i><b>15.3.3</b> Open street map data</a></li>
-<li class="chapter" data-level="15.3.4" data-path="on-your-own-5.html"><a href="on-your-own-5.html#ndvi"><i class="fa fa-check"></i><b>15.3.4</b> NDVI</a></li>
-</ul></li>
-<li class="chapter" data-level="15.4" data-path="on-your-own-5.html"><a href="on-your-own-5.html#data-exploration"><i class="fa fa-check"></i><b>15.4</b> Data exploration</a>
-<ul>
-<li class="chapter" data-level="15.4.1" data-path="on-your-own-5.html"><a href="on-your-own-5.html#final-map"><i class="fa fa-check"></i><b>15.4.1</b> Final map</a></li>
-<li class="chapter" data-level="15.4.2" data-path="on-your-own-5.html"><a href="on-your-own-5.html#detection-summary"><i class="fa fa-check"></i><b>15.4.2</b> Detection summary</a></li>
-<li class="chapter" data-level="15.4.3" data-path="on-your-own-5.html"><a href="on-your-own-5.html#temporal-patterns"><i class="fa fa-check"></i><b>15.4.3</b> Temporal patterns</a></li>
-<li class="chapter" data-level="15.4.4" data-path="on-your-own-5.html"><a href="on-your-own-5.html#spatial-patterns"><i class="fa fa-check"></i><b>15.4.4</b> Spatial patterns</a></li>
-<li class="chapter" data-level="15.4.5" data-path="on-your-own-5.html"><a href="on-your-own-5.html#species-co-occurance"><i class="fa fa-check"></i><b>15.4.5</b> Species co-occurance</a></li>
-</ul></li>
 </ul></li>
 <li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
 <li class="divider"></li>
@@ -468,9 +393,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>If you get stuck <a href="mailto:c.w.beirne@gmail.com">send me an email!</a></p>
 <div id="install-r" class="section level2 hasAnchor" number="2.1">
 <h2><span class="header-section-number">2.1</span> Install R<a href="prep.html#install-r" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p><strong>Windows</strong> Click on <a href="https://cran.r-project.org/bin/windows/base/">this link</a> and then <code>Download R-4.2.1 for Windows</code>.</p>
-<p><strong>Mac</strong> Click on <a href="https://cran.r-project.org/bin/macosx/">this link</a> and then the <code>R-4.2.1.pkgs</code> link.</p>
-<p><strong>If you already have R</strong> please update your R client so that it is on at least version 4.2.1. Checkout the <a href="https://www.r-project.org/nosvn/pandoc/installr.html">installR package</a> to this directly from the terminal.</p>
+<p><strong>Windows</strong> Click on <a href="https://cran.r-project.org/bin/windows/base/">this link</a> and then <code>Download R-4.4.0 for Windows</code>.</p>
+<p><strong>Mac</strong> Click on <a href="https://cran.r-project.org/bin/macosx/">this link</a> and then the <code>R-4.4.0.pkgs</code> link.</p>
+<p><strong>If you already have R</strong> please update your R client so that it is on at least version 4.4.0. Checkout the <a href="https://www.r-project.org/nosvn/pandoc/installr.html">installR package</a> to this directly from the terminal.</p>
 </div>
 <div id="install-rstudio" class="section level2 hasAnchor" number="2.2">
 <h2><span class="header-section-number">2.2</span> Install RStudio<a href="prep.html#install-rstudio" class="anchor-section" aria-label="Anchor link to header"></a></h2>
@@ -486,62 +411,62 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="cran-packages" class="section level3 hasAnchor" number="2.3.1">
 <h3><span class="header-section-number">2.3.1</span> CRAN packages<a href="prep.html#cran-packages" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>Copy and paste the following code into your R terminal and press enter. <em>Note - if you hover over the code block a copy button appears in the top right.</em></p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r Rmain"><code class="sourceCode r"><span id="cb4-1"><a href="prep.html#cb4-1" tabindex="-1"></a><span class="co"># A list of the required packages</span></span>
-<span id="cb4-2"><a href="prep.html#cb4-2" tabindex="-1"></a>list.of.packages <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;activity&quot;</span>,</span>
-<span id="cb4-3"><a href="prep.html#cb4-3" tabindex="-1"></a>                      <span class="st">&quot;corrplot&quot;</span>,</span>
-<span id="cb4-4"><a href="prep.html#cb4-4" tabindex="-1"></a>                      <span class="st">&quot;cowplot&quot;</span>,</span>
-<span id="cb4-5"><a href="prep.html#cb4-5" tabindex="-1"></a>                      <span class="st">&quot;dplyr&quot;</span>, </span>
-<span id="cb4-6"><a href="prep.html#cb4-6" tabindex="-1"></a>                      <span class="st">&quot;elevatr&quot;</span>,</span>
-<span id="cb4-7"><a href="prep.html#cb4-7" tabindex="-1"></a>                      <span class="st">&quot;gfcanalysis&quot;</span>,  </span>
-<span id="cb4-8"><a href="prep.html#cb4-8" tabindex="-1"></a>                      <span class="st">&quot;ggplot2&quot;</span>,</span>
-<span id="cb4-9"><a href="prep.html#cb4-9" tabindex="-1"></a>                      <span class="st">&quot;gridExtra&quot;</span>,</span>
-<span id="cb4-10"><a href="prep.html#cb4-10" tabindex="-1"></a>                      <span class="st">&quot;iNEXT&quot;</span>,</span>
-<span id="cb4-11"><a href="prep.html#cb4-11" tabindex="-1"></a>                      <span class="st">&quot;kableExtra&quot;</span>,</span>
-<span id="cb4-12"><a href="prep.html#cb4-12" tabindex="-1"></a>                      <span class="st">&quot;Hmsc&quot;</span>,</span>
-<span id="cb4-13"><a href="prep.html#cb4-13" tabindex="-1"></a>                      <span class="st">&quot;leaflet&quot;</span>,</span>
-<span id="cb4-14"><a href="prep.html#cb4-14" tabindex="-1"></a>                      <span class="st">&quot;lme4&quot;</span>,</span>
-<span id="cb4-15"><a href="prep.html#cb4-15" tabindex="-1"></a>                      <span class="st">&quot;lubridate&quot;</span>,</span>
-<span id="cb4-16"><a href="prep.html#cb4-16" tabindex="-1"></a>                      <span class="st">&quot;magrittr&quot;</span>,</span>
-<span id="cb4-17"><a href="prep.html#cb4-17" tabindex="-1"></a>                      <span class="st">&quot;MCMCvis&quot;</span>,</span>
-<span id="cb4-18"><a href="prep.html#cb4-18" tabindex="-1"></a>                      <span class="st">&quot;MODISTools&quot;</span>,</span>
-<span id="cb4-19"><a href="prep.html#cb4-19" tabindex="-1"></a>                      <span class="st">&quot;osmdata&quot;</span>,</span>
-<span id="cb4-20"><a href="prep.html#cb4-20" tabindex="-1"></a>                      <span class="st">&quot;pals&quot;</span>,</span>
-<span id="cb4-21"><a href="prep.html#cb4-21" tabindex="-1"></a>                      <span class="st">&quot;plotly&quot;</span>,</span>
-<span id="cb4-22"><a href="prep.html#cb4-22" tabindex="-1"></a>                      <span class="st">&quot;remotes&quot;</span>,</span>
-<span id="cb4-23"><a href="prep.html#cb4-23" tabindex="-1"></a>                      <span class="st">&quot;rmarkdown&quot;</span>,</span>
-<span id="cb4-24"><a href="prep.html#cb4-24" tabindex="-1"></a>                      <span class="st">&quot;sf&quot;</span>,</span>
-<span id="cb4-25"><a href="prep.html#cb4-25" tabindex="-1"></a>                      <span class="st">&quot;spOccupancy&quot;</span>,</span>
-<span id="cb4-26"><a href="prep.html#cb4-26" tabindex="-1"></a>                      <span class="st">&quot;stars&quot;</span>,</span>
-<span id="cb4-27"><a href="prep.html#cb4-27" tabindex="-1"></a>                      <span class="st">&quot;stringr&quot;</span>,</span>
-<span id="cb4-28"><a href="prep.html#cb4-28" tabindex="-1"></a>                      <span class="st">&quot;terra&quot;</span>,</span>
-<span id="cb4-29"><a href="prep.html#cb4-29" tabindex="-1"></a>                      <span class="st">&quot;tibble&quot;</span>,</span>
-<span id="cb4-30"><a href="prep.html#cb4-30" tabindex="-1"></a>                      <span class="st">&quot;tidyr&quot;</span>, </span>
-<span id="cb4-31"><a href="prep.html#cb4-31" tabindex="-1"></a>                      <span class="st">&quot;unmarked&quot;</span>,</span>
-<span id="cb4-32"><a href="prep.html#cb4-32" tabindex="-1"></a>                      <span class="st">&quot;viridis&quot;</span>,</span>
-<span id="cb4-33"><a href="prep.html#cb4-33" tabindex="-1"></a>                      <span class="st">&quot;jtools&quot;</span>,</span>
-<span id="cb4-34"><a href="prep.html#cb4-34" tabindex="-1"></a>                      <span class="st">&quot;vegan&quot;</span>,</span>
-<span id="cb4-35"><a href="prep.html#cb4-35" tabindex="-1"></a>                      <span class="st">&quot;MuMIn&quot;</span>,</span>
-<span id="cb4-36"><a href="prep.html#cb4-36" tabindex="-1"></a>                      <span class="st">&quot;rgdal&quot;</span>,</span>
-<span id="cb4-37"><a href="prep.html#cb4-37" tabindex="-1"></a>                      <span class="st">&quot;usedist&quot;</span>,</span>
-<span id="cb4-38"><a href="prep.html#cb4-38" tabindex="-1"></a>                      <span class="st">&quot;taxize&quot;</span>)</span>
-<span id="cb4-39"><a href="prep.html#cb4-39" tabindex="-1"></a></span>
-<span id="cb4-40"><a href="prep.html#cb4-40" tabindex="-1"></a><span class="co"># A check to see which ones you have and which are missing</span></span>
-<span id="cb4-41"><a href="prep.html#cb4-41" tabindex="-1"></a>new.packages <span class="ot">&lt;-</span> list.of.packages[<span class="sc">!</span>(list.of.packages <span class="sc">%in%</span> <span class="fu">installed.packages</span>()[,<span class="st">&quot;Package&quot;</span>])]</span>
-<span id="cb4-42"><a href="prep.html#cb4-42" tabindex="-1"></a></span>
-<span id="cb4-43"><a href="prep.html#cb4-43" tabindex="-1"></a><span class="co"># Code which tells R to install the missing packages</span></span>
-<span id="cb4-44"><a href="prep.html#cb4-44" tabindex="-1"></a><span class="cf">if</span>(<span class="fu">length</span>(new.packages)) <span class="fu">install.packages</span>(new.packages)</span>
-<span id="cb4-45"><a href="prep.html#cb4-45" tabindex="-1"></a><span class="fu">lapply</span>(list.of.packages, require, <span class="at">character.only =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r Rmain"><code class="sourceCode r"><span id="cb3-1"><a href="prep.html#cb3-1" tabindex="-1"></a><span class="co"># A list of the required packages</span></span>
+<span id="cb3-2"><a href="prep.html#cb3-2" tabindex="-1"></a>list.of.packages <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;activity&quot;</span>,</span>
+<span id="cb3-3"><a href="prep.html#cb3-3" tabindex="-1"></a>                      <span class="st">&quot;corrplot&quot;</span>,</span>
+<span id="cb3-4"><a href="prep.html#cb3-4" tabindex="-1"></a>                      <span class="st">&quot;cowplot&quot;</span>,</span>
+<span id="cb3-5"><a href="prep.html#cb3-5" tabindex="-1"></a>                      <span class="st">&quot;dplyr&quot;</span>, </span>
+<span id="cb3-6"><a href="prep.html#cb3-6" tabindex="-1"></a>                      <span class="st">&quot;elevatr&quot;</span>,</span>
+<span id="cb3-7"><a href="prep.html#cb3-7" tabindex="-1"></a>                      <span class="st">&quot;gfcanalysis&quot;</span>,  </span>
+<span id="cb3-8"><a href="prep.html#cb3-8" tabindex="-1"></a>                      <span class="st">&quot;ggplot2&quot;</span>,</span>
+<span id="cb3-9"><a href="prep.html#cb3-9" tabindex="-1"></a>                      <span class="st">&quot;gridExtra&quot;</span>,</span>
+<span id="cb3-10"><a href="prep.html#cb3-10" tabindex="-1"></a>                      <span class="st">&quot;iNEXT&quot;</span>,</span>
+<span id="cb3-11"><a href="prep.html#cb3-11" tabindex="-1"></a>                      <span class="st">&quot;kableExtra&quot;</span>,</span>
+<span id="cb3-12"><a href="prep.html#cb3-12" tabindex="-1"></a>                      <span class="st">&quot;Hmsc&quot;</span>,</span>
+<span id="cb3-13"><a href="prep.html#cb3-13" tabindex="-1"></a>                      <span class="st">&quot;leaflet&quot;</span>,</span>
+<span id="cb3-14"><a href="prep.html#cb3-14" tabindex="-1"></a>                      <span class="st">&quot;lme4&quot;</span>,</span>
+<span id="cb3-15"><a href="prep.html#cb3-15" tabindex="-1"></a>                      <span class="st">&quot;lubridate&quot;</span>,</span>
+<span id="cb3-16"><a href="prep.html#cb3-16" tabindex="-1"></a>                      <span class="st">&quot;magrittr&quot;</span>,</span>
+<span id="cb3-17"><a href="prep.html#cb3-17" tabindex="-1"></a>                      <span class="st">&quot;MCMCvis&quot;</span>,</span>
+<span id="cb3-18"><a href="prep.html#cb3-18" tabindex="-1"></a>                      <span class="st">&quot;MODISTools&quot;</span>,</span>
+<span id="cb3-19"><a href="prep.html#cb3-19" tabindex="-1"></a>                      <span class="st">&quot;osmdata&quot;</span>,</span>
+<span id="cb3-20"><a href="prep.html#cb3-20" tabindex="-1"></a>                      <span class="st">&quot;pals&quot;</span>,</span>
+<span id="cb3-21"><a href="prep.html#cb3-21" tabindex="-1"></a>                      <span class="st">&quot;plotly&quot;</span>,</span>
+<span id="cb3-22"><a href="prep.html#cb3-22" tabindex="-1"></a>                      <span class="st">&quot;remotes&quot;</span>,</span>
+<span id="cb3-23"><a href="prep.html#cb3-23" tabindex="-1"></a>                      <span class="st">&quot;rmarkdown&quot;</span>,</span>
+<span id="cb3-24"><a href="prep.html#cb3-24" tabindex="-1"></a>                      <span class="st">&quot;sf&quot;</span>,</span>
+<span id="cb3-25"><a href="prep.html#cb3-25" tabindex="-1"></a>                      <span class="st">&quot;spOccupancy&quot;</span>,</span>
+<span id="cb3-26"><a href="prep.html#cb3-26" tabindex="-1"></a>                      <span class="st">&quot;stars&quot;</span>,</span>
+<span id="cb3-27"><a href="prep.html#cb3-27" tabindex="-1"></a>                      <span class="st">&quot;stringr&quot;</span>,</span>
+<span id="cb3-28"><a href="prep.html#cb3-28" tabindex="-1"></a>                      <span class="st">&quot;terra&quot;</span>,</span>
+<span id="cb3-29"><a href="prep.html#cb3-29" tabindex="-1"></a>                      <span class="st">&quot;tibble&quot;</span>,</span>
+<span id="cb3-30"><a href="prep.html#cb3-30" tabindex="-1"></a>                      <span class="st">&quot;tidyr&quot;</span>, </span>
+<span id="cb3-31"><a href="prep.html#cb3-31" tabindex="-1"></a>                      <span class="st">&quot;unmarked&quot;</span>,</span>
+<span id="cb3-32"><a href="prep.html#cb3-32" tabindex="-1"></a>                      <span class="st">&quot;viridis&quot;</span>,</span>
+<span id="cb3-33"><a href="prep.html#cb3-33" tabindex="-1"></a>                      <span class="st">&quot;jtools&quot;</span>,</span>
+<span id="cb3-34"><a href="prep.html#cb3-34" tabindex="-1"></a>                      <span class="st">&quot;vegan&quot;</span>,</span>
+<span id="cb3-35"><a href="prep.html#cb3-35" tabindex="-1"></a>                      <span class="st">&quot;MuMIn&quot;</span>,</span>
+<span id="cb3-36"><a href="prep.html#cb3-36" tabindex="-1"></a>                      <span class="st">&quot;rgdal&quot;</span>,</span>
+<span id="cb3-37"><a href="prep.html#cb3-37" tabindex="-1"></a>                      <span class="st">&quot;usedist&quot;</span>,</span>
+<span id="cb3-38"><a href="prep.html#cb3-38" tabindex="-1"></a>                      <span class="st">&quot;taxize&quot;</span>)</span>
+<span id="cb3-39"><a href="prep.html#cb3-39" tabindex="-1"></a></span>
+<span id="cb3-40"><a href="prep.html#cb3-40" tabindex="-1"></a><span class="co"># A check to see which ones you have and which are missing</span></span>
+<span id="cb3-41"><a href="prep.html#cb3-41" tabindex="-1"></a>new.packages <span class="ot">&lt;-</span> list.of.packages[<span class="sc">!</span>(list.of.packages <span class="sc">%in%</span> <span class="fu">installed.packages</span>()[,<span class="st">&quot;Package&quot;</span>])]</span>
+<span id="cb3-42"><a href="prep.html#cb3-42" tabindex="-1"></a></span>
+<span id="cb3-43"><a href="prep.html#cb3-43" tabindex="-1"></a><span class="co"># Code which tells R to install the missing packages</span></span>
+<span id="cb3-44"><a href="prep.html#cb3-44" tabindex="-1"></a><span class="cf">if</span>(<span class="fu">length</span>(new.packages)) <span class="fu">install.packages</span>(new.packages)</span>
+<span id="cb3-45"><a href="prep.html#cb3-45" tabindex="-1"></a><span class="fu">lapply</span>(list.of.packages, require, <span class="at">character.only =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
 </div>
 <div id="other-packages" class="section level3 hasAnchor" number="2.3.2">
 <h3><span class="header-section-number">2.3.2</span> Other packages<a href="prep.html#other-packages" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>Some packages must be compiled from sources other than CRAN. Copy and paste following code block into your R console and press enter.</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r Rmain"><code class="sourceCode r"><span id="cb5-1"><a href="prep.html#cb5-1" tabindex="-1"></a><span class="co"># We use the remotes package to access package repositories not on the </span></span>
-<span id="cb5-2"><a href="prep.html#cb5-2" tabindex="-1"></a><span class="co"># CRAN interface (e.g. on github)</span></span>
-<span id="cb5-3"><a href="prep.html#cb5-3" tabindex="-1"></a><span class="fu">library</span>(remotes)</span>
-<span id="cb5-4"><a href="prep.html#cb5-4" tabindex="-1"></a></span>
-<span id="cb5-5"><a href="prep.html#cb5-5" tabindex="-1"></a>remotes<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">&quot;RS-eco/traitdata&quot;</span>)</span>
-<span id="cb5-6"><a href="prep.html#cb5-6" tabindex="-1"></a>remotes<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">&quot;arcaravaggi/remBoot&quot;</span>)</span>
-<span id="cb5-7"><a href="prep.html#cb5-7" tabindex="-1"></a>remotes<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">&quot;annam21/spaceNtime&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r Rmain"><code class="sourceCode r"><span id="cb4-1"><a href="prep.html#cb4-1" tabindex="-1"></a><span class="co"># We use the remotes package to access package repositories not on the </span></span>
+<span id="cb4-2"><a href="prep.html#cb4-2" tabindex="-1"></a><span class="co"># CRAN interface (e.g. on github)</span></span>
+<span id="cb4-3"><a href="prep.html#cb4-3" tabindex="-1"></a><span class="fu">library</span>(remotes)</span>
+<span id="cb4-4"><a href="prep.html#cb4-4" tabindex="-1"></a></span>
+<span id="cb4-5"><a href="prep.html#cb4-5" tabindex="-1"></a>remotes<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">&quot;RS-eco/traitdata&quot;</span>)</span>
+<span id="cb4-6"><a href="prep.html#cb4-6" tabindex="-1"></a>remotes<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">&quot;arcaravaggi/remBoot&quot;</span>)</span>
+<span id="cb4-7"><a href="prep.html#cb4-7" tabindex="-1"></a>remotes<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">&quot;annam21/spaceNtime&quot;</span>)</span></code></pre></div>
 </div>
 </div>
 <div id="create-an-r-project" class="section level2 hasAnchor" number="2.4">
