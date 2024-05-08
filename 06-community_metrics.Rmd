@@ -5,6 +5,10 @@ editor_options:
 ---
 # Community composition {#composition}
 
+```{r setup06, include=FALSE} 
+knitr::opts_chunk$set(warning = FALSE, message = FALSE) 
+```
+
 **By Christopher Beirne and Laura Stewart**
 
 One of the most fundamental questions researchers and practitioners want to answer is *how many species are there in my survey area?*. Exploring patterns in species richness can also tell us if we have performed 'enough' surveying. 

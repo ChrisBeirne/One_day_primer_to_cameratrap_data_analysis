@@ -17,6 +17,7 @@ description: "One day primer forcamera trap data management and analysis course"
 
 ```{r ch0_1, echo=F, message=F, warning=F}
 library(bookdown)
+knitr::opts_chunk$set(warning = FALSE, message = FALSE)
 knitr::include_graphics("./images/Ninja.png")
 ```
 

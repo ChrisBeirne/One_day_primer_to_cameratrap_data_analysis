@@ -385,10 +385,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p><strong>Create a new .R script</strong></p>
 <p>Call it <code>02_example_covariates.R</code>.</p>
 <p><strong>Load the required packages and read in the locations dataframe</strong></p>
-<div class="sourceCode" id="cb82"><pre class="sourceCode r Rmain"><code class="sourceCode r"><span id="cb82-1"><a href="covariates.html#cb82-1" tabindex="-1"></a><span class="fu">library</span>(kableExtra);<span class="fu">library</span>(dplyr); <span class="fu">library</span>(sf); <span class="fu">library</span>(MODISTools); <span class="fu">library</span>(lubridate); <span class="fu">library</span>(corrplot); <span class="fu">library</span>(terra); <span class="fu">library</span>(osmdata); <span class="fu">library</span>(elevatr)</span>
-<span id="cb82-2"><a href="covariates.html#cb82-2" tabindex="-1"></a></span>
-<span id="cb82-3"><a href="covariates.html#cb82-3" tabindex="-1"></a><span class="co"># Locations data frame </span></span>
-<span id="cb82-4"><a href="covariates.html#cb82-4" tabindex="-1"></a>locs <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;data/processed_data/AlgarRestorationProject_camera_locations.csv&quot;</span>, <span class="at">header=</span>T)</span></code></pre></div>
+<div class="sourceCode" id="cb58"><pre class="sourceCode r Rmain"><code class="sourceCode r"><span id="cb58-1"><a href="covariates.html#cb58-1" tabindex="-1"></a><span class="fu">library</span>(kableExtra);<span class="fu">library</span>(dplyr); <span class="fu">library</span>(sf); <span class="fu">library</span>(MODISTools); <span class="fu">library</span>(lubridate); <span class="fu">library</span>(corrplot); <span class="fu">library</span>(terra); <span class="fu">library</span>(osmdata); <span class="fu">library</span>(elevatr)</span>
+<span id="cb58-2"><a href="covariates.html#cb58-2" tabindex="-1"></a></span>
+<span id="cb58-3"><a href="covariates.html#cb58-3" tabindex="-1"></a><span class="co"># Locations data frame </span></span>
+<span id="cb58-4"><a href="covariates.html#cb58-4" tabindex="-1"></a>locs <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;data/processed_data/AlgarRestorationProject_camera_locations.csv&quot;</span>, <span class="at">header=</span>T)</span></code></pre></div>
 <div id="camera-station-covariates" class="section level2 hasAnchor" number="7.1">
 <h2><span class="header-section-number">7.1</span> Camera station covariates<a href="covariates.html#camera-station-covariates" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>It is common to have a suite of covariates which you would like to investigate the effects of in your datasets. These could take the form of habitat designations or treatment types. These may already be included with your deployment data, or you may need to derive them from a variety of remote sources. In their simplest form, these variable are time invariant (they do not change), however you may have variables which change through time as well (we discuss these at the end). In the following steps, we walk through the process of manipulating and deriving example covariates.</p>
@@ -397,15 +397,15 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h3><span class="header-section-number">7.1.1</span> Locally collected covariates<a href="covariates.html#locally-collected-covariates" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>You may have collected some data in the field when deploying or checking your camera traps, and kept that data separate from your camera trap data (e.g. vegetation assessments). Provided that the naming convention you gave to these dataframes is the same as in your camera data (e.g. the location is in a column called <code>placename</code>) - you can do a ’left_join()` to merge the two datasets.</p>
 <p>Import a sample set of local covariates and look at it:</p>
-<div class="sourceCode" id="cb83"><pre class="sourceCode r Rmain"><code class="sourceCode r"><span id="cb83-1"><a href="covariates.html#cb83-1" tabindex="-1"></a><span class="co"># Import</span></span>
-<span id="cb83-2"><a href="covariates.html#cb83-2" tabindex="-1"></a>local_covs <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;data/raw_data/example_covariates/example_dataframe.csv&quot;</span>)</span>
-<span id="cb83-3"><a href="covariates.html#cb83-3" tabindex="-1"></a></span>
-<span id="cb83-4"><a href="covariates.html#cb83-4" tabindex="-1"></a><span class="co"># Add it to you locations datafile</span></span>
-<span id="cb83-5"><a href="covariates.html#cb83-5" tabindex="-1"></a>locs <span class="ot">&lt;-</span> <span class="fu">left_join</span>(locs, local_covs)   <span class="co"># From the dplyr package</span></span></code></pre></div>
-<pre><code>## Joining with `by = join_by(placename)`</code></pre>
-<div class="sourceCode" id="cb85"><pre class="sourceCode r Rmain"><code class="sourceCode r"><span id="cb85-1"><a href="covariates.html#cb85-1" tabindex="-1"></a><span class="co"># Look at the data</span></span>
-<span id="cb85-2"><a href="covariates.html#cb85-2" tabindex="-1"></a>local_covs <span class="sc">%&gt;%</span> <span class="fu">kbl</span>() <span class="sc">%&gt;%</span> </span>
-<span id="cb85-3"><a href="covariates.html#cb85-3" tabindex="-1"></a>  kableExtra<span class="sc">::</span><span class="fu">scroll_box</span>(<span class="at">height =</span> <span class="st">&quot;250px&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb59"><pre class="sourceCode r Rmain"><code class="sourceCode r"><span id="cb59-1"><a href="covariates.html#cb59-1" tabindex="-1"></a><span class="co"># Import</span></span>
+<span id="cb59-2"><a href="covariates.html#cb59-2" tabindex="-1"></a>local_covs <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;data/raw_data/example_covariates/example_dataframe.csv&quot;</span>)</span>
+<span id="cb59-3"><a href="covariates.html#cb59-3" tabindex="-1"></a></span>
+<span id="cb59-4"><a href="covariates.html#cb59-4" tabindex="-1"></a><span class="co"># Add it to you locations datafile</span></span>
+<span id="cb59-5"><a href="covariates.html#cb59-5" tabindex="-1"></a>locs <span class="ot">&lt;-</span> <span class="fu">left_join</span>(locs, local_covs)   <span class="co"># From the dplyr package</span></span>
+<span id="cb59-6"><a href="covariates.html#cb59-6" tabindex="-1"></a></span>
+<span id="cb59-7"><a href="covariates.html#cb59-7" tabindex="-1"></a><span class="co"># Look at the data</span></span>
+<span id="cb59-8"><a href="covariates.html#cb59-8" tabindex="-1"></a>local_covs <span class="sc">%&gt;%</span> <span class="fu">kbl</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb59-9"><a href="covariates.html#cb59-9" tabindex="-1"></a>  kableExtra<span class="sc">::</span><span class="fu">scroll_box</span>(<span class="at">height =</span> <span class="st">&quot;250px&quot;</span>)</span></code></pre></div>
 <div style="border: 1px solid #ddd; padding: 0px; overflow-y: scroll; height:250px; ">
 <table>
 <thead>
@@ -1014,13 +1014,13 @@ ALG073
 <h3><span class="header-section-number">7.1.2</span> Remotely collected covariates<a href="covariates.html#remotely-collected-covariates" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>To exploit remotely collected data sources we need to use the <code>sf</code> package to help us with spatial data.</p>
 <p>Lets convert our “normal” dataframe to an <code>sf</code> dataframe:</p>
-<div class="sourceCode" id="cb86"><pre class="sourceCode r Rmain"><code class="sourceCode r"><span id="cb86-1"><a href="covariates.html#cb86-1" tabindex="-1"></a><span class="co"># Convert</span></span>
-<span id="cb86-2"><a href="covariates.html#cb86-2" tabindex="-1"></a>locs_sf <span class="ot">&lt;-</span> <span class="fu">st_as_sf</span>(locs,                              <span class="co"># We specify the dataframe </span></span>
-<span id="cb86-3"><a href="covariates.html#cb86-3" tabindex="-1"></a>                    <span class="at">coords=</span><span class="fu">c</span>(<span class="st">&quot;longitude&quot;</span>, <span class="st">&quot;latitude&quot;</span>), <span class="co"># The XY coordinates</span></span>
-<span id="cb86-4"><a href="covariates.html#cb86-4" tabindex="-1"></a>                    <span class="at">crs=</span><span class="dv">4326</span>)                          <span class="co"># And the projection code</span></span>
-<span id="cb86-5"><a href="covariates.html#cb86-5" tabindex="-1"></a></span>
-<span id="cb86-6"><a href="covariates.html#cb86-6" tabindex="-1"></a><span class="co"># Look</span></span>
-<span id="cb86-7"><a href="covariates.html#cb86-7" tabindex="-1"></a>locs_sf</span></code></pre></div>
+<div class="sourceCode" id="cb60"><pre class="sourceCode r Rmain"><code class="sourceCode r"><span id="cb60-1"><a href="covariates.html#cb60-1" tabindex="-1"></a><span class="co"># Convert</span></span>
+<span id="cb60-2"><a href="covariates.html#cb60-2" tabindex="-1"></a>locs_sf <span class="ot">&lt;-</span> <span class="fu">st_as_sf</span>(locs,                              <span class="co"># We specify the dataframe </span></span>
+<span id="cb60-3"><a href="covariates.html#cb60-3" tabindex="-1"></a>                    <span class="at">coords=</span><span class="fu">c</span>(<span class="st">&quot;longitude&quot;</span>, <span class="st">&quot;latitude&quot;</span>), <span class="co"># The XY coordinates</span></span>
+<span id="cb60-4"><a href="covariates.html#cb60-4" tabindex="-1"></a>                    <span class="at">crs=</span><span class="dv">4326</span>)                          <span class="co"># And the projection code</span></span>
+<span id="cb60-5"><a href="covariates.html#cb60-5" tabindex="-1"></a></span>
+<span id="cb60-6"><a href="covariates.html#cb60-6" tabindex="-1"></a><span class="co"># Look</span></span>
+<span id="cb60-7"><a href="covariates.html#cb60-7" tabindex="-1"></a>locs_sf</span></code></pre></div>
 <pre><code>## Simple feature collection with 38 features and 4 fields
 ## Geometry type: POINT
 ## Dimension:     XY
@@ -1058,32 +1058,32 @@ ALG073
 <p><a href="https://www.tandfonline.com/doi/full/10.4296/cwrj2011-909">White, Barry, et al. “Using the cartographic depth-to-water index to locate small streams and associated wet areas across landscapes.” Canadian Water Resources Journal 37.4 (2012): 333-347.</a></p>
 <p><em>NOTE</em> the raster has been down scaled to reduce its size for this course - it is no longer at 1m resolution.</p>
 <p>The only time we deviate from the <code>sf</code> package is to deal with rasters. Raster objects in R are processed really slowly, especially if the raster is large. So instead we use the <code>terra</code> package.</p>
-<div class="sourceCode" id="cb88"><pre class="sourceCode r Rmain"><code class="sourceCode r"><span id="cb88-1"><a href="covariates.html#cb88-1" tabindex="-1"></a><span class="fu">library</span>(terra)</span>
-<span id="cb88-2"><a href="covariates.html#cb88-2" tabindex="-1"></a></span>
-<span id="cb88-3"><a href="covariates.html#cb88-3" tabindex="-1"></a><span class="co"># Import the example raster using the stars package</span></span>
-<span id="cb88-4"><a href="covariates.html#cb88-4" tabindex="-1"></a>ras <span class="ot">&lt;-</span> <span class="fu">rast</span>(<span class="st">&quot;data/raw_data/example_covariates/example_raster.tif&quot;</span>)</span>
-<span id="cb88-5"><a href="covariates.html#cb88-5" tabindex="-1"></a><span class="co"># Covert your sf locations to the same projection as your raster then put it in terra `vect` format,</span></span>
-<span id="cb88-6"><a href="covariates.html#cb88-6" tabindex="-1"></a>locs_terra <span class="ot">&lt;-</span> locs_sf <span class="sc">%&gt;%</span> </span>
-<span id="cb88-7"><a href="covariates.html#cb88-7" tabindex="-1"></a>                <span class="fu">st_transform</span>(<span class="at">crs=</span><span class="fu">st_crs</span>(ras)) <span class="sc">%&gt;%</span> <span class="co"># change the projection to match the raster</span></span>
-<span id="cb88-8"><a href="covariates.html#cb88-8" tabindex="-1"></a>                <span class="fu">vect</span>() <span class="co"># Turn it into a terra object</span></span>
-<span id="cb88-9"><a href="covariates.html#cb88-9" tabindex="-1"></a></span>
-<span id="cb88-10"><a href="covariates.html#cb88-10" tabindex="-1"></a><span class="co"># Plot the result</span></span>
-<span id="cb88-11"><a href="covariates.html#cb88-11" tabindex="-1"></a><span class="fu">plot</span>(ras) <span class="co"># The terra package makes nice raster plots with legends</span></span>
-<span id="cb88-12"><a href="covariates.html#cb88-12" tabindex="-1"></a><span class="fu">plot</span>(locs_terra, <span class="at">add=</span>T) <span class="co"># Add the survey locations as black dots</span></span></code></pre></div>
+<div class="sourceCode" id="cb62"><pre class="sourceCode r Rmain"><code class="sourceCode r"><span id="cb62-1"><a href="covariates.html#cb62-1" tabindex="-1"></a><span class="fu">library</span>(terra)</span>
+<span id="cb62-2"><a href="covariates.html#cb62-2" tabindex="-1"></a></span>
+<span id="cb62-3"><a href="covariates.html#cb62-3" tabindex="-1"></a><span class="co"># Import the example raster using the stars package</span></span>
+<span id="cb62-4"><a href="covariates.html#cb62-4" tabindex="-1"></a>ras <span class="ot">&lt;-</span> <span class="fu">rast</span>(<span class="st">&quot;data/raw_data/example_covariates/example_raster.tif&quot;</span>)</span>
+<span id="cb62-5"><a href="covariates.html#cb62-5" tabindex="-1"></a><span class="co"># Covert your sf locations to the same projection as your raster then put it in terra `vect` format,</span></span>
+<span id="cb62-6"><a href="covariates.html#cb62-6" tabindex="-1"></a>locs_terra <span class="ot">&lt;-</span> locs_sf <span class="sc">%&gt;%</span> </span>
+<span id="cb62-7"><a href="covariates.html#cb62-7" tabindex="-1"></a>                <span class="fu">st_transform</span>(<span class="at">crs=</span><span class="fu">st_crs</span>(ras)) <span class="sc">%&gt;%</span> <span class="co"># change the projection to match the raster</span></span>
+<span id="cb62-8"><a href="covariates.html#cb62-8" tabindex="-1"></a>                <span class="fu">vect</span>() <span class="co"># Turn it into a terra object</span></span>
+<span id="cb62-9"><a href="covariates.html#cb62-9" tabindex="-1"></a></span>
+<span id="cb62-10"><a href="covariates.html#cb62-10" tabindex="-1"></a><span class="co"># Plot the result</span></span>
+<span id="cb62-11"><a href="covariates.html#cb62-11" tabindex="-1"></a><span class="fu">plot</span>(ras) <span class="co"># The terra package makes nice raster plots with legends</span></span>
+<span id="cb62-12"><a href="covariates.html#cb62-12" tabindex="-1"></a><span class="fu">plot</span>(locs_terra, <span class="at">add=</span>T) <span class="co"># Add the survey locations as black dots</span></span></code></pre></div>
 <p><img src="Intro-to-data-analysis_files/figure-html/ch4_19-1.png" width="672" /></p>
 <p>Great! Now lets buffer our camera locations by 250 meters, and take the average depth to water for each location:</p>
-<div class="sourceCode" id="cb89"><pre class="sourceCode r Rmain"><code class="sourceCode r"><span id="cb89-1"><a href="covariates.html#cb89-1" tabindex="-1"></a><span class="co"># Buffer by 250m</span></span>
-<span id="cb89-2"><a href="covariates.html#cb89-2" tabindex="-1"></a>locs_terra <span class="ot">&lt;-</span> <span class="fu">buffer</span>(locs_terra,<span class="dv">250</span>)</span>
-<span id="cb89-3"><a href="covariates.html#cb89-3" tabindex="-1"></a></span>
-<span id="cb89-4"><a href="covariates.html#cb89-4" tabindex="-1"></a><span class="co"># Extract the values to a temporary object - tmp </span></span>
-<span id="cb89-5"><a href="covariates.html#cb89-5" tabindex="-1"></a>tmp <span class="ot">&lt;-</span> raster<span class="sc">::</span><span class="fu">extract</span>(ras, locs_terra, <span class="at">fun=</span>mean)</span>
-<span id="cb89-6"><a href="covariates.html#cb89-6" tabindex="-1"></a></span>
-<span id="cb89-7"><a href="covariates.html#cb89-7" tabindex="-1"></a><span class="co"># Make a new column in locs_sf called water_depth_m</span></span>
-<span id="cb89-8"><a href="covariates.html#cb89-8" tabindex="-1"></a><span class="co"># They are ordered the same way so no need for a fancy join</span></span>
-<span id="cb89-9"><a href="covariates.html#cb89-9" tabindex="-1"></a>locs_sf<span class="sc">$</span>water_depth_m <span class="ot">&lt;-</span> tmp<span class="sc">$</span>Depth2WatAlgar</span>
-<span id="cb89-10"><a href="covariates.html#cb89-10" tabindex="-1"></a></span>
-<span id="cb89-11"><a href="covariates.html#cb89-11" tabindex="-1"></a><span class="co"># Check the distribution of our data</span></span>
-<span id="cb89-12"><a href="covariates.html#cb89-12" tabindex="-1"></a><span class="fu">boxplot</span>(locs_sf<span class="sc">$</span>water_depth_m)</span></code></pre></div>
+<div class="sourceCode" id="cb63"><pre class="sourceCode r Rmain"><code class="sourceCode r"><span id="cb63-1"><a href="covariates.html#cb63-1" tabindex="-1"></a><span class="co"># Buffer by 250m</span></span>
+<span id="cb63-2"><a href="covariates.html#cb63-2" tabindex="-1"></a>locs_terra <span class="ot">&lt;-</span> <span class="fu">buffer</span>(locs_terra,<span class="dv">250</span>)</span>
+<span id="cb63-3"><a href="covariates.html#cb63-3" tabindex="-1"></a></span>
+<span id="cb63-4"><a href="covariates.html#cb63-4" tabindex="-1"></a><span class="co"># Extract the values to a temporary object - tmp </span></span>
+<span id="cb63-5"><a href="covariates.html#cb63-5" tabindex="-1"></a>tmp <span class="ot">&lt;-</span> raster<span class="sc">::</span><span class="fu">extract</span>(ras, locs_terra, <span class="at">fun=</span>mean)</span>
+<span id="cb63-6"><a href="covariates.html#cb63-6" tabindex="-1"></a></span>
+<span id="cb63-7"><a href="covariates.html#cb63-7" tabindex="-1"></a><span class="co"># Make a new column in locs_sf called water_depth_m</span></span>
+<span id="cb63-8"><a href="covariates.html#cb63-8" tabindex="-1"></a><span class="co"># They are ordered the same way so no need for a fancy join</span></span>
+<span id="cb63-9"><a href="covariates.html#cb63-9" tabindex="-1"></a>locs_sf<span class="sc">$</span>water_depth_m <span class="ot">&lt;-</span> tmp<span class="sc">$</span>Depth2WatAlgar</span>
+<span id="cb63-10"><a href="covariates.html#cb63-10" tabindex="-1"></a></span>
+<span id="cb63-11"><a href="covariates.html#cb63-11" tabindex="-1"></a><span class="co"># Check the distribution of our data</span></span>
+<span id="cb63-12"><a href="covariates.html#cb63-12" tabindex="-1"></a><span class="fu">boxplot</span>(locs_sf<span class="sc">$</span>water_depth_m)</span></code></pre></div>
 <p><img src="Intro-to-data-analysis_files/figure-html/ch4_21-1.png" width="672" /></p>
 <p>Most locations are on the water table (lowland sites), others are above it (upload sites), and they have different vegetation characteristics in the field.</p>
 </div>
@@ -1092,13 +1092,13 @@ ALG073
 <p>Camera studies often occur over a range of elevations - and we can quickly extract these elevations using the <code>elevatr</code> package and an <code>sf</code> dataframe.</p>
 <p>The <code>src</code> option specifies the sources of the DEM data. We use <code>aws</code> Amazon Web Service Terrain Tiles - which are available globally.</p>
 <p>The <code>z</code> option specifies the resolution of the underlying DEM, the high the value, the more detailed it is. However, it will take longer to run so do not go crazy.</p>
-<div class="sourceCode" id="cb90"><pre class="sourceCode r Rmain"><code class="sourceCode r"><span id="cb90-1"><a href="covariates.html#cb90-1" tabindex="-1"></a><span class="fu">library</span>(elevatr)</span>
-<span id="cb90-2"><a href="covariates.html#cb90-2" tabindex="-1"></a>locs_sf <span class="ot">&lt;-</span> <span class="fu">get_elev_point</span>(locs_sf, </span>
-<span id="cb90-3"><a href="covariates.html#cb90-3" tabindex="-1"></a>                          <span class="at">src=</span><span class="st">&quot;aws&quot;</span>, <span class="co">#Amazon Web Service Terrain Tiles - available globally</span></span>
-<span id="cb90-4"><a href="covariates.html#cb90-4" tabindex="-1"></a>                          <span class="at">z =</span> <span class="dv">12</span>)  <span class="co"># z specifies the zoom level, the lower the value the faster the code runs, but the coarser the elevation values are</span></span>
-<span id="cb90-5"><a href="covariates.html#cb90-5" tabindex="-1"></a></span>
-<span id="cb90-6"><a href="covariates.html#cb90-6" tabindex="-1"></a><span class="co"># Plot the result</span></span>
-<span id="cb90-7"><a href="covariates.html#cb90-7" tabindex="-1"></a><span class="fu">boxplot</span>(locs_sf<span class="sc">$</span>elevation)</span></code></pre></div>
+<div class="sourceCode" id="cb64"><pre class="sourceCode r Rmain"><code class="sourceCode r"><span id="cb64-1"><a href="covariates.html#cb64-1" tabindex="-1"></a><span class="fu">library</span>(elevatr)</span>
+<span id="cb64-2"><a href="covariates.html#cb64-2" tabindex="-1"></a>locs_sf <span class="ot">&lt;-</span> <span class="fu">get_elev_point</span>(locs_sf, </span>
+<span id="cb64-3"><a href="covariates.html#cb64-3" tabindex="-1"></a>                          <span class="at">src=</span><span class="st">&quot;aws&quot;</span>, <span class="co">#Amazon Web Service Terrain Tiles - available globally</span></span>
+<span id="cb64-4"><a href="covariates.html#cb64-4" tabindex="-1"></a>                          <span class="at">z =</span> <span class="dv">12</span>)  <span class="co"># z specifies the zoom level, the lower the value the faster the code runs, but the coarser the elevation values are</span></span>
+<span id="cb64-5"><a href="covariates.html#cb64-5" tabindex="-1"></a></span>
+<span id="cb64-6"><a href="covariates.html#cb64-6" tabindex="-1"></a><span class="co"># Plot the result</span></span>
+<span id="cb64-7"><a href="covariates.html#cb64-7" tabindex="-1"></a><span class="fu">boxplot</span>(locs_sf<span class="sc">$</span>elevation)</span></code></pre></div>
 <p><img src="Intro-to-data-analysis_files/figure-html/ch4_23-1.png" width="672" /></p>
 <p>An elevation of ~ 500m was expected. Great!</p>
 <p>If you want to download a full elevation raster for your area of interests, see the <a href="https://cran.r-project.org/web/packages/elevatr/vignettes/introduction_to_elevatr.html"><code>introduction to elevatr</code></a></p>
@@ -1108,36 +1108,36 @@ ALG073
 <p>Open Street Map (OSM) is an incredible resource for generating covariates for camera trap studies. For example, we might be interested in the distance to the nearest rivers, roads, or trails. All of these anthropogenic features are available in OSM!</p>
 <p><strong>CAREFUL</strong> OSM data is user contributed and often incomplete and patchy. Always plot your data and never assume it is complete without checking it first. For an example fo this see <code>water bodies</code> below.</p>
 <p>First lets load the <code>osmdata</code> package.</p>
-<div class="sourceCode" id="cb91"><pre class="sourceCode r Rmain"><code class="sourceCode r"><span id="cb91-1"><a href="covariates.html#cb91-1" tabindex="-1"></a><span class="fu">library</span>(osmdata)</span></code></pre></div>
+<div class="sourceCode" id="cb65"><pre class="sourceCode r Rmain"><code class="sourceCode r"><span id="cb65-1"><a href="covariates.html#cb65-1" tabindex="-1"></a><span class="fu">library</span>(osmdata)</span></code></pre></div>
 <p>The types of features we can extract using the <code>osmdata</code> package are listed here: <a href="https://wiki.openstreetmap.org/wiki/Map_features">https://wiki.openstreetmap.org/wiki/Map_features</a>.</p>
 <div id="highways" class="section level4 hasAnchor" number="7.1.5.1">
 <h4><span class="header-section-number">7.1.5.1</span> Highways<a href="covariates.html#highways" class="anchor-section" aria-label="Anchor link to header"></a></h4>
 <p>Camera trap projects are often interested in human disturbance, of which, highways are an important part.</p>
 <p>Let’s start by defining our area of interest. All <code>osmdata</code> queries begin with a bounding box defining the area of the query:</p>
-<div class="sourceCode" id="cb92"><pre class="sourceCode r Rmain"><code class="sourceCode r"><span id="cb92-1"><a href="covariates.html#cb92-1" tabindex="-1"></a><span class="co"># First buffer our points by 10km to create an area of interest (aoi)</span></span>
-<span id="cb92-2"><a href="covariates.html#cb92-2" tabindex="-1"></a>aoi <span class="ot">&lt;-</span> <span class="fu">st_bbox</span>(<span class="fu">st_buffer</span>(locs_sf, <span class="dv">10000</span>)) <span class="co"># Units are in meters </span></span>
-<span id="cb92-3"><a href="covariates.html#cb92-3" tabindex="-1"></a></span>
-<span id="cb92-4"><a href="covariates.html#cb92-4" tabindex="-1"></a><span class="co"># Return the features inside the bounding box</span></span>
-<span id="cb92-5"><a href="covariates.html#cb92-5" tabindex="-1"></a>highway <span class="ot">&lt;-</span> <span class="fu">opq</span>(aoi) <span class="sc">%&gt;%</span> <span class="co">#using the bounding box</span></span>
-<span id="cb92-6"><a href="covariates.html#cb92-6" tabindex="-1"></a>           <span class="fu">add_osm_feature</span>(<span class="at">key=</span><span class="st">&quot;highway&quot;</span>) <span class="sc">%&gt;%</span> <span class="co">#extract all highway features</span></span>
-<span id="cb92-7"><a href="covariates.html#cb92-7" tabindex="-1"></a>           <span class="fu">osmdata_sf</span>()  <span class="co"># convert them into simple features format</span></span></code></pre></div>
+<div class="sourceCode" id="cb66"><pre class="sourceCode r Rmain"><code class="sourceCode r"><span id="cb66-1"><a href="covariates.html#cb66-1" tabindex="-1"></a><span class="co"># First buffer our points by 10km to create an area of interest (aoi)</span></span>
+<span id="cb66-2"><a href="covariates.html#cb66-2" tabindex="-1"></a>aoi <span class="ot">&lt;-</span> <span class="fu">st_bbox</span>(<span class="fu">st_buffer</span>(locs_sf, <span class="dv">10000</span>)) <span class="co"># Units are in meters </span></span>
+<span id="cb66-3"><a href="covariates.html#cb66-3" tabindex="-1"></a></span>
+<span id="cb66-4"><a href="covariates.html#cb66-4" tabindex="-1"></a><span class="co"># Return the features inside the bounding box</span></span>
+<span id="cb66-5"><a href="covariates.html#cb66-5" tabindex="-1"></a>highway <span class="ot">&lt;-</span> <span class="fu">opq</span>(aoi) <span class="sc">%&gt;%</span> <span class="co">#using the bounding box</span></span>
+<span id="cb66-6"><a href="covariates.html#cb66-6" tabindex="-1"></a>           <span class="fu">add_osm_feature</span>(<span class="at">key=</span><span class="st">&quot;highway&quot;</span>) <span class="sc">%&gt;%</span> <span class="co">#extract all highway features</span></span>
+<span id="cb66-7"><a href="covariates.html#cb66-7" tabindex="-1"></a>           <span class="fu">osmdata_sf</span>()  <span class="co"># convert them into simple features format</span></span></code></pre></div>
 <p>The data you extract is its own “class” of data made up from multiple data types. The key thing is that it is made up of multiple data slices, each of which represents an <code>sf</code> dataset. Let’s take a look at three of these
 - $osm_points
 - $osm_lines
 - $osm_polygons</p>
 <p>Let’s use the lines element and add our camera stations, then calculate the distances to them:</p>
-<div class="sourceCode" id="cb93"><pre class="sourceCode r Rinfo"><code class="sourceCode r"><span id="cb93-1"><a href="covariates.html#cb93-1" tabindex="-1"></a><span class="co"># Create an index of the nearest object in `highway$osm_lines` to locs_sf</span></span>
-<span id="cb93-2"><a href="covariates.html#cb93-2" tabindex="-1"></a>index <span class="ot">&lt;-</span> <span class="fu">st_nearest_feature</span>(locs_sf, highway<span class="sc">$</span>osm_lines)</span>
-<span id="cb93-3"><a href="covariates.html#cb93-3" tabindex="-1"></a></span>
-<span id="cb93-4"><a href="covariates.html#cb93-4" tabindex="-1"></a><span class="co"># Use that index to ask for the distance to that object</span></span>
-<span id="cb93-5"><a href="covariates.html#cb93-5" tabindex="-1"></a>locs_sf<span class="sc">$</span>road_dist_m <span class="ot">&lt;-</span> <span class="fu">st_distance</span>(locs_sf, highway<span class="sc">$</span>osm_lines[index,], </span>
-<span id="cb93-6"><a href="covariates.html#cb93-6" tabindex="-1"></a>                                   <span class="at">by_element=</span>T) <span class="co"># Note `by_element=T` tells st_distance to evaluate things line by line. </span></span>
-<span id="cb93-7"><a href="covariates.html#cb93-7" tabindex="-1"></a></span>
-<span id="cb93-8"><a href="covariates.html#cb93-8" tabindex="-1"></a><span class="co"># Plot the data</span></span>
-<span id="cb93-9"><a href="covariates.html#cb93-9" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow=</span><span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">1</span>))</span>
-<span id="cb93-10"><a href="covariates.html#cb93-10" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">st_as_sfc</span>(aoi))     <span class="co"># st_as_sfc created a polygon from a `bbox` object</span></span>
-<span id="cb93-11"><a href="covariates.html#cb93-11" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">st_geometry</span>(highway<span class="sc">$</span>osm_lines), <span class="at">add=</span>T)</span>
-<span id="cb93-12"><a href="covariates.html#cb93-12" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">st_geometry</span>(locs_sf), <span class="at">col=</span><span class="st">&quot;red&quot;</span>, <span class="at">add=</span>T)</span></code></pre></div>
+<div class="sourceCode" id="cb67"><pre class="sourceCode r Rinfo"><code class="sourceCode r"><span id="cb67-1"><a href="covariates.html#cb67-1" tabindex="-1"></a><span class="co"># Create an index of the nearest object in `highway$osm_lines` to locs_sf</span></span>
+<span id="cb67-2"><a href="covariates.html#cb67-2" tabindex="-1"></a>index <span class="ot">&lt;-</span> <span class="fu">st_nearest_feature</span>(locs_sf, highway<span class="sc">$</span>osm_lines)</span>
+<span id="cb67-3"><a href="covariates.html#cb67-3" tabindex="-1"></a></span>
+<span id="cb67-4"><a href="covariates.html#cb67-4" tabindex="-1"></a><span class="co"># Use that index to ask for the distance to that object</span></span>
+<span id="cb67-5"><a href="covariates.html#cb67-5" tabindex="-1"></a>locs_sf<span class="sc">$</span>road_dist_m <span class="ot">&lt;-</span> <span class="fu">st_distance</span>(locs_sf, highway<span class="sc">$</span>osm_lines[index,], </span>
+<span id="cb67-6"><a href="covariates.html#cb67-6" tabindex="-1"></a>                                   <span class="at">by_element=</span>T) <span class="co"># Note `by_element=T` tells st_distance to evaluate things line by line. </span></span>
+<span id="cb67-7"><a href="covariates.html#cb67-7" tabindex="-1"></a></span>
+<span id="cb67-8"><a href="covariates.html#cb67-8" tabindex="-1"></a><span class="co"># Plot the data</span></span>
+<span id="cb67-9"><a href="covariates.html#cb67-9" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow=</span><span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">1</span>))</span>
+<span id="cb67-10"><a href="covariates.html#cb67-10" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">st_as_sfc</span>(aoi))     <span class="co"># st_as_sfc created a polygon from a `bbox` object</span></span>
+<span id="cb67-11"><a href="covariates.html#cb67-11" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">st_geometry</span>(highway<span class="sc">$</span>osm_lines), <span class="at">add=</span>T)</span>
+<span id="cb67-12"><a href="covariates.html#cb67-12" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">st_geometry</span>(locs_sf), <span class="at">col=</span><span class="st">&quot;red&quot;</span>, <span class="at">add=</span>T)</span></code></pre></div>
 <p><img src="Intro-to-data-analysis_files/figure-html/ch4_30-1.png" width="672" /></p>
 <p><code>st_nearest_feature</code> gives us the index number of the feature which is closest to each station.</p>
 <p>We can the use this to request the distance from that nearest feature to each camera station using <code>st_distance</code>. Which, put together, looks like:</p>
@@ -1145,14 +1145,14 @@ ALG073
 <div id="water-bodies" class="section level4 hasAnchor" number="7.1.5.2">
 <h4><span class="header-section-number">7.1.5.2</span> water bodies<a href="covariates.html#water-bodies" class="anchor-section" aria-label="Anchor link to header"></a></h4>
 <p>We also might want to calculate the distances to the nearest water body, and important resource for wildlife. We can do that using the following:</p>
-<div class="sourceCode" id="cb94"><pre class="sourceCode r Rmain"><code class="sourceCode r"><span id="cb94-1"><a href="covariates.html#cb94-1" tabindex="-1"></a>water <span class="ot">&lt;-</span> <span class="fu">opq</span>(aoi) <span class="sc">%&gt;%</span></span>
-<span id="cb94-2"><a href="covariates.html#cb94-2" tabindex="-1"></a>           <span class="fu">add_osm_feature</span>(<span class="at">key=</span><span class="st">&quot;water&quot;</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb94-3"><a href="covariates.html#cb94-3" tabindex="-1"></a>           <span class="fu">osmdata_sf</span>()</span>
-<span id="cb94-4"><a href="covariates.html#cb94-4" tabindex="-1"></a></span>
-<span id="cb94-5"><a href="covariates.html#cb94-5" tabindex="-1"></a><span class="co"># This time we will use the points file</span></span>
-<span id="cb94-6"><a href="covariates.html#cb94-6" tabindex="-1"></a>index <span class="ot">&lt;-</span> <span class="fu">st_nearest_feature</span>(locs_sf, water<span class="sc">$</span>osm_points)</span>
-<span id="cb94-7"><a href="covariates.html#cb94-7" tabindex="-1"></a></span>
-<span id="cb94-8"><a href="covariates.html#cb94-8" tabindex="-1"></a>locs_sf<span class="sc">$</span>water_dist_m <span class="ot">&lt;-</span> <span class="fu">st_distance</span>(locs_sf, water<span class="sc">$</span>osm_points[index,], <span class="at">by_element=</span>T) <span class="co"># Note `by_element=T` tells st_distance to evaluate things line by line. </span></span></code></pre></div>
+<div class="sourceCode" id="cb68"><pre class="sourceCode r Rmain"><code class="sourceCode r"><span id="cb68-1"><a href="covariates.html#cb68-1" tabindex="-1"></a>water <span class="ot">&lt;-</span> <span class="fu">opq</span>(aoi) <span class="sc">%&gt;%</span></span>
+<span id="cb68-2"><a href="covariates.html#cb68-2" tabindex="-1"></a>           <span class="fu">add_osm_feature</span>(<span class="at">key=</span><span class="st">&quot;water&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb68-3"><a href="covariates.html#cb68-3" tabindex="-1"></a>           <span class="fu">osmdata_sf</span>()</span>
+<span id="cb68-4"><a href="covariates.html#cb68-4" tabindex="-1"></a></span>
+<span id="cb68-5"><a href="covariates.html#cb68-5" tabindex="-1"></a><span class="co"># This time we will use the points file</span></span>
+<span id="cb68-6"><a href="covariates.html#cb68-6" tabindex="-1"></a>index <span class="ot">&lt;-</span> <span class="fu">st_nearest_feature</span>(locs_sf, water<span class="sc">$</span>osm_points)</span>
+<span id="cb68-7"><a href="covariates.html#cb68-7" tabindex="-1"></a></span>
+<span id="cb68-8"><a href="covariates.html#cb68-8" tabindex="-1"></a>locs_sf<span class="sc">$</span>water_dist_m <span class="ot">&lt;-</span> <span class="fu">st_distance</span>(locs_sf, water<span class="sc">$</span>osm_points[index,], <span class="at">by_element=</span>T) <span class="co"># Note `by_element=T` tells st_distance to evaluate things line by line. </span></span></code></pre></div>
 <p>For more examples of using the <code>osmdata</code> package see: <a href="https://github.com/ropensci/osmdata">the projects github page</a></p>
 </div>
 </div>
@@ -1165,40 +1165,40 @@ ALG073
 <p>Also click that link for more details on how to use it.</p>
 <p>Two commonly data products are <a href="https://lpdaac.usgs.gov/products/mod13q1v006/">MOD13Q1</a> for the derivation of NDVI/EVI, and <a href="https://lpdaac.usgs.gov/products/mod15a2hv006/">MOD15A2H</a> for the derivation of leaf area index (LAI).</p>
 <p>Let’s load the package and get it into the right format:</p>
-<div class="sourceCode" id="cb95"><pre class="sourceCode r Rmain"><code class="sourceCode r"><span id="cb95-1"><a href="covariates.html#cb95-1" tabindex="-1"></a><span class="fu">library</span>(MODISTools)</span>
-<span id="cb95-2"><a href="covariates.html#cb95-2" tabindex="-1"></a></span>
-<span id="cb95-3"><a href="covariates.html#cb95-3" tabindex="-1"></a><span class="co"># Select the location data and put it into the format MODIS tools expects</span></span>
-<span id="cb95-4"><a href="covariates.html#cb95-4" tabindex="-1"></a>modis_locs <span class="ot">&lt;-</span> locs <span class="sc">%&gt;%</span> </span>
-<span id="cb95-5"><a href="covariates.html#cb95-5" tabindex="-1"></a>  <span class="fu">select</span>(<span class="st">&quot;placename&quot;</span>, <span class="st">&quot;longitude&quot;</span>, <span class="st">&quot;latitude&quot;</span>) <span class="sc">%&gt;%</span> </span>
-<span id="cb95-6"><a href="covariates.html#cb95-6" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">site_name=</span>placename, <span class="at">lat=</span>latitude, <span class="at">lon=</span>longitude)</span>
-<span id="cb95-7"><a href="covariates.html#cb95-7" tabindex="-1"></a></span>
-<span id="cb95-8"><a href="covariates.html#cb95-8" tabindex="-1"></a><span class="co"># Download some NDVI data</span></span>
-<span id="cb95-9"><a href="covariates.html#cb95-9" tabindex="-1"></a>site_ndvi <span class="ot">&lt;-</span> <span class="fu">mt_batch_subset</span>(<span class="at">product =</span> <span class="st">&quot;MOD13Q1&quot;</span>,</span>
-<span id="cb95-10"><a href="covariates.html#cb95-10" tabindex="-1"></a>                              <span class="at">df=</span>modis_locs,</span>
-<span id="cb95-11"><a href="covariates.html#cb95-11" tabindex="-1"></a>                              <span class="at">band =</span> <span class="st">&quot;250m_16_days_NDVI&quot;</span>,</span>
-<span id="cb95-12"><a href="covariates.html#cb95-12" tabindex="-1"></a>                              <span class="at">start =</span> <span class="st">&quot;2019-07-01&quot;</span>,</span>
-<span id="cb95-13"><a href="covariates.html#cb95-13" tabindex="-1"></a>                              <span class="at">end =</span> <span class="st">&quot;2019-08-31&quot;</span>,</span>
-<span id="cb95-14"><a href="covariates.html#cb95-14" tabindex="-1"></a>                              <span class="at">km_lr =</span> <span class="dv">0</span>,         <span class="co"># Use these options if you want to buffer the value (km left)</span></span>
-<span id="cb95-15"><a href="covariates.html#cb95-15" tabindex="-1"></a>                              <span class="at">km_ab =</span> <span class="dv">0</span>,         <span class="co"># Use these options if you want to buffer the value (km above)</span></span>
-<span id="cb95-16"><a href="covariates.html#cb95-16" tabindex="-1"></a>                              <span class="at">internal =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb69"><pre class="sourceCode r Rmain"><code class="sourceCode r"><span id="cb69-1"><a href="covariates.html#cb69-1" tabindex="-1"></a><span class="fu">library</span>(MODISTools)</span>
+<span id="cb69-2"><a href="covariates.html#cb69-2" tabindex="-1"></a></span>
+<span id="cb69-3"><a href="covariates.html#cb69-3" tabindex="-1"></a><span class="co"># Select the location data and put it into the format MODIS tools expects</span></span>
+<span id="cb69-4"><a href="covariates.html#cb69-4" tabindex="-1"></a>modis_locs <span class="ot">&lt;-</span> locs <span class="sc">%&gt;%</span> </span>
+<span id="cb69-5"><a href="covariates.html#cb69-5" tabindex="-1"></a>  <span class="fu">select</span>(<span class="st">&quot;placename&quot;</span>, <span class="st">&quot;longitude&quot;</span>, <span class="st">&quot;latitude&quot;</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb69-6"><a href="covariates.html#cb69-6" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">site_name=</span>placename, <span class="at">lat=</span>latitude, <span class="at">lon=</span>longitude)</span>
+<span id="cb69-7"><a href="covariates.html#cb69-7" tabindex="-1"></a></span>
+<span id="cb69-8"><a href="covariates.html#cb69-8" tabindex="-1"></a><span class="co"># Download some NDVI data</span></span>
+<span id="cb69-9"><a href="covariates.html#cb69-9" tabindex="-1"></a>site_ndvi <span class="ot">&lt;-</span> <span class="fu">mt_batch_subset</span>(<span class="at">product =</span> <span class="st">&quot;MOD13Q1&quot;</span>,</span>
+<span id="cb69-10"><a href="covariates.html#cb69-10" tabindex="-1"></a>                              <span class="at">df=</span>modis_locs,</span>
+<span id="cb69-11"><a href="covariates.html#cb69-11" tabindex="-1"></a>                              <span class="at">band =</span> <span class="st">&quot;250m_16_days_NDVI&quot;</span>,</span>
+<span id="cb69-12"><a href="covariates.html#cb69-12" tabindex="-1"></a>                              <span class="at">start =</span> <span class="st">&quot;2019-07-01&quot;</span>,</span>
+<span id="cb69-13"><a href="covariates.html#cb69-13" tabindex="-1"></a>                              <span class="at">end =</span> <span class="st">&quot;2019-08-31&quot;</span>,</span>
+<span id="cb69-14"><a href="covariates.html#cb69-14" tabindex="-1"></a>                              <span class="at">km_lr =</span> <span class="dv">0</span>,         <span class="co"># Use these options if you want to buffer the value (km left)</span></span>
+<span id="cb69-15"><a href="covariates.html#cb69-15" tabindex="-1"></a>                              <span class="at">km_ab =</span> <span class="dv">0</span>,         <span class="co"># Use these options if you want to buffer the value (km above)</span></span>
+<span id="cb69-16"><a href="covariates.html#cb69-16" tabindex="-1"></a>                              <span class="at">internal =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
 <p>Lets simplify the output to the key elements of information and rename them to match our camera data where appropriate:</p>
-<div class="sourceCode" id="cb96"><pre class="sourceCode r Rmain"><code class="sourceCode r"><span id="cb96-1"><a href="covariates.html#cb96-1" tabindex="-1"></a><span class="co"># Reduce the number of columsn in the output and rename it where required.</span></span>
-<span id="cb96-2"><a href="covariates.html#cb96-2" tabindex="-1"></a>ndvi_simple <span class="ot">&lt;-</span> site_ndvi <span class="sc">%&gt;%</span> </span>
-<span id="cb96-3"><a href="covariates.html#cb96-3" tabindex="-1"></a>  <span class="fu">select</span>(   site, band, calendar_date, value) <span class="sc">%&gt;%</span> </span>
-<span id="cb96-4"><a href="covariates.html#cb96-4" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">placename=</span>site)</span>
-<span id="cb96-5"><a href="covariates.html#cb96-5" tabindex="-1"></a></span>
-<span id="cb96-6"><a href="covariates.html#cb96-6" tabindex="-1"></a><span class="co"># Take the average for each location</span></span>
-<span id="cb96-7"><a href="covariates.html#cb96-7" tabindex="-1"></a>tmp <span class="ot">&lt;-</span> ndvi_simple <span class="sc">%&gt;%</span>             <span class="co">#Take the NDVI layer</span></span>
-<span id="cb96-8"><a href="covariates.html#cb96-8" tabindex="-1"></a>  <span class="fu">group_by</span>(placename) <span class="sc">%&gt;%</span>          <span class="co"># Group observations by the placename</span></span>
-<span id="cb96-9"><a href="covariates.html#cb96-9" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">mean_ndvi=</span><span class="fu">mean</span>(value)) <span class="co"># Take the mean of the values and call the new column `mean_ndvi`</span></span>
-<span id="cb96-10"><a href="covariates.html#cb96-10" tabindex="-1"></a></span>
-<span id="cb96-11"><a href="covariates.html#cb96-11" tabindex="-1"></a><span class="co"># Add the new data to our locations dataframe</span></span>
-<span id="cb96-12"><a href="covariates.html#cb96-12" tabindex="-1"></a>locs_sf <span class="ot">&lt;-</span> <span class="fu">left_join</span>(locs_sf, tmp)</span>
-<span id="cb96-13"><a href="covariates.html#cb96-13" tabindex="-1"></a></span>
-<span id="cb96-14"><a href="covariates.html#cb96-14" tabindex="-1"></a><span class="co"># Plot the results</span></span>
-<span id="cb96-15"><a href="covariates.html#cb96-15" tabindex="-1"></a><span class="fu">boxplot</span>(locs_sf<span class="sc">$</span>mean_ndvi,</span>
-<span id="cb96-16"><a href="covariates.html#cb96-16" tabindex="-1"></a>        <span class="at">ylab=</span><span class="st">&quot;Mean NDVI score&quot;</span>,</span>
-<span id="cb96-17"><a href="covariates.html#cb96-17" tabindex="-1"></a>        <span class="at">las=</span><span class="dv">1</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb70"><pre class="sourceCode r Rmain"><code class="sourceCode r"><span id="cb70-1"><a href="covariates.html#cb70-1" tabindex="-1"></a><span class="co"># Reduce the number of columsn in the output and rename it where required.</span></span>
+<span id="cb70-2"><a href="covariates.html#cb70-2" tabindex="-1"></a>ndvi_simple <span class="ot">&lt;-</span> site_ndvi <span class="sc">%&gt;%</span> </span>
+<span id="cb70-3"><a href="covariates.html#cb70-3" tabindex="-1"></a>  <span class="fu">select</span>(   site, band, calendar_date, value) <span class="sc">%&gt;%</span> </span>
+<span id="cb70-4"><a href="covariates.html#cb70-4" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">placename=</span>site)</span>
+<span id="cb70-5"><a href="covariates.html#cb70-5" tabindex="-1"></a></span>
+<span id="cb70-6"><a href="covariates.html#cb70-6" tabindex="-1"></a><span class="co"># Take the average for each location</span></span>
+<span id="cb70-7"><a href="covariates.html#cb70-7" tabindex="-1"></a>tmp <span class="ot">&lt;-</span> ndvi_simple <span class="sc">%&gt;%</span>             <span class="co">#Take the NDVI layer</span></span>
+<span id="cb70-8"><a href="covariates.html#cb70-8" tabindex="-1"></a>  <span class="fu">group_by</span>(placename) <span class="sc">%&gt;%</span>          <span class="co"># Group observations by the placename</span></span>
+<span id="cb70-9"><a href="covariates.html#cb70-9" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">mean_ndvi=</span><span class="fu">mean</span>(value)) <span class="co"># Take the mean of the values and call the new column `mean_ndvi`</span></span>
+<span id="cb70-10"><a href="covariates.html#cb70-10" tabindex="-1"></a></span>
+<span id="cb70-11"><a href="covariates.html#cb70-11" tabindex="-1"></a><span class="co"># Add the new data to our locations dataframe</span></span>
+<span id="cb70-12"><a href="covariates.html#cb70-12" tabindex="-1"></a>locs_sf <span class="ot">&lt;-</span> <span class="fu">left_join</span>(locs_sf, tmp)</span>
+<span id="cb70-13"><a href="covariates.html#cb70-13" tabindex="-1"></a></span>
+<span id="cb70-14"><a href="covariates.html#cb70-14" tabindex="-1"></a><span class="co"># Plot the results</span></span>
+<span id="cb70-15"><a href="covariates.html#cb70-15" tabindex="-1"></a><span class="fu">boxplot</span>(locs_sf<span class="sc">$</span>mean_ndvi,</span>
+<span id="cb70-16"><a href="covariates.html#cb70-16" tabindex="-1"></a>        <span class="at">ylab=</span><span class="st">&quot;Mean NDVI score&quot;</span>,</span>
+<span id="cb70-17"><a href="covariates.html#cb70-17" tabindex="-1"></a>        <span class="at">las=</span><span class="dv">1</span>)</span></code></pre></div>
 <p><img src="Intro-to-data-analysis_files/figure-html/ch4_52-1.png" width="672" /></p>
 <p>It is possible to generate an NDVI score for each month that each camera is active, however that would take too long to produce for this course!</p>
 </div>
@@ -1206,37 +1206,37 @@ ALG073
 </div>
 <div id="convert-and-save-your-covariates" class="section level2 hasAnchor" number="7.2">
 <h2><span class="header-section-number">7.2</span> Convert and save your covariates<a href="covariates.html#convert-and-save-your-covariates" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<div class="sourceCode" id="cb97"><pre class="sourceCode r Rmain"><code class="sourceCode r"><span id="cb97-1"><a href="covariates.html#cb97-1" tabindex="-1"></a><span class="co"># Convert columns to numeric</span></span>
-<span id="cb97-2"><a href="covariates.html#cb97-2" tabindex="-1"></a>locs_sf<span class="sc">$</span>road_dist_m <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(locs_sf<span class="sc">$</span>road_dist_m)</span>
-<span id="cb97-3"><a href="covariates.html#cb97-3" tabindex="-1"></a></span>
-<span id="cb97-4"><a href="covariates.html#cb97-4" tabindex="-1"></a><span class="co"># Convert it back to a dataframe</span></span>
-<span id="cb97-5"><a href="covariates.html#cb97-5" tabindex="-1"></a>locs_sf<span class="sc">$</span>geometry <span class="ot">&lt;-</span> <span class="cn">NULL</span></span>
-<span id="cb97-6"><a href="covariates.html#cb97-6" tabindex="-1"></a></span>
-<span id="cb97-7"><a href="covariates.html#cb97-7" tabindex="-1"></a>locs <span class="ot">&lt;-</span> <span class="fu">left_join</span>(locs, locs_sf)</span>
-<span id="cb97-8"><a href="covariates.html#cb97-8" tabindex="-1"></a></span>
-<span id="cb97-9"><a href="covariates.html#cb97-9" tabindex="-1"></a></span>
-<span id="cb97-10"><a href="covariates.html#cb97-10" tabindex="-1"></a><span class="co"># Write the dataset</span></span>
-<span id="cb97-11"><a href="covariates.html#cb97-11" tabindex="-1"></a></span>
-<span id="cb97-12"><a href="covariates.html#cb97-12" tabindex="-1"></a><span class="fu">write.csv</span>(locs, <span class="fu">paste0</span>(<span class="st">&quot;data/processed_data/&quot;</span>, locs<span class="sc">$</span>project_id[<span class="dv">1</span>],<span class="st">&quot;_camera_locations_and_covariates.csv&quot;</span>), <span class="at">row.names=</span>F)</span></code></pre></div>
+<div class="sourceCode" id="cb71"><pre class="sourceCode r Rmain"><code class="sourceCode r"><span id="cb71-1"><a href="covariates.html#cb71-1" tabindex="-1"></a><span class="co"># Convert columns to numeric</span></span>
+<span id="cb71-2"><a href="covariates.html#cb71-2" tabindex="-1"></a>locs_sf<span class="sc">$</span>road_dist_m <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(locs_sf<span class="sc">$</span>road_dist_m)</span>
+<span id="cb71-3"><a href="covariates.html#cb71-3" tabindex="-1"></a></span>
+<span id="cb71-4"><a href="covariates.html#cb71-4" tabindex="-1"></a><span class="co"># Convert it back to a dataframe</span></span>
+<span id="cb71-5"><a href="covariates.html#cb71-5" tabindex="-1"></a>locs_sf<span class="sc">$</span>geometry <span class="ot">&lt;-</span> <span class="cn">NULL</span></span>
+<span id="cb71-6"><a href="covariates.html#cb71-6" tabindex="-1"></a></span>
+<span id="cb71-7"><a href="covariates.html#cb71-7" tabindex="-1"></a>locs <span class="ot">&lt;-</span> <span class="fu">left_join</span>(locs, locs_sf)</span>
+<span id="cb71-8"><a href="covariates.html#cb71-8" tabindex="-1"></a></span>
+<span id="cb71-9"><a href="covariates.html#cb71-9" tabindex="-1"></a></span>
+<span id="cb71-10"><a href="covariates.html#cb71-10" tabindex="-1"></a><span class="co"># Write the dataset</span></span>
+<span id="cb71-11"><a href="covariates.html#cb71-11" tabindex="-1"></a></span>
+<span id="cb71-12"><a href="covariates.html#cb71-12" tabindex="-1"></a><span class="fu">write.csv</span>(locs, <span class="fu">paste0</span>(<span class="st">&quot;data/processed_data/&quot;</span>, locs<span class="sc">$</span>project_id[<span class="dv">1</span>],<span class="st">&quot;_camera_locations_and_covariates.csv&quot;</span>), <span class="at">row.names=</span>F)</span></code></pre></div>
 </div>
 <div id="correlations-between-predictors" class="section level2 hasAnchor" number="7.3">
 <h2><span class="header-section-number">7.3</span> Correlations between predictors<a href="covariates.html#correlations-between-predictors" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>So we have used a variety of different techniques to generate covariates for our subsequent analyses. However, it is important to note that we cannot just through these variables into a model.</p>
 <p>One way to check if your different variables are confound/correlated is using the <code>corrplot</code> package.</p>
-<div class="sourceCode" id="cb98"><pre class="sourceCode r Rmain"><code class="sourceCode r"><span id="cb98-1"><a href="covariates.html#cb98-1" tabindex="-1"></a><span class="fu">library</span>(corrplot)</span>
-<span id="cb98-2"><a href="covariates.html#cb98-2" tabindex="-1"></a></span>
-<span id="cb98-3"><a href="covariates.html#cb98-3" tabindex="-1"></a><span class="co"># First we need to create a correlation matrix between the different variables of interest</span></span>
-<span id="cb98-4"><a href="covariates.html#cb98-4" tabindex="-1"></a>M <span class="ot">&lt;-</span> <span class="fu">cor</span>(locs[, <span class="fu">c</span>(<span class="st">&quot;line_of_sight_m&quot;</span>, <span class="st">&quot;water_depth_m&quot;</span>, <span class="st">&quot;elevation&quot;</span>,</span>
-<span id="cb98-5"><a href="covariates.html#cb98-5" tabindex="-1"></a>                     <span class="st">&quot;road_dist_m&quot;</span>, <span class="st">&quot;mean_ndvi&quot;</span>)])</span>
-<span id="cb98-6"><a href="covariates.html#cb98-6" tabindex="-1"></a></span>
-<span id="cb98-7"><a href="covariates.html#cb98-7" tabindex="-1"></a><span class="fu">corrplot</span>(M,                              <span class="co">#The correlation matrix we made</span></span>
-<span id="cb98-8"><a href="covariates.html#cb98-8" tabindex="-1"></a>         <span class="at">method=</span><span class="st">&quot;color&quot;</span>,                 <span class="co"># How we want the cells </span></span>
-<span id="cb98-9"><a href="covariates.html#cb98-9" tabindex="-1"></a>         <span class="at">type=</span><span class="st">&quot;upper&quot;</span>,                   <span class="co"># Just show the upper part (it is usually mirrored)</span></span>
-<span id="cb98-10"><a href="covariates.html#cb98-10" tabindex="-1"></a>         <span class="at">order=</span><span class="st">&quot;hclust&quot;</span>,                 <span class="co"># Order the variables using the hclust method</span></span>
-<span id="cb98-11"><a href="covariates.html#cb98-11" tabindex="-1"></a>         <span class="at">addCoef.col =</span> <span class="st">&quot;black&quot;</span>,          <span class="co"># Add coefficient of correlation  </span></span>
-<span id="cb98-12"><a href="covariates.html#cb98-12" tabindex="-1"></a>         <span class="at">tl.col=</span><span class="st">&quot;black&quot;</span>, <span class="at">tl.srt=</span><span class="dv">45</span>,      <span class="co"># Control the text label color and rotation</span></span>
-<span id="cb98-13"><a href="covariates.html#cb98-13" tabindex="-1"></a>         <span class="at">diag=</span>F                          <span class="co"># Suppress the diagonal correlations (which are 1 anyway)</span></span>
-<span id="cb98-14"><a href="covariates.html#cb98-14" tabindex="-1"></a>         )</span></code></pre></div>
+<div class="sourceCode" id="cb72"><pre class="sourceCode r Rmain"><code class="sourceCode r"><span id="cb72-1"><a href="covariates.html#cb72-1" tabindex="-1"></a><span class="fu">library</span>(corrplot)</span>
+<span id="cb72-2"><a href="covariates.html#cb72-2" tabindex="-1"></a></span>
+<span id="cb72-3"><a href="covariates.html#cb72-3" tabindex="-1"></a><span class="co"># First we need to create a correlation matrix between the different variables of interest</span></span>
+<span id="cb72-4"><a href="covariates.html#cb72-4" tabindex="-1"></a>M <span class="ot">&lt;-</span> <span class="fu">cor</span>(locs[, <span class="fu">c</span>(<span class="st">&quot;line_of_sight_m&quot;</span>, <span class="st">&quot;water_depth_m&quot;</span>, <span class="st">&quot;elevation&quot;</span>,</span>
+<span id="cb72-5"><a href="covariates.html#cb72-5" tabindex="-1"></a>                     <span class="st">&quot;road_dist_m&quot;</span>, <span class="st">&quot;mean_ndvi&quot;</span>)])</span>
+<span id="cb72-6"><a href="covariates.html#cb72-6" tabindex="-1"></a></span>
+<span id="cb72-7"><a href="covariates.html#cb72-7" tabindex="-1"></a><span class="fu">corrplot</span>(M,                              <span class="co">#The correlation matrix we made</span></span>
+<span id="cb72-8"><a href="covariates.html#cb72-8" tabindex="-1"></a>         <span class="at">method=</span><span class="st">&quot;color&quot;</span>,                 <span class="co"># How we want the cells </span></span>
+<span id="cb72-9"><a href="covariates.html#cb72-9" tabindex="-1"></a>         <span class="at">type=</span><span class="st">&quot;upper&quot;</span>,                   <span class="co"># Just show the upper part (it is usually mirrored)</span></span>
+<span id="cb72-10"><a href="covariates.html#cb72-10" tabindex="-1"></a>         <span class="at">order=</span><span class="st">&quot;hclust&quot;</span>,                 <span class="co"># Order the variables using the hclust method</span></span>
+<span id="cb72-11"><a href="covariates.html#cb72-11" tabindex="-1"></a>         <span class="at">addCoef.col =</span> <span class="st">&quot;black&quot;</span>,          <span class="co"># Add coefficient of correlation  </span></span>
+<span id="cb72-12"><a href="covariates.html#cb72-12" tabindex="-1"></a>         <span class="at">tl.col=</span><span class="st">&quot;black&quot;</span>, <span class="at">tl.srt=</span><span class="dv">45</span>,      <span class="co"># Control the text label color and rotation</span></span>
+<span id="cb72-13"><a href="covariates.html#cb72-13" tabindex="-1"></a>         <span class="at">diag=</span>F                          <span class="co"># Suppress the diagonal correlations (which are 1 anyway)</span></span>
+<span id="cb72-14"><a href="covariates.html#cb72-14" tabindex="-1"></a>         )</span></code></pre></div>
 <p><img src="Intro-to-data-analysis_files/figure-html/ch4_58-1.png" width="672" /></p>
 <p>The cells denote pairwise correlations between the rows and the columns. The great thing about <code>corrplot</code> is customization option are near endless - see <a href="https://cran.r-project.org/web/packages/corrplot/vignettes/corrplot-intro.html">the corrplot vignette</a>.</p>
 <p>In general there is very low correlation between our different predictors! If we were seeing pairwise correlations &gt;0.7 we perhaps wouldn’t include those in the same model.</p>

@@ -5,6 +5,10 @@ editor_options:
 ---
 # Habitat use {#habitat-use}
 
+```{r setup07, include=FALSE} 
+knitr::opts_chunk$set(warning = FALSE, message = FALSE) 
+```
+
 Camera traps are well suited for the quantification of habitat use across multiple species. To assess habitat use, we typically quantify the detection rate - the number of detections divided by the time interval of interest. As detection rates are fairly simple to estimate and conceptually simple to understand, thus their use is widespread in the camera trap literature. 
 
 In its simplest form habitat use represents the number of independent events of a given species at a given camera, divided by the number of days that camera was active during that period of interest. 

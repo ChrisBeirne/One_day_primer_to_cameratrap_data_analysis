@@ -1,5 +1,9 @@
 # Analysis covariates {#covariates}
 
+```{r setup04, include=FALSE} 
+knitr::opts_chunk$set(warning = FALSE, message = FALSE) 
+```
+
 Once we have created the building blocks for our data analysis dataframes, we must bring in the variables which will be used in the modelling steps. It is important to not that there are millions of ways to add covariates - both in terms of how you do it, and where you derive the data from. The covariates you use will depend on the questions you have, and the context of your survey. The examples provided here are not comprehensive and serve only as a guide!
 
 **Create a new .R script**

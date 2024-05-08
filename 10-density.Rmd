@@ -8,6 +8,10 @@ editor_options:
 
 # Density {#density}
 
+```{r setup10, include=FALSE} 
+knitr::opts_chunk$set(warning = FALSE, message = FALSE) 
+```
+
 Precise and unbiased population density estimates are fundamental to
 conserve rare and vulnerable species... But it is complicated,
 especially with camera traps!

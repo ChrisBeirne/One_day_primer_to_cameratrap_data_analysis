@@ -451,8 +451,8 @@ So let’s compare density estimates between winter (Oct-Mar) and summer
 <p>In our project we didn’t empirically measure the detection zone, so we
 will assume that these remain constant through time time and space.</p>
 <p>First, install the remBoot package to help us fit the REM model.</p>
-<div class="sourceCode" id="cb179"><pre class="sourceCode r Rmain"><code class="sourceCode r"><span id="cb179-1"><a href="density.html#cb179-1" tabindex="-1"></a><span class="co">#devtools::install_github(&quot;arcaravaggi/remBoot&quot;)</span></span>
-<span id="cb179-2"><a href="density.html#cb179-2" tabindex="-1"></a><span class="fu">library</span>(remBoot); <span class="fu">library</span>(dplyr); <span class="fu">library</span>(lubridate)</span></code></pre></div>
+<div class="sourceCode" id="cb142"><pre class="sourceCode r Rmain"><code class="sourceCode r"><span id="cb142-1"><a href="density.html#cb142-1" tabindex="-1"></a><span class="co">#devtools::install_github(&quot;arcaravaggi/remBoot&quot;)</span></span>
+<span id="cb142-2"><a href="density.html#cb142-2" tabindex="-1"></a><span class="fu">library</span>(remBoot); <span class="fu">library</span>(dplyr); <span class="fu">library</span>(lubridate)</span></code></pre></div>
 <div id="formatting" class="section level4 hasAnchor" number="13.2.1.1">
 <h4><span class="header-section-number">13.2.1.1</span> Formatting<a href="density.html#formatting" class="anchor-section" aria-label="Anchor link to header"></a></h4>
 <p>The formulation of the REM included in the ‘remBoot’ package is fairly
@@ -476,68 +476,68 @@ range</a> = 25m .</p>
 <h3><span class="header-section-number">13.2.2</span> Moose<a href="density.html#moose" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>From existing literature, we are expecting moose densities of roughly
 0.2-0.5 individuals per km2.</p>
-<div class="sourceCode" id="cb180"><pre class="sourceCode r Rmain"><code class="sourceCode r"><span id="cb180-1"><a href="density.html#cb180-1" tabindex="-1"></a>ind <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;data/processed_data/AlgarRestorationProject_30min_independent_detections.csv&quot;</span>, <span class="at">header=</span>T)</span>
-<span id="cb180-2"><a href="density.html#cb180-2" tabindex="-1"></a></span>
-<span id="cb180-3"><a href="density.html#cb180-3" tabindex="-1"></a><span class="co"># Setup a winter and summer months variable</span></span>
-<span id="cb180-4"><a href="density.html#cb180-4" tabindex="-1"></a>summer <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;04&quot;</span>, <span class="st">&quot;05&quot;</span>, <span class="st">&quot;06&quot;</span>, <span class="st">&quot;07&quot;</span>, <span class="st">&quot;08&quot;</span>, <span class="st">&quot;09&quot;</span>)</span>
-<span id="cb180-5"><a href="density.html#cb180-5" tabindex="-1"></a>winter <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;01&quot;</span>, <span class="st">&quot;02&quot;</span>, <span class="st">&quot;03&quot;</span>, <span class="st">&quot;10&quot;</span>, <span class="st">&quot;11&quot;</span>, <span class="st">&quot;12&quot;</span>)</span>
-<span id="cb180-6"><a href="density.html#cb180-6" tabindex="-1"></a></span>
-<span id="cb180-7"><a href="density.html#cb180-7" tabindex="-1"></a></span>
-<span id="cb180-8"><a href="density.html#cb180-8" tabindex="-1"></a><span class="co"># Subset to moose (alces alces) and the summer months</span></span>
-<span id="cb180-9"><a href="density.html#cb180-9" tabindex="-1"></a>moose_summer <span class="ot">&lt;-</span> ind[ind<span class="sc">$</span>sp<span class="sc">==</span><span class="st">&quot;Alces.alces&quot;</span> <span class="sc">&amp;</span> <span class="fu">substr</span>(ind<span class="sc">$</span>timestamp,<span class="dv">6</span>,<span class="dv">7</span>) <span class="sc">%in%</span> summer,<span class="fu">c</span>(<span class="st">&quot;placename&quot;</span>, <span class="st">&quot;event_groupsize&quot;</span>)]</span>
-<span id="cb180-10"><a href="density.html#cb180-10" tabindex="-1"></a><span class="co"># rename the columns</span></span>
-<span id="cb180-11"><a href="density.html#cb180-11" tabindex="-1"></a>moose_summer <span class="ot">&lt;-</span> moose_summer <span class="sc">%&gt;%</span> </span>
-<span id="cb180-12"><a href="density.html#cb180-12" tabindex="-1"></a>                   <span class="fu">rename</span>(<span class="st">&quot;cam&quot;</span><span class="ot">=</span>placename,</span>
-<span id="cb180-13"><a href="density.html#cb180-13" tabindex="-1"></a>                   <span class="st">&quot;count&quot;</span><span class="ot">=</span>event_groupsize)</span>
-<span id="cb180-14"><a href="density.html#cb180-14" tabindex="-1"></a></span>
-<span id="cb180-15"><a href="density.html#cb180-15" tabindex="-1"></a>moose_summer<span class="sc">$</span>dist <span class="ot">&lt;-</span> <span class="fl">0.024</span>             <span class="co"># Our detection distance in km</span></span>
-<span id="cb180-16"><a href="density.html#cb180-16" tabindex="-1"></a>moose_summer<span class="sc">$</span>theta <span class="ot">&lt;-</span> <span class="fl">42.9</span><span class="sc">*</span>(pi<span class="sc">/</span><span class="dv">180</span>)    <span class="co"># Our viewshed angle</span></span>
-<span id="cb180-17"><a href="density.html#cb180-17" tabindex="-1"></a></span>
-<span id="cb180-18"><a href="density.html#cb180-18" tabindex="-1"></a><span class="co"># Subset to moose (alces alces) and the winter months</span></span>
-<span id="cb180-19"><a href="density.html#cb180-19" tabindex="-1"></a>moose_winter <span class="ot">&lt;-</span> ind[ind<span class="sc">$</span>sp<span class="sc">==</span><span class="st">&quot;Alces.alces&quot;</span> <span class="sc">&amp;</span> <span class="fu">substr</span>(ind<span class="sc">$</span>timestamp,<span class="dv">6</span>,<span class="dv">7</span>) <span class="sc">%in%</span> winter,<span class="fu">c</span>(<span class="st">&quot;placename&quot;</span>, <span class="st">&quot;event_groupsize&quot;</span>)] </span>
-<span id="cb180-20"><a href="density.html#cb180-20" tabindex="-1"></a></span>
-<span id="cb180-21"><a href="density.html#cb180-21" tabindex="-1"></a><span class="co"># rename the columns</span></span>
-<span id="cb180-22"><a href="density.html#cb180-22" tabindex="-1"></a>moose_winter <span class="ot">&lt;-</span> moose_winter <span class="sc">%&gt;%</span> </span>
-<span id="cb180-23"><a href="density.html#cb180-23" tabindex="-1"></a>                 <span class="fu">rename</span>(<span class="st">&quot;cam&quot;</span><span class="ot">=</span>placename,</span>
-<span id="cb180-24"><a href="density.html#cb180-24" tabindex="-1"></a>                 <span class="st">&quot;count&quot;</span><span class="ot">=</span>event_groupsize)</span>
-<span id="cb180-25"><a href="density.html#cb180-25" tabindex="-1"></a></span>
-<span id="cb180-26"><a href="density.html#cb180-26" tabindex="-1"></a><span class="co"># Add the detection zone covariates</span></span>
-<span id="cb180-27"><a href="density.html#cb180-27" tabindex="-1"></a>moose_winter<span class="sc">$</span>dist <span class="ot">&lt;-</span> <span class="fl">0.024</span></span>
-<span id="cb180-28"><a href="density.html#cb180-28" tabindex="-1"></a>moose_winter<span class="sc">$</span>theta <span class="ot">&lt;-</span> <span class="fl">42.9</span><span class="sc">*</span>(pi<span class="sc">/</span><span class="dv">180</span>)</span>
-<span id="cb180-29"><a href="density.html#cb180-29" tabindex="-1"></a></span>
-<span id="cb180-30"><a href="density.html#cb180-30" tabindex="-1"></a><span class="co"># The the monthly data to get an effort estimate for each season</span></span>
-<span id="cb180-31"><a href="density.html#cb180-31" tabindex="-1"></a>mon_obs <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;data/processed_data/AlgarRestorationProject_30min_independent_monthly_observations.csv&quot;</span>, <span class="at">header=</span>T)</span>
-<span id="cb180-32"><a href="density.html#cb180-32" tabindex="-1"></a></span>
-<span id="cb180-33"><a href="density.html#cb180-33" tabindex="-1"></a><span class="co"># Sum the values</span></span>
-<span id="cb180-34"><a href="density.html#cb180-34" tabindex="-1"></a>summer_effort <span class="ot">&lt;-</span> <span class="fu">sum</span>(mon_obs<span class="sc">$</span>days[<span class="fu">substr</span>(mon_obs<span class="sc">$</span>date, <span class="dv">6</span>,<span class="dv">7</span>) <span class="sc">%in%</span> summer])</span>
-<span id="cb180-35"><a href="density.html#cb180-35" tabindex="-1"></a>winter_effort <span class="ot">&lt;-</span> <span class="fu">sum</span>(mon_obs<span class="sc">$</span>days[<span class="fu">substr</span>(mon_obs<span class="sc">$</span>date, <span class="dv">6</span>,<span class="dv">7</span>) <span class="sc">%in%</span> winter])</span></code></pre></div>
+<div class="sourceCode" id="cb143"><pre class="sourceCode r Rmain"><code class="sourceCode r"><span id="cb143-1"><a href="density.html#cb143-1" tabindex="-1"></a>ind <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;data/processed_data/AlgarRestorationProject_30min_independent_detections.csv&quot;</span>, <span class="at">header=</span>T)</span>
+<span id="cb143-2"><a href="density.html#cb143-2" tabindex="-1"></a></span>
+<span id="cb143-3"><a href="density.html#cb143-3" tabindex="-1"></a><span class="co"># Setup a winter and summer months variable</span></span>
+<span id="cb143-4"><a href="density.html#cb143-4" tabindex="-1"></a>summer <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;04&quot;</span>, <span class="st">&quot;05&quot;</span>, <span class="st">&quot;06&quot;</span>, <span class="st">&quot;07&quot;</span>, <span class="st">&quot;08&quot;</span>, <span class="st">&quot;09&quot;</span>)</span>
+<span id="cb143-5"><a href="density.html#cb143-5" tabindex="-1"></a>winter <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;01&quot;</span>, <span class="st">&quot;02&quot;</span>, <span class="st">&quot;03&quot;</span>, <span class="st">&quot;10&quot;</span>, <span class="st">&quot;11&quot;</span>, <span class="st">&quot;12&quot;</span>)</span>
+<span id="cb143-6"><a href="density.html#cb143-6" tabindex="-1"></a></span>
+<span id="cb143-7"><a href="density.html#cb143-7" tabindex="-1"></a></span>
+<span id="cb143-8"><a href="density.html#cb143-8" tabindex="-1"></a><span class="co"># Subset to moose (alces alces) and the summer months</span></span>
+<span id="cb143-9"><a href="density.html#cb143-9" tabindex="-1"></a>moose_summer <span class="ot">&lt;-</span> ind[ind<span class="sc">$</span>sp<span class="sc">==</span><span class="st">&quot;Alces.alces&quot;</span> <span class="sc">&amp;</span> <span class="fu">substr</span>(ind<span class="sc">$</span>timestamp,<span class="dv">6</span>,<span class="dv">7</span>) <span class="sc">%in%</span> summer,<span class="fu">c</span>(<span class="st">&quot;placename&quot;</span>, <span class="st">&quot;event_groupsize&quot;</span>)]</span>
+<span id="cb143-10"><a href="density.html#cb143-10" tabindex="-1"></a><span class="co"># rename the columns</span></span>
+<span id="cb143-11"><a href="density.html#cb143-11" tabindex="-1"></a>moose_summer <span class="ot">&lt;-</span> moose_summer <span class="sc">%&gt;%</span> </span>
+<span id="cb143-12"><a href="density.html#cb143-12" tabindex="-1"></a>                   <span class="fu">rename</span>(<span class="st">&quot;cam&quot;</span><span class="ot">=</span>placename,</span>
+<span id="cb143-13"><a href="density.html#cb143-13" tabindex="-1"></a>                   <span class="st">&quot;count&quot;</span><span class="ot">=</span>event_groupsize)</span>
+<span id="cb143-14"><a href="density.html#cb143-14" tabindex="-1"></a></span>
+<span id="cb143-15"><a href="density.html#cb143-15" tabindex="-1"></a>moose_summer<span class="sc">$</span>dist <span class="ot">&lt;-</span> <span class="fl">0.024</span>             <span class="co"># Our detection distance in km</span></span>
+<span id="cb143-16"><a href="density.html#cb143-16" tabindex="-1"></a>moose_summer<span class="sc">$</span>theta <span class="ot">&lt;-</span> <span class="fl">42.9</span><span class="sc">*</span>(pi<span class="sc">/</span><span class="dv">180</span>)    <span class="co"># Our viewshed angle</span></span>
+<span id="cb143-17"><a href="density.html#cb143-17" tabindex="-1"></a></span>
+<span id="cb143-18"><a href="density.html#cb143-18" tabindex="-1"></a><span class="co"># Subset to moose (alces alces) and the winter months</span></span>
+<span id="cb143-19"><a href="density.html#cb143-19" tabindex="-1"></a>moose_winter <span class="ot">&lt;-</span> ind[ind<span class="sc">$</span>sp<span class="sc">==</span><span class="st">&quot;Alces.alces&quot;</span> <span class="sc">&amp;</span> <span class="fu">substr</span>(ind<span class="sc">$</span>timestamp,<span class="dv">6</span>,<span class="dv">7</span>) <span class="sc">%in%</span> winter,<span class="fu">c</span>(<span class="st">&quot;placename&quot;</span>, <span class="st">&quot;event_groupsize&quot;</span>)] </span>
+<span id="cb143-20"><a href="density.html#cb143-20" tabindex="-1"></a></span>
+<span id="cb143-21"><a href="density.html#cb143-21" tabindex="-1"></a><span class="co"># rename the columns</span></span>
+<span id="cb143-22"><a href="density.html#cb143-22" tabindex="-1"></a>moose_winter <span class="ot">&lt;-</span> moose_winter <span class="sc">%&gt;%</span> </span>
+<span id="cb143-23"><a href="density.html#cb143-23" tabindex="-1"></a>                 <span class="fu">rename</span>(<span class="st">&quot;cam&quot;</span><span class="ot">=</span>placename,</span>
+<span id="cb143-24"><a href="density.html#cb143-24" tabindex="-1"></a>                 <span class="st">&quot;count&quot;</span><span class="ot">=</span>event_groupsize)</span>
+<span id="cb143-25"><a href="density.html#cb143-25" tabindex="-1"></a></span>
+<span id="cb143-26"><a href="density.html#cb143-26" tabindex="-1"></a><span class="co"># Add the detection zone covariates</span></span>
+<span id="cb143-27"><a href="density.html#cb143-27" tabindex="-1"></a>moose_winter<span class="sc">$</span>dist <span class="ot">&lt;-</span> <span class="fl">0.024</span></span>
+<span id="cb143-28"><a href="density.html#cb143-28" tabindex="-1"></a>moose_winter<span class="sc">$</span>theta <span class="ot">&lt;-</span> <span class="fl">42.9</span><span class="sc">*</span>(pi<span class="sc">/</span><span class="dv">180</span>)</span>
+<span id="cb143-29"><a href="density.html#cb143-29" tabindex="-1"></a></span>
+<span id="cb143-30"><a href="density.html#cb143-30" tabindex="-1"></a><span class="co"># The the monthly data to get an effort estimate for each season</span></span>
+<span id="cb143-31"><a href="density.html#cb143-31" tabindex="-1"></a>mon_obs <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;data/processed_data/AlgarRestorationProject_30min_independent_monthly_observations.csv&quot;</span>, <span class="at">header=</span>T)</span>
+<span id="cb143-32"><a href="density.html#cb143-32" tabindex="-1"></a></span>
+<span id="cb143-33"><a href="density.html#cb143-33" tabindex="-1"></a><span class="co"># Sum the values</span></span>
+<span id="cb143-34"><a href="density.html#cb143-34" tabindex="-1"></a>summer_effort <span class="ot">&lt;-</span> <span class="fu">sum</span>(mon_obs<span class="sc">$</span>days[<span class="fu">substr</span>(mon_obs<span class="sc">$</span>date, <span class="dv">6</span>,<span class="dv">7</span>) <span class="sc">%in%</span> summer])</span>
+<span id="cb143-35"><a href="density.html#cb143-35" tabindex="-1"></a>winter_effort <span class="ot">&lt;-</span> <span class="fu">sum</span>(mon_obs<span class="sc">$</span>days[<span class="fu">substr</span>(mon_obs<span class="sc">$</span>date, <span class="dv">6</span>,<span class="dv">7</span>) <span class="sc">%in%</span> winter])</span></code></pre></div>
 <p>Here I will use the average daily distance for summer and winter derived
 from telemetry datasets on Movebank from locations close to where this
 camera trap study was conducted:</p>
 <p>Moose winter = 1.07 km per day Moose summer = 1.15 km per day</p>
 <p>Now lets fit the REM model.</p>
-<div class="sourceCode" id="cb181"><pre class="sourceCode r Rmain"><code class="sourceCode r"><span id="cb181-1"><a href="density.html#cb181-1" tabindex="-1"></a><span class="co"># Number of iterations</span></span>
-<span id="cb181-2"><a href="density.html#cb181-2" tabindex="-1"></a>nboots <span class="ot">&lt;-</span> <span class="dv">1000</span></span>
-<span id="cb181-3"><a href="density.html#cb181-3" tabindex="-1"></a></span>
-<span id="cb181-4"><a href="density.html#cb181-4" tabindex="-1"></a>summer_rem <span class="ot">&lt;-</span> <span class="fu">rem</span>(<span class="at">dat =</span> moose_summer, <span class="at">tm=</span>summer_effort, <span class="at">v=</span><span class="fl">1.15</span>)</span>
-<span id="cb181-5"><a href="density.html#cb181-5" tabindex="-1"></a>winter_rem <span class="ot">&lt;-</span> <span class="fu">rem</span>(<span class="at">dat =</span> moose_winter, <span class="at">tm=</span>winter_effort, <span class="at">v=</span><span class="fl">1.07</span>) </span>
-<span id="cb181-6"><a href="density.html#cb181-6" tabindex="-1"></a></span>
-<span id="cb181-7"><a href="density.html#cb181-7" tabindex="-1"></a>moose_res <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">season=</span><span class="fu">c</span>(<span class="st">&quot;summer&quot;</span>, <span class="st">&quot;winter&quot;</span>), </span>
-<span id="cb181-8"><a href="density.html#cb181-8" tabindex="-1"></a>             <span class="at">species=</span><span class="st">&quot;moose&quot;</span>, </span>
-<span id="cb181-9"><a href="density.html#cb181-9" tabindex="-1"></a>             <span class="at">density=</span><span class="fu">c</span>(summer_rem,winter_rem), </span>
-<span id="cb181-10"><a href="density.html#cb181-10" tabindex="-1"></a>             <span class="at">sd=</span><span class="cn">NA</span>)</span>
-<span id="cb181-11"><a href="density.html#cb181-11" tabindex="-1"></a></span>
-<span id="cb181-12"><a href="density.html#cb181-12" tabindex="-1"></a><span class="co"># Add the sd</span></span>
-<span id="cb181-13"><a href="density.html#cb181-13" tabindex="-1"></a>tm <span class="ot">&lt;-</span> summer_effort</span>
-<span id="cb181-14"><a href="density.html#cb181-14" tabindex="-1"></a>v <span class="ot">&lt;-</span> <span class="fl">1.15</span></span>
-<span id="cb181-15"><a href="density.html#cb181-15" tabindex="-1"></a>moose_res<span class="sc">$</span>sd[moose_res<span class="sc">$</span>season<span class="sc">==</span><span class="st">&quot;summer&quot;</span>] <span class="ot">&lt;-</span> <span class="fu">sd</span>(<span class="fu">boot_sd</span>(moose_summer))</span>
-<span id="cb181-16"><a href="density.html#cb181-16" tabindex="-1"></a></span>
-<span id="cb181-17"><a href="density.html#cb181-17" tabindex="-1"></a>tm <span class="ot">&lt;-</span> winter_effort</span>
-<span id="cb181-18"><a href="density.html#cb181-18" tabindex="-1"></a>v <span class="ot">&lt;-</span> <span class="fl">1.07</span></span>
-<span id="cb181-19"><a href="density.html#cb181-19" tabindex="-1"></a>moose_res<span class="sc">$</span>sd[moose_res<span class="sc">$</span>season<span class="sc">==</span><span class="st">&quot;winter&quot;</span>] <span class="ot">&lt;-</span> <span class="fu">sd</span>(<span class="fu">boot_sd</span>(moose_winter))</span>
-<span id="cb181-20"><a href="density.html#cb181-20" tabindex="-1"></a></span>
-<span id="cb181-21"><a href="density.html#cb181-21" tabindex="-1"></a><span class="co"># Look at the results</span></span>
-<span id="cb181-22"><a href="density.html#cb181-22" tabindex="-1"></a>moose_res</span></code></pre></div>
+<div class="sourceCode" id="cb144"><pre class="sourceCode r Rmain"><code class="sourceCode r"><span id="cb144-1"><a href="density.html#cb144-1" tabindex="-1"></a><span class="co"># Number of iterations</span></span>
+<span id="cb144-2"><a href="density.html#cb144-2" tabindex="-1"></a>nboots <span class="ot">&lt;-</span> <span class="dv">1000</span></span>
+<span id="cb144-3"><a href="density.html#cb144-3" tabindex="-1"></a></span>
+<span id="cb144-4"><a href="density.html#cb144-4" tabindex="-1"></a>summer_rem <span class="ot">&lt;-</span> <span class="fu">rem</span>(<span class="at">dat =</span> moose_summer, <span class="at">tm=</span>summer_effort, <span class="at">v=</span><span class="fl">1.15</span>)</span>
+<span id="cb144-5"><a href="density.html#cb144-5" tabindex="-1"></a>winter_rem <span class="ot">&lt;-</span> <span class="fu">rem</span>(<span class="at">dat =</span> moose_winter, <span class="at">tm=</span>winter_effort, <span class="at">v=</span><span class="fl">1.07</span>) </span>
+<span id="cb144-6"><a href="density.html#cb144-6" tabindex="-1"></a></span>
+<span id="cb144-7"><a href="density.html#cb144-7" tabindex="-1"></a>moose_res <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">season=</span><span class="fu">c</span>(<span class="st">&quot;summer&quot;</span>, <span class="st">&quot;winter&quot;</span>), </span>
+<span id="cb144-8"><a href="density.html#cb144-8" tabindex="-1"></a>             <span class="at">species=</span><span class="st">&quot;moose&quot;</span>, </span>
+<span id="cb144-9"><a href="density.html#cb144-9" tabindex="-1"></a>             <span class="at">density=</span><span class="fu">c</span>(summer_rem,winter_rem), </span>
+<span id="cb144-10"><a href="density.html#cb144-10" tabindex="-1"></a>             <span class="at">sd=</span><span class="cn">NA</span>)</span>
+<span id="cb144-11"><a href="density.html#cb144-11" tabindex="-1"></a></span>
+<span id="cb144-12"><a href="density.html#cb144-12" tabindex="-1"></a><span class="co"># Add the sd</span></span>
+<span id="cb144-13"><a href="density.html#cb144-13" tabindex="-1"></a>tm <span class="ot">&lt;-</span> summer_effort</span>
+<span id="cb144-14"><a href="density.html#cb144-14" tabindex="-1"></a>v <span class="ot">&lt;-</span> <span class="fl">1.15</span></span>
+<span id="cb144-15"><a href="density.html#cb144-15" tabindex="-1"></a>moose_res<span class="sc">$</span>sd[moose_res<span class="sc">$</span>season<span class="sc">==</span><span class="st">&quot;summer&quot;</span>] <span class="ot">&lt;-</span> <span class="fu">sd</span>(<span class="fu">boot_sd</span>(moose_summer))</span>
+<span id="cb144-16"><a href="density.html#cb144-16" tabindex="-1"></a></span>
+<span id="cb144-17"><a href="density.html#cb144-17" tabindex="-1"></a>tm <span class="ot">&lt;-</span> winter_effort</span>
+<span id="cb144-18"><a href="density.html#cb144-18" tabindex="-1"></a>v <span class="ot">&lt;-</span> <span class="fl">1.07</span></span>
+<span id="cb144-19"><a href="density.html#cb144-19" tabindex="-1"></a>moose_res<span class="sc">$</span>sd[moose_res<span class="sc">$</span>season<span class="sc">==</span><span class="st">&quot;winter&quot;</span>] <span class="ot">&lt;-</span> <span class="fu">sd</span>(<span class="fu">boot_sd</span>(moose_winter))</span>
+<span id="cb144-20"><a href="density.html#cb144-20" tabindex="-1"></a></span>
+<span id="cb144-21"><a href="density.html#cb144-21" tabindex="-1"></a><span class="co"># Look at the results</span></span>
+<span id="cb144-22"><a href="density.html#cb144-22" tabindex="-1"></a>moose_res</span></code></pre></div>
 <pre><code>##   season species   density         sd
 ## 1 summer   moose 0.5275170 0.02045190
 ## 2 winter   moose 0.4094503 0.02908781</code></pre>
@@ -545,14 +545,14 @@ camera trap study was conducted:</p>
 per km<sup>2</sup>… not bad!</p>
 <p>Lets make a plot of the estimated densities and their standard
 deviations:</p>
-<div class="sourceCode" id="cb183"><pre class="sourceCode r Rmain"><code class="sourceCode r"><span id="cb183-1"><a href="density.html#cb183-1" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
-<span id="cb183-2"><a href="density.html#cb183-2" tabindex="-1"></a>p<span class="ot">&lt;-</span><span class="fu">ggplot</span>(moose_res, <span class="fu">aes</span>(<span class="at">x=</span>season, <span class="at">y=</span>density)) <span class="sc">+</span> </span>
-<span id="cb183-3"><a href="density.html#cb183-3" tabindex="-1"></a>  <span class="fu">geom_point</span>()<span class="sc">+</span></span>
-<span id="cb183-4"><a href="density.html#cb183-4" tabindex="-1"></a>  <span class="fu">geom_errorbar</span>(<span class="fu">aes</span>(<span class="at">ymin=</span>density<span class="sc">-</span>sd, <span class="at">ymax=</span>density<span class="sc">+</span>sd), <span class="at">width=</span>.<span class="dv">2</span>,</span>
-<span id="cb183-5"><a href="density.html#cb183-5" tabindex="-1"></a>                <span class="at">position=</span><span class="fu">position_dodge</span>(<span class="fl">0.05</span>)) <span class="sc">+</span></span>
-<span id="cb183-6"><a href="density.html#cb183-6" tabindex="-1"></a>  <span class="fu">theme_classic</span>()</span>
-<span id="cb183-7"><a href="density.html#cb183-7" tabindex="-1"></a>  </span>
-<span id="cb183-8"><a href="density.html#cb183-8" tabindex="-1"></a>p</span></code></pre></div>
+<div class="sourceCode" id="cb146"><pre class="sourceCode r Rmain"><code class="sourceCode r"><span id="cb146-1"><a href="density.html#cb146-1" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb146-2"><a href="density.html#cb146-2" tabindex="-1"></a>p<span class="ot">&lt;-</span><span class="fu">ggplot</span>(moose_res, <span class="fu">aes</span>(<span class="at">x=</span>season, <span class="at">y=</span>density)) <span class="sc">+</span> </span>
+<span id="cb146-3"><a href="density.html#cb146-3" tabindex="-1"></a>  <span class="fu">geom_point</span>()<span class="sc">+</span></span>
+<span id="cb146-4"><a href="density.html#cb146-4" tabindex="-1"></a>  <span class="fu">geom_errorbar</span>(<span class="fu">aes</span>(<span class="at">ymin=</span>density<span class="sc">-</span>sd, <span class="at">ymax=</span>density<span class="sc">+</span>sd), <span class="at">width=</span>.<span class="dv">2</span>,</span>
+<span id="cb146-5"><a href="density.html#cb146-5" tabindex="-1"></a>                <span class="at">position=</span><span class="fu">position_dodge</span>(<span class="fl">0.05</span>)) <span class="sc">+</span></span>
+<span id="cb146-6"><a href="density.html#cb146-6" tabindex="-1"></a>  <span class="fu">theme_classic</span>()</span>
+<span id="cb146-7"><a href="density.html#cb146-7" tabindex="-1"></a>  </span>
+<span id="cb146-8"><a href="density.html#cb146-8" tabindex="-1"></a>p</span></code></pre></div>
 <p><img src="Intro-to-data-analysis_files/figure-html/unnamed-chunk-16-1.png" width="672" /></p>
 </div>
 <div id="wolf" class="section level3 hasAnchor" number="13.2.3">
@@ -560,54 +560,54 @@ deviations:</p>
 <p>From existing literature we would expect wolf densities of 0.001 - 0.025
 individuals per km<sup>2</sup>.</p>
 <p>Lets repeat our analysis for wolves:</p>
-<div class="sourceCode" id="cb184"><pre class="sourceCode r Rmain"><code class="sourceCode r"><span id="cb184-1"><a href="density.html#cb184-1" tabindex="-1"></a><span class="co"># Subset to moose (alces alces) and the summer months</span></span>
-<span id="cb184-2"><a href="density.html#cb184-2" tabindex="-1"></a>wolf_summer <span class="ot">&lt;-</span> ind[ind<span class="sc">$</span>sp<span class="sc">==</span><span class="st">&quot;Canis.lupus&quot;</span> <span class="sc">&amp;</span> <span class="fu">substr</span>(ind<span class="sc">$</span>timestamp,<span class="dv">6</span>,<span class="dv">7</span>) <span class="sc">%in%</span> summer,<span class="fu">c</span>(<span class="st">&quot;placename&quot;</span>, <span class="st">&quot;event_groupsize&quot;</span>)]</span>
-<span id="cb184-3"><a href="density.html#cb184-3" tabindex="-1"></a><span class="co"># rename the columns</span></span>
-<span id="cb184-4"><a href="density.html#cb184-4" tabindex="-1"></a>wolf_summer <span class="ot">&lt;-</span> wolf_summer <span class="sc">%&gt;%</span> </span>
-<span id="cb184-5"><a href="density.html#cb184-5" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="st">&quot;cam&quot;</span><span class="ot">=</span>placename,</span>
-<span id="cb184-6"><a href="density.html#cb184-6" tabindex="-1"></a>         <span class="st">&quot;count&quot;</span><span class="ot">=</span>event_groupsize)</span>
-<span id="cb184-7"><a href="density.html#cb184-7" tabindex="-1"></a></span>
-<span id="cb184-8"><a href="density.html#cb184-8" tabindex="-1"></a>wolf_summer<span class="sc">$</span>dist <span class="ot">&lt;-</span> <span class="fl">0.024</span>             <span class="co"># Our detection distance in km</span></span>
-<span id="cb184-9"><a href="density.html#cb184-9" tabindex="-1"></a>wolf_summer<span class="sc">$</span>theta <span class="ot">&lt;-</span> <span class="fl">42.9</span><span class="sc">*</span>(pi<span class="sc">/</span><span class="dv">180</span>)    <span class="co"># Our viewshed angle</span></span>
-<span id="cb184-10"><a href="density.html#cb184-10" tabindex="-1"></a></span>
-<span id="cb184-11"><a href="density.html#cb184-11" tabindex="-1"></a><span class="co"># Subset to wolf (alces alces) and the winter months</span></span>
-<span id="cb184-12"><a href="density.html#cb184-12" tabindex="-1"></a>wolf_winter <span class="ot">&lt;-</span> ind[ind<span class="sc">$</span>sp<span class="sc">==</span><span class="st">&quot;Canis.lupus&quot;</span> <span class="sc">&amp;</span> <span class="fu">substr</span>(ind<span class="sc">$</span>timestamp,<span class="dv">6</span>,<span class="dv">7</span>) <span class="sc">%in%</span> winter,<span class="fu">c</span>(<span class="st">&quot;placename&quot;</span>, <span class="st">&quot;event_groupsize&quot;</span>)] </span>
-<span id="cb184-13"><a href="density.html#cb184-13" tabindex="-1"></a></span>
-<span id="cb184-14"><a href="density.html#cb184-14" tabindex="-1"></a><span class="co"># rename the columns</span></span>
-<span id="cb184-15"><a href="density.html#cb184-15" tabindex="-1"></a>wolf_winter <span class="ot">&lt;-</span> wolf_winter <span class="sc">%&gt;%</span> </span>
-<span id="cb184-16"><a href="density.html#cb184-16" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="st">&quot;cam&quot;</span><span class="ot">=</span>placename,</span>
-<span id="cb184-17"><a href="density.html#cb184-17" tabindex="-1"></a>         <span class="st">&quot;count&quot;</span><span class="ot">=</span>event_groupsize)</span>
-<span id="cb184-18"><a href="density.html#cb184-18" tabindex="-1"></a></span>
-<span id="cb184-19"><a href="density.html#cb184-19" tabindex="-1"></a><span class="co"># Add the detection zone covariates</span></span>
-<span id="cb184-20"><a href="density.html#cb184-20" tabindex="-1"></a>wolf_winter<span class="sc">$</span>dist <span class="ot">&lt;-</span> <span class="fl">0.024</span></span>
-<span id="cb184-21"><a href="density.html#cb184-21" tabindex="-1"></a>wolf_winter<span class="sc">$</span>theta <span class="ot">&lt;-</span> <span class="fl">42.9</span><span class="sc">*</span>(pi<span class="sc">/</span><span class="dv">180</span>)</span>
-<span id="cb184-22"><a href="density.html#cb184-22" tabindex="-1"></a></span>
-<span id="cb184-23"><a href="density.html#cb184-23" tabindex="-1"></a>summer_rem <span class="ot">&lt;-</span> <span class="fu">rem</span>(<span class="at">dat =</span> wolf_summer, <span class="at">tm=</span>summer_effort, <span class="at">v=</span><span class="fl">11.9</span>)</span>
-<span id="cb184-24"><a href="density.html#cb184-24" tabindex="-1"></a>winter_rem <span class="ot">&lt;-</span> <span class="fu">rem</span>(<span class="at">dat =</span> wolf_winter, <span class="at">tm=</span>winter_effort, <span class="at">v=</span><span class="fl">11.8</span>) </span>
-<span id="cb184-25"><a href="density.html#cb184-25" tabindex="-1"></a></span>
-<span id="cb184-26"><a href="density.html#cb184-26" tabindex="-1"></a>wolf_res <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">season=</span><span class="fu">c</span>(<span class="st">&quot;summer&quot;</span>, <span class="st">&quot;winter&quot;</span>), </span>
-<span id="cb184-27"><a href="density.html#cb184-27" tabindex="-1"></a>             <span class="at">species=</span><span class="st">&quot;wolf&quot;</span>, </span>
-<span id="cb184-28"><a href="density.html#cb184-28" tabindex="-1"></a>             <span class="at">density=</span><span class="fu">c</span>(summer_rem,winter_rem), </span>
-<span id="cb184-29"><a href="density.html#cb184-29" tabindex="-1"></a>             <span class="at">sd=</span><span class="cn">NA</span>)</span>
-<span id="cb184-30"><a href="density.html#cb184-30" tabindex="-1"></a></span>
-<span id="cb184-31"><a href="density.html#cb184-31" tabindex="-1"></a><span class="co"># Add the sd</span></span>
-<span id="cb184-32"><a href="density.html#cb184-32" tabindex="-1"></a>tm <span class="ot">&lt;-</span> summer_effort</span>
-<span id="cb184-33"><a href="density.html#cb184-33" tabindex="-1"></a>v <span class="ot">&lt;-</span> <span class="fl">11.9</span></span>
-<span id="cb184-34"><a href="density.html#cb184-34" tabindex="-1"></a>wolf_res<span class="sc">$</span>sd[wolf_res<span class="sc">$</span>season<span class="sc">==</span><span class="st">&quot;summer&quot;</span>] <span class="ot">&lt;-</span> <span class="fu">sd</span>(<span class="fu">boot_sd</span>(wolf_summer))</span>
-<span id="cb184-35"><a href="density.html#cb184-35" tabindex="-1"></a></span>
-<span id="cb184-36"><a href="density.html#cb184-36" tabindex="-1"></a>tm <span class="ot">&lt;-</span> winter_effort</span>
-<span id="cb184-37"><a href="density.html#cb184-37" tabindex="-1"></a>v <span class="ot">&lt;-</span> <span class="fl">11.8</span></span>
-<span id="cb184-38"><a href="density.html#cb184-38" tabindex="-1"></a>wolf_res<span class="sc">$</span>sd[wolf_res<span class="sc">$</span>season<span class="sc">==</span><span class="st">&quot;winter&quot;</span>] <span class="ot">&lt;-</span> <span class="fu">sd</span>(<span class="fu">boot_sd</span>(wolf_winter))</span></code></pre></div>
+<div class="sourceCode" id="cb147"><pre class="sourceCode r Rmain"><code class="sourceCode r"><span id="cb147-1"><a href="density.html#cb147-1" tabindex="-1"></a><span class="co"># Subset to moose (alces alces) and the summer months</span></span>
+<span id="cb147-2"><a href="density.html#cb147-2" tabindex="-1"></a>wolf_summer <span class="ot">&lt;-</span> ind[ind<span class="sc">$</span>sp<span class="sc">==</span><span class="st">&quot;Canis.lupus&quot;</span> <span class="sc">&amp;</span> <span class="fu">substr</span>(ind<span class="sc">$</span>timestamp,<span class="dv">6</span>,<span class="dv">7</span>) <span class="sc">%in%</span> summer,<span class="fu">c</span>(<span class="st">&quot;placename&quot;</span>, <span class="st">&quot;event_groupsize&quot;</span>)]</span>
+<span id="cb147-3"><a href="density.html#cb147-3" tabindex="-1"></a><span class="co"># rename the columns</span></span>
+<span id="cb147-4"><a href="density.html#cb147-4" tabindex="-1"></a>wolf_summer <span class="ot">&lt;-</span> wolf_summer <span class="sc">%&gt;%</span> </span>
+<span id="cb147-5"><a href="density.html#cb147-5" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="st">&quot;cam&quot;</span><span class="ot">=</span>placename,</span>
+<span id="cb147-6"><a href="density.html#cb147-6" tabindex="-1"></a>         <span class="st">&quot;count&quot;</span><span class="ot">=</span>event_groupsize)</span>
+<span id="cb147-7"><a href="density.html#cb147-7" tabindex="-1"></a></span>
+<span id="cb147-8"><a href="density.html#cb147-8" tabindex="-1"></a>wolf_summer<span class="sc">$</span>dist <span class="ot">&lt;-</span> <span class="fl">0.024</span>             <span class="co"># Our detection distance in km</span></span>
+<span id="cb147-9"><a href="density.html#cb147-9" tabindex="-1"></a>wolf_summer<span class="sc">$</span>theta <span class="ot">&lt;-</span> <span class="fl">42.9</span><span class="sc">*</span>(pi<span class="sc">/</span><span class="dv">180</span>)    <span class="co"># Our viewshed angle</span></span>
+<span id="cb147-10"><a href="density.html#cb147-10" tabindex="-1"></a></span>
+<span id="cb147-11"><a href="density.html#cb147-11" tabindex="-1"></a><span class="co"># Subset to wolf (alces alces) and the winter months</span></span>
+<span id="cb147-12"><a href="density.html#cb147-12" tabindex="-1"></a>wolf_winter <span class="ot">&lt;-</span> ind[ind<span class="sc">$</span>sp<span class="sc">==</span><span class="st">&quot;Canis.lupus&quot;</span> <span class="sc">&amp;</span> <span class="fu">substr</span>(ind<span class="sc">$</span>timestamp,<span class="dv">6</span>,<span class="dv">7</span>) <span class="sc">%in%</span> winter,<span class="fu">c</span>(<span class="st">&quot;placename&quot;</span>, <span class="st">&quot;event_groupsize&quot;</span>)] </span>
+<span id="cb147-13"><a href="density.html#cb147-13" tabindex="-1"></a></span>
+<span id="cb147-14"><a href="density.html#cb147-14" tabindex="-1"></a><span class="co"># rename the columns</span></span>
+<span id="cb147-15"><a href="density.html#cb147-15" tabindex="-1"></a>wolf_winter <span class="ot">&lt;-</span> wolf_winter <span class="sc">%&gt;%</span> </span>
+<span id="cb147-16"><a href="density.html#cb147-16" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="st">&quot;cam&quot;</span><span class="ot">=</span>placename,</span>
+<span id="cb147-17"><a href="density.html#cb147-17" tabindex="-1"></a>         <span class="st">&quot;count&quot;</span><span class="ot">=</span>event_groupsize)</span>
+<span id="cb147-18"><a href="density.html#cb147-18" tabindex="-1"></a></span>
+<span id="cb147-19"><a href="density.html#cb147-19" tabindex="-1"></a><span class="co"># Add the detection zone covariates</span></span>
+<span id="cb147-20"><a href="density.html#cb147-20" tabindex="-1"></a>wolf_winter<span class="sc">$</span>dist <span class="ot">&lt;-</span> <span class="fl">0.024</span></span>
+<span id="cb147-21"><a href="density.html#cb147-21" tabindex="-1"></a>wolf_winter<span class="sc">$</span>theta <span class="ot">&lt;-</span> <span class="fl">42.9</span><span class="sc">*</span>(pi<span class="sc">/</span><span class="dv">180</span>)</span>
+<span id="cb147-22"><a href="density.html#cb147-22" tabindex="-1"></a></span>
+<span id="cb147-23"><a href="density.html#cb147-23" tabindex="-1"></a>summer_rem <span class="ot">&lt;-</span> <span class="fu">rem</span>(<span class="at">dat =</span> wolf_summer, <span class="at">tm=</span>summer_effort, <span class="at">v=</span><span class="fl">11.9</span>)</span>
+<span id="cb147-24"><a href="density.html#cb147-24" tabindex="-1"></a>winter_rem <span class="ot">&lt;-</span> <span class="fu">rem</span>(<span class="at">dat =</span> wolf_winter, <span class="at">tm=</span>winter_effort, <span class="at">v=</span><span class="fl">11.8</span>) </span>
+<span id="cb147-25"><a href="density.html#cb147-25" tabindex="-1"></a></span>
+<span id="cb147-26"><a href="density.html#cb147-26" tabindex="-1"></a>wolf_res <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">season=</span><span class="fu">c</span>(<span class="st">&quot;summer&quot;</span>, <span class="st">&quot;winter&quot;</span>), </span>
+<span id="cb147-27"><a href="density.html#cb147-27" tabindex="-1"></a>             <span class="at">species=</span><span class="st">&quot;wolf&quot;</span>, </span>
+<span id="cb147-28"><a href="density.html#cb147-28" tabindex="-1"></a>             <span class="at">density=</span><span class="fu">c</span>(summer_rem,winter_rem), </span>
+<span id="cb147-29"><a href="density.html#cb147-29" tabindex="-1"></a>             <span class="at">sd=</span><span class="cn">NA</span>)</span>
+<span id="cb147-30"><a href="density.html#cb147-30" tabindex="-1"></a></span>
+<span id="cb147-31"><a href="density.html#cb147-31" tabindex="-1"></a><span class="co"># Add the sd</span></span>
+<span id="cb147-32"><a href="density.html#cb147-32" tabindex="-1"></a>tm <span class="ot">&lt;-</span> summer_effort</span>
+<span id="cb147-33"><a href="density.html#cb147-33" tabindex="-1"></a>v <span class="ot">&lt;-</span> <span class="fl">11.9</span></span>
+<span id="cb147-34"><a href="density.html#cb147-34" tabindex="-1"></a>wolf_res<span class="sc">$</span>sd[wolf_res<span class="sc">$</span>season<span class="sc">==</span><span class="st">&quot;summer&quot;</span>] <span class="ot">&lt;-</span> <span class="fu">sd</span>(<span class="fu">boot_sd</span>(wolf_summer))</span>
+<span id="cb147-35"><a href="density.html#cb147-35" tabindex="-1"></a></span>
+<span id="cb147-36"><a href="density.html#cb147-36" tabindex="-1"></a>tm <span class="ot">&lt;-</span> winter_effort</span>
+<span id="cb147-37"><a href="density.html#cb147-37" tabindex="-1"></a>v <span class="ot">&lt;-</span> <span class="fl">11.8</span></span>
+<span id="cb147-38"><a href="density.html#cb147-38" tabindex="-1"></a>wolf_res<span class="sc">$</span>sd[wolf_res<span class="sc">$</span>season<span class="sc">==</span><span class="st">&quot;winter&quot;</span>] <span class="ot">&lt;-</span> <span class="fu">sd</span>(<span class="fu">boot_sd</span>(wolf_winter))</span></code></pre></div>
 <p>Which again, is fairly close to our expected densities, if a little on
 the high side. Again let’s plot them:</p>
-<div class="sourceCode" id="cb185"><pre class="sourceCode r Rmain"><code class="sourceCode r"><span id="cb185-1"><a href="density.html#cb185-1" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
-<span id="cb185-2"><a href="density.html#cb185-2" tabindex="-1"></a>p<span class="ot">&lt;-</span><span class="fu">ggplot</span>(wolf_res, <span class="fu">aes</span>(<span class="at">x=</span>season, <span class="at">y=</span>density)) <span class="sc">+</span> </span>
-<span id="cb185-3"><a href="density.html#cb185-3" tabindex="-1"></a>  <span class="fu">geom_point</span>()<span class="sc">+</span></span>
-<span id="cb185-4"><a href="density.html#cb185-4" tabindex="-1"></a>  <span class="fu">geom_errorbar</span>(<span class="fu">aes</span>(<span class="at">ymin=</span>density<span class="sc">-</span>sd, <span class="at">ymax=</span>density<span class="sc">+</span>sd), <span class="at">width=</span>.<span class="dv">2</span>,</span>
-<span id="cb185-5"><a href="density.html#cb185-5" tabindex="-1"></a>                <span class="at">position=</span><span class="fu">position_dodge</span>(<span class="fl">0.05</span>)) <span class="sc">+</span></span>
-<span id="cb185-6"><a href="density.html#cb185-6" tabindex="-1"></a>  <span class="fu">theme_classic</span>()</span>
-<span id="cb185-7"><a href="density.html#cb185-7" tabindex="-1"></a>  </span>
-<span id="cb185-8"><a href="density.html#cb185-8" tabindex="-1"></a>p</span></code></pre></div>
+<div class="sourceCode" id="cb148"><pre class="sourceCode r Rmain"><code class="sourceCode r"><span id="cb148-1"><a href="density.html#cb148-1" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb148-2"><a href="density.html#cb148-2" tabindex="-1"></a>p<span class="ot">&lt;-</span><span class="fu">ggplot</span>(wolf_res, <span class="fu">aes</span>(<span class="at">x=</span>season, <span class="at">y=</span>density)) <span class="sc">+</span> </span>
+<span id="cb148-3"><a href="density.html#cb148-3" tabindex="-1"></a>  <span class="fu">geom_point</span>()<span class="sc">+</span></span>
+<span id="cb148-4"><a href="density.html#cb148-4" tabindex="-1"></a>  <span class="fu">geom_errorbar</span>(<span class="fu">aes</span>(<span class="at">ymin=</span>density<span class="sc">-</span>sd, <span class="at">ymax=</span>density<span class="sc">+</span>sd), <span class="at">width=</span>.<span class="dv">2</span>,</span>
+<span id="cb148-5"><a href="density.html#cb148-5" tabindex="-1"></a>                <span class="at">position=</span><span class="fu">position_dodge</span>(<span class="fl">0.05</span>)) <span class="sc">+</span></span>
+<span id="cb148-6"><a href="density.html#cb148-6" tabindex="-1"></a>  <span class="fu">theme_classic</span>()</span>
+<span id="cb148-7"><a href="density.html#cb148-7" tabindex="-1"></a>  </span>
+<span id="cb148-8"><a href="density.html#cb148-8" tabindex="-1"></a>p</span></code></pre></div>
 <p><img src="Intro-to-data-analysis_files/figure-html/unnamed-chunk-18-1.png" width="672" /></p>
 <p>These estimates are in the right ball park - and suggesting that wolf
 densities are higher in winter.</p>

@@ -5,6 +5,10 @@ editor_options:
 ---
 # Activity
 
+```{r setup09, include=FALSE} 
+knitr::opts_chunk$set(warning = FALSE, message = FALSE) 
+```
+
 Given that camera traps operate 24 hours a day, 7 days a week, and can record animal motion down to second-level precision, they represent a powerful tool to explore and contrast the activity patterns of the species they detect! Such analyses can give insight into competition, predation and coexistence. Characterizing the "activity level" - the proportion of the day which animals are active - is also increasingly important for new estimators of animal density ([see the density chapter for more info](#density)). Consequently, understanding how to derive and use activity data is very important for people using camera traps. 
 
 *Must read* [Frey, Sandra, et al. "Investigating animal activity patterns and temporal niche partitioning using camera‐trap data: Challenges and opportunities." Remote Sensing in Ecology and Conservation 3.3 (2017): 123-132.](https://zslpublications.onlinelibrary.wiley.com/doi/full/10.1002/rse2.60) 

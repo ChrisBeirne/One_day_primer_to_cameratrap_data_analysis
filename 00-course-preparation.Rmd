@@ -34,6 +34,7 @@ Through the course we will use RStudio to interact with R. Please download `RStu
 Open RStudio. If all has gone well you should see something like this:
 
 ```{r, echo=F, message=F, warning=F, out.width="100%"}
+knitr::opts_chunk$set(warning = FALSE, message = FALSE)
 knitr::include_graphics("./images/course-preparation/R_studio_start.PNG")
 ```
 

@@ -18,6 +18,7 @@ The file structure of your data backups depends on the structure of your project
 This is likely the most intuitive method if you are manually sorting data or using an image labeller (software to manage your camera data) which uses the location as the key organizing element. You would make a folder using the 'placename' (unique location where a camera is deployed), then copy all of the data relating to that site within it (left). Note, if you had multiple camera deployments you would have nested folders with the 'deployment_id' as the name: 
 
 ```{r ch1_1, echo=F, message=F, warning=F}
+knitr::opts_chunk$set(warning = FALSE, message = FALSE)
 knitr::include_graphics("images/preprocessing/folder_structure.PNG")
 ```
 

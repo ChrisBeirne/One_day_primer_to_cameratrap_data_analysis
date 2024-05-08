@@ -1,5 +1,9 @@
 # Analysis data exploration {#exploration}
 
+```{r setup05, include=FALSE} 
+knitr::opts_chunk$set(warning = FALSE, message = FALSE) 
+```
+
 Now things start to get really interesting - we are getting closer to analyzing our data. Before we get into building any models however, we must thoroughly explore our data. We want to ask questions like?
 
 - How many species did we detect?

@@ -5,6 +5,10 @@ editor_options:
 ---
 # Occupancy {#occupancy}
 
+```{r setup08, include=FALSE} 
+knitr::opts_chunk$set(warning = FALSE, message = FALSE) 
+```
+
 Occupancy modelling has been one of the mainstays of camera traps data analysis for many years, so learning how to wangle our data into occupancy-style formats is essential. 
 
 When we survey wild and free ranging populations using any sampling methodology, the probability of detecting a given individual or species if it is actually present on the landscape at the time of sampling is typically less than  one. This is because wild animals are often hard to see! This issue is termed "imperfect detection". 
