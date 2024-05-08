@@ -33,18 +33,12 @@ We will usually make a new R sheet for each chapter - however the error checking
 Second, read in our standardized example datasets:
 
 ```{r ch3_1, class.source="Rmain"}
-# Load your data 
+# Load your data sheets
 pro <- read.csv("data/raw_data/example_data/proj.csv", header=T)
 img <- read.csv("data/raw_data/example_data/img.csv", header=T)
 dep <- read.csv("data/raw_data/example_data/dep.csv", header=T)
 cam <- read.csv("data/raw_data/example_data/cam.csv", header=T)
 
-```
-
-Next, load in the packages we will use in this chapter - we give a brief description of them too.
-Cut and paste the code block below.
-
-```{r ch3_2, echo=T, results='hide',message=F, warning=F, class.source="Rmain"}
 #Load Packages
 list.of.packages <- c(
                       "leaflet",       # creates interactive maps
@@ -85,17 +79,18 @@ We use the `ymd()` function to convert our dates into date objects.
 Lets convert the date columns from character strings to date objects:
 
 ```{r ch3_9, class.source="Rmain"}
+
+# Format the deployment data dates
+
 # start dates
 dep$start_date <- ymd(dep$start_date)
 
 # end dates
 dep$end_date   <- ymd(dep$end_date)
-```
 
-Now lets make a new column in the deployment data called `days`, and calculate the interval for all the deployments:
-
-```{r ch3_10, class.source="Rmain"}
+# Make a new column called days - calculate thwe interval
 dep$days <- interval(dep$start_date, dep$end_date)/ddays(1)
+
 ```
 
 We should then check the range of dates the cameras were active for.
@@ -113,18 +108,7 @@ Lets look at the range of values we have:
 summary(dep$days)
 ```
 
-Cameras were active between 15 and 234 days per deployment, and we have an NA.
-Let's see what it relates to:
-
-```{r ch3_12, class.source="Rinfo"}
-
-dep[is.na(dep$days)==T,] %>% 
-  kbl() %>% 
-  kable_styling(full_width = T) %>% 
-  kableExtra::scroll_box(width = "100%")
-```
-
-It was a camera that was on a 'HumanUse' feature - this camera was stolen!
+Note - a camera that was on a 'HumanUse' feature was stolen - so it is an NA!
 
 ### Image dates
 
@@ -133,13 +117,12 @@ We next need to convert the `img$timestamp` column to a date-object.
 We use the 'ymd_hms()' function to do this, as images have time data too.
 
 ```{r ch3_14, class.source="Rmain"}
+# Image dates
+
+# Convert the dates in your images labels to date objects
 img$timestamp <- ymd_hms(img$timestamp)
-```
 
-And do a quick check to see if all the dates parsed correctly.
-First check the range:
-
-```{r ch3_15, class.source="Rinfo"}
+# Check it worked
 range(img$timestamp)
 ```
 
@@ -152,8 +135,12 @@ Now that our camera trap data are loaded into R, we can very quickly find out su
 First let's count the number of unique locations:
 
 ```{r ch3_17, echo=T, class.source="Rinfo"}
+# Summary of the data
 # Count the number of camera locations
-paste(length(unique(dep$placename)), "locations"); paste(length(unique(dep$deployment_id)), "deployments");paste(nrow(img), "image labels"); paste(nrow(img[img$is_blank == TRUE,]), "blanks")
+paste(length(unique(dep$placename)), "locations"); 
+paste(length(unique(dep$deployment_id)), "deployments");
+paste(nrow(img), "image labels"); 
+paste(nrow(img[img$is_blank == TRUE,]), "blanks")
 ```
 
 ## Error checks
@@ -273,11 +260,9 @@ camera_locs <- dep %>%
   dplyr::select(placename, latitude, longitude) %>% 
   unique() %>% # remove duplicated rows (rows where the placename and coordinates match)
   st_as_sf(coords = c("longitude", "latitude"), crs = "+proj=longlat") # Convert to `sf` format
-```
 
-Now let's crunch the numbers. Paste and run the following:
 
-```{r ch3_24, class.source="Rmain"}
+# Calculate the distances
 # distance matrix for all cameras
 camera_dist <- st_distance(camera_locs) %>% 
                   as.dist() %>% 
@@ -304,13 +289,11 @@ for (i in (1:dim(camera_dist_mins)[1]))
     #Append the new_row to the accumulated results dataframe
     camera_dist_list[nrow(camera_dist_list) + 1,] = new_row
 
-  }
-```
+}
 
-Lets summarize the output:
-
-```{r ch3_25, , class.source="Rinfo"}
+# Summarise the output
 summary(camera_dist_list$dist)
+
 ```
 
 So the largest distance between two cameras is `r paste0(round(max(camera_dist_list$dist),0), "m")`, the minimum is `r paste0(round(min(camera_dist_list$dist)), "m")` and on average it is `r paste0(round(mean(camera_dist_list$dist)), "m")`.
@@ -648,33 +631,22 @@ sp_list %>%
   kableExtra::scroll_box(width = "100%", height = "250px")
 ```
 
-We have an external list of common names which we will use to update our `img` file.
+
+We have an external list of common names which we will use to update our species list and `img` file.
 
 ```{r ch3_44, class.source="Rmain", message=F, warning=F}
 # Import the dataframe
 tmp <- read.csv("data/raw_data/example_data/common_names.csv")
 
-# Join it with the existing species list
+# Join it with the existing species list to add common names
 sp_list$common_name <- NULL
 sp_list <- left_join(sp_list, tmp)
 
-```
-
-Then let's write our species list into our raw data folder:
-
-```{r ch3_45, class.source="Rmain"}
-# Note we use the project_id from from project data frame to name the file - that was we wont overwrite it if we run things with a different project. 
+# And save the file
 write.csv(sp_list, paste0("data/raw_data/",pro$project_id[1],"_raw_species_list.csv"))
-```
 
-Then lets update the `common_name` column in our `img` dataframe to reflect the updated common names.
-
-We will do this using a `left_join()`, an operation which is invaluable when programming in R.
-
-It uses a specified "key" variable to merge two dataframes in this case we will use the 'sp' column.
-
-```{r ch3_46, class.source="Rmain"}
-# first remove the common_name column
+# Update the common names in the image data too
+# first remove the existing common_name column
 img$common_name <- NULL
 
 # add an sp column to the img dataframe - remember the genus and species columns are not pasted together yet
@@ -683,8 +655,6 @@ img$sp <- paste(img$genus, img$species, sep=".")
 # Next we do the 'left_join'
 img <- left_join(img, sp_list[, c("sp", "common_name")], by="sp")
 ```
-
-Lets move on!
 
 ## Diel activity check
 
@@ -885,24 +855,9 @@ For example, if your organism of interest is very abundant, for examples human h
 # Set the "independence" interval in minutes
 independent <- 30
 
-```
 
-Finally we need to specify what a "count" means in this dataset. Some people do estimates of `group_size` in their footage - summing all of the individuals they are sure are different. Others only sum the animals they can see in each photo. Here is where you specify which to use:
-
-
-```{r ch3_55a, class.source="Rinfo"}
-# Check for a `group_size` variable? 
-table(img_sub$group_size)
-
-# Check for a 'number_ofobjects' variable
-table(img_sub$number_of_objects)
-
-```
-
-Make your selection:
-
-```{r ch3_55b, class.source="Rmain"}
-# If yes use that, if no use 'number_of_objects'
+# Specify what style of group count you want to include (if you have this data)
+# We will use group_size
 img_sub$animal_count <- img_sub$group_size    
 
 ```

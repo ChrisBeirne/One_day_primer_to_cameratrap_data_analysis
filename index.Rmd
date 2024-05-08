@@ -1,5 +1,5 @@
 --- 
-title: "An Introduction to Camera Trap Data Management and Analysis in R"
+title: "An Primer to Camera Trap Data Management and Analysis in R"
 author: "Christopher Beirne, the Wildlife Coexistence Lab, UBC, and the WildCam Network"
 date: "`r Sys.Date()`"
 site: bookdown::bookdown_site
@@ -9,8 +9,8 @@ bibliography: [book.bib, packages.bib]
 toc-title: "Contents"
 biblio-style: apalike
 link-citations: yes
-github-repo: " WildCoLab/Introduction-to-Camera-Trap-Data-Management-and-Analysis-in-R"
-description: "Materials for the three day camera trap data management and analysis course"
+github-repo: "ChrisBeirne/One_day_primer_to_cameratrap_data_analysis"
+description: "One day primer forcamera trap data management and analysis course"
 ---
 
 # Introduction
@@ -20,11 +20,15 @@ library(bookdown)
 knitr::include_graphics("./images/Ninja.png")
 ```
 
-This is an abridged version of the full three day course located here: [An Introduction to Camera Trap Data Management and Analysis in R](https://wildcolab.github.io/Introduction-to-Camera-Trap-Data-Management-and-Analysis-in-R/). That version will be the most up-to-date and comprehensive.  
+**This is an abridged version of the full three day course located here:** 
+
+[An Introduction to Camera Trap Data Management and Analysis in R](https://wildcolab.github.io/Introduction-to-Camera-Trap-Data-Management-and-Analysis-in-R/). 
+
+That version will be the most up-to-date and comprehensive.  
 
 ## How to use this book
 
-You can run this code to get a quick flavour for camera trap data analysis. 
+You can run this code to get a quick flavour for camera trap data analyses and work flows. 
 
 - [Download the example data via dropbox](https://www.dropbox.com/sh/fpnsinyn1ml9x28/AAB-Y-glHHRDsiCdmQnVLx7Wa?dl=0) and 'follow-along' by cutting and pasting the code
 
